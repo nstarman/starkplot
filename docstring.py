@@ -1,0 +1,183 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#############################################################################
+
+"""
+Modified matplotlib docstring decorators
+
+# TODO put in the full attribution
+"""
+
+#############################################################################
+# Imports
+
+from matplotlib import cbook
+
+from matplotlib import docstring as _docstring
+
+#############################################################################
+# Info
+
+__author__ = "Nathaniel Starkman"
+__copyright__ = "Copyright 2018, "
+__credits__ = ["The Matplotlib Team", 'Jo Bovy']
+__license__ = "MIT"
+__version__ = "1.0.0"
+__maintainer__ = "Nathaniel Starkman"
+__email__ = "n.starkman@mail.utoronto.ca"
+__status__ = "Production"
+
+#############################################################################
+# Functions
+
+Substitution = _docstring.Substitution
+
+# class Substitution(object):
+#     """
+#     A decorator to take a function's docstring and perform string
+#     substitution on it.
+
+#     This decorator should be robust even if func.__doc__ is None
+#     (for example, if -OO was passed to the interpreter)
+
+#     Usage: construct a docstring.Substitution with a sequence or
+#     dictionary suitable for performing substitution; then
+#     decorate a suitable function with the constructed object. e.g.
+
+#     sub_author_name = Substitution(author='Jason')
+
+#     @sub_author_name
+#     def some_function(x):
+#         "%(author)s wrote this function"
+
+#     # note that some_function.__doc__ is now "Jason wrote this function"
+
+#     One can also use positional arguments.
+
+#     sub_first_last_names = Substitution('Edgar Allen', 'Poe')
+
+#     @sub_first_last_names
+#     def some_function(x):
+#         "%s %s wrote the Raven"
+#     """
+
+#     def __init__(self, *args, **kwargs):
+#         assert not (len(args) and len(kwargs)), \
+#                 "Only positional or keyword args are allowed"
+#         self.params = args or kwargs
+
+#     def __call__(self, func):
+#         func.__doc__ = func.__doc__ and func.__doc__ % self.params
+#         return func
+
+#     def update(self, *args, **kwargs):
+#         "Assume self.params is a dict and update it with supplied args"
+#         self.params.update(*args, **kwargs)
+
+#     @classmethod
+#     def from_params(cls, params):
+#         """
+#         In the case where the params is a mutable sequence (list or
+#         dictionary) and it may change before this class is called, one may
+#         explicitly use a reference to the params rather than using *args or
+#         **kwargs which will copy the values and not reference them.
+#         """
+#         result = cls()
+#         result.params = params
+#         return result
+
+
+class Appender(object):
+    """
+    A function decorator that will append an addendum to the docstring
+    of the target function.
+
+    This decorator should be robust even if func.__doc__ is None
+    (for example, if -OO was passed to the interpreter).
+
+    Usage: construct a docstring.Appender with a string to be joined to
+    the original docstring. An optional 'join' parameter may be supplied
+    which will be used to join the docstring and addendum. e.g.
+
+    add_copyright = Appender("Copyright (c) 2009", join='\n')
+
+    @add_copyright
+    def my_dog(has='fleas'):
+        "This docstring will have a copyright below"
+        pass
+
+    Modifications
+    -------------
+    added prededent option
+    # TODO make robust if func.__doc__ is None
+    """
+
+    def __init__(self, addendum, join='', prededent=False):
+        self.addendum = addendum
+        self.join = join
+        self.prededent = prededent
+
+    def __call__(self, func):
+        if self.prededent:
+            docitems = [cbook.dedent(func.__doc__), self.addendum]
+        else:
+            docitems = [func.__doc__, self.addendum]
+
+        func.__doc__ = func.__doc__ and self.join.join(docitems)
+        return func
+
+
+def strthentwoline(s):
+    if s.endswith('\n\n'):
+        return s
+    elif s.endswith('\n'):
+        return s + '\n'
+    else:
+        return s + '\n\n'
+
+
+def nonestr(s):
+    return s if s is not None else ''
+
+
+def dedent(docstring):
+    """Dedent a docstring (if present)
+    if docstring is None, return ''
+    """
+    return nonestr(docstring and cbook.dedent(docstring))
+
+
+dedentfunc = _docstring.dedent
+
+
+copy = _docstring.copy
+# def copy(source):
+#     "Copy a docstring from another source function (if present)"
+#     def do_copy(target):
+#         if source.__doc__:
+#             target.__doc__ = source.__doc__
+#         return target
+#     return do_copy
+
+# create a decorator that will house the various documentation that
+#  is reused throughout matplotlib
+interpd = Substitution()
+
+
+copy = _docstring.dedent_interpd
+# def dedent_interpd(func):
+#     """A special case of the interpd that first performs a dedent on
+#     the incoming docstring"""
+#     return interpd(dedent(func))
+
+
+copy_dedent = _docstring.copy_dedent
+# def copy_dedent(source):
+#     """A decorator that will copy the docstring from the source and
+#     then dedent it"""
+#     # note the following is ugly because "Python is not a functional
+#     # language" - GVR. Perhaps one day, functools.compose will exist.
+#     #  or perhaps not.
+#     #  http://mail.python.org/pipermail/patches/2007-February/021687.html
+#     return lambda target: dedent(copy(source)(target))

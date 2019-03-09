@@ -366,7 +366,7 @@ class SideHists(MatplotlibDecoratorBase):
             xkw={}, **kw
         )
 
-        return self
+        return self.as_decorator
     # /def
 
     def __init__(self, func=None, funcdoc=None,

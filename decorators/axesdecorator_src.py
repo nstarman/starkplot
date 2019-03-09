@@ -525,7 +525,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
 
         # if func is not None:
         #     return self(lambda *args, **kw: func(*args, **kw))
-        return self
+        return self.as_decorator
     # /def
 
     # __init__

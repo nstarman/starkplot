@@ -344,7 +344,7 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
             xkw=xkw, **kw
         )
 
-        return self
+        return self.as_decorator
     # /def
 
     # __init__

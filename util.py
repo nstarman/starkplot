@@ -360,8 +360,6 @@ def tightLayout(fig=None, tlkw={}, **kw):
                          for k, v in kw.items()
                          if k.startswith('tight_layout_')})
 
-    print(tlkw)
-
     fig.tight_layout(**tlkw)
 
 

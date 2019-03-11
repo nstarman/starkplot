@@ -226,11 +226,9 @@ def _parseoptsdict(attr):
 
 def _latexstr(attr):
     if not attr:  # empty string
-        # print('empty')
         return rf'{attr}'
-    elif not attr.startswith('$'):
-        # print(attr)
-        return rf'${attr}$'
+    # elif not attr.startswith('$'):
+    #     return rf'${attr}$'
     else:
         return rf'{attr}'
 
@@ -356,13 +354,15 @@ def tightLayout(fig=None, tlkw={}, **kw):
         tlkw = kw.get('tight_layout', {})
         if not tlkw:  # if empty
             # allowable arguments
-            tlkw = {k: kw.get(k) for k in _tightlayoutk for k in kw}
+            tlkw = {k: kw.get(k) for k in _tightlayoutk if k in kw}
             # any specific overrides
             tlkw.update({_stripprefix(k, 'tight_layout_'): v
                          for k, v in kw.items()
                          if k.startswith('tight_layout_')})
 
-    fig.tight_layout(**kw)
+    print(tlkw)
+
+    fig.tight_layout(**tlkw)
 
 
 def saveFigure(fname, fig=None, **kw):
@@ -455,20 +455,23 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
     units: bool
     xkw:
     """
+
+    if x is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
 
-    if x is not None:
-        x, nkw = _parselatexstrandopts(x)
-        if not kw:  # if no kwargs
-            nkw = kw.get('xlabel', {})
-            if not kw:
-                nkw = {k: kw.get(k) for k in _xlabelk if k in kw}
-                nkw.update({_stripprefix(k, 'xlabel_'): v
-                            for k, v in kw.items()
-                            if k.startswith('xlabel_')})
-        if units is True:
-            x = rf"{x} [{ax.get_xlabel()}]"
-        ax.set_xlabel(x, **nkw)
+    x, nkw = _parselatexstrandopts(x)
+    if not kw:  # if no kwargs
+        nkw = kw.get('xlabel', {})
+        if not kw:
+            nkw = {k: kw.get(k) for k in _xlabelk if k in kw}
+            nkw.update({_stripprefix(k, 'xlabel_'): v
+                        for k, v in kw.items()
+                        if k.startswith('xlabel_')})
+    if units is True:
+        x = rf"{x} [{ax.get_xlabel()}]"
+    ax.set_xlabel(x, **nkw)
 
 
 @docstring.Appender(pyplot.Axes.set_ylabel.__doc__,
@@ -484,20 +487,22 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
     xkw:
     """
 
+    if y is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
 
-    if y is not None:
-        y, nkw = _parselatexstrandopts(y)
-        if not kw:  # if no kwargs
-            nkw = kw.get('ylabel', {})
-            if not kw:
-                nkw = {k: kw.get(k) for k in _ylabelk if k in kw}
-                nkw.update({_stripprefix(k, 'ylabel_'): v
-                            for k, v in kw.items()
-                            if k.startswith('ylabel_')})
-        if units is True:
-            y = rf"{y} [{ax.get_ylabel()}]"
-        ax.set_ylabel(y, **nkw)
+    y, nkw = _parselatexstrandopts(y)
+    if not kw:  # if no kwargs
+        nkw = kw.get('ylabel', {})
+        if not kw:
+            nkw = {k: kw.get(k) for k in _ylabelk if k in kw}
+            nkw.update({_stripprefix(k, 'ylabel_'): v
+                        for k, v in kw.items()
+                        if k.startswith('ylabel_')})
+    if units is True:
+        y = rf"{y} [{ax.get_ylabel()}]"
+    ax.set_ylabel(y, **nkw)
 
 
 # @docstring.Appender(pyplot.Axes.set_zlabel.__doc__,
@@ -512,26 +517,27 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
     units: bool
     **kw:
     """
+    if z is None:
+        return
 
     ax = ax if ax is not None else pyplot.gca()
 
-    if z is not None:
-        try:
-            ax.get_zlabel()
-        except AttributeError:
-            pass
-        else:
-            z, nkw = _parselatexstrandopts(z)
-            if not kw:  # if no kwargs
-                nkw = kw.get('zlabel', {})
-                if not kw:
-                    nkw = {k: kw.get(k) for k in _zlabelk if k in kw}
-                    nkw.update({_stripprefix(k, 'zlabel_'): v
-                                for k, v in kw.items()
-                                if k.startswith('zlabel_')})
-            if units is True:
-                rf"{z} [{ax.get_zlabel()}]"
-            ax.set_zlabel(z, **nkw)
+    try:
+        ax.get_zlabel()
+    except AttributeError:
+        pass
+    else:
+        z, nkw = _parselatexstrandopts(z)
+        if not kw:  # if no kwargs
+            nkw = kw.get('zlabel', {})
+            if not kw:
+                nkw = {k: kw.get(k) for k in _zlabelk if k in kw}
+                nkw.update({_stripprefix(k, 'zlabel_'): v
+                            for k, v in kw.items()
+                            if k.startswith('zlabel_')})
+        if units is True:
+            rf"{z} [{ax.get_zlabel()}]"
+        ax.set_zlabel(z, **nkw)
 
 
 @docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
@@ -574,44 +580,6 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
     set_ylabel(ax=ax, y=y, units=units, **kw)
     set_zlabel(ax=ax, z=z, units=units, **kw)
 
-    # if x is not None:
-    #     x, xlkw = _parselatexstrandopts(x)
-    #     if not xlkw:  # if no kwargs
-    #         xlkw = xkw.get('xlabel', {})
-    #         if not xlkw:
-    #             xlkw = {_stripprefix(k, 'xlabel_'): xkw.get(k, v)
-    #                     for k, v in _xlabelkdf}
-    #     if units is True:
-    #         x = rf"{x} [{ax.get_xlabel()}]"
-    #     ax.set_xlabel(x, **xlkw)
-
-    # if y is not None:
-    #     y, ykw = _parselatexstrandopts(y)
-    #     if not ykw:  # if no kwargs
-    #         ykw = xkw.get('ylabel', {})
-    #         if not ykw:
-    #             ykw = {_stripprefix(k, 'ylabel_'): xkw.get(k, v)
-    #                    for k, v in _ylabelkdf}
-    #     if units is True:
-    #         y = rf"{y} [{ax.get_ylabel()}]"
-    #     ax.set_ylabel(y, **ykw)
-
-    # if z is not None:
-    #     try:
-    #         ax.get_zlabel()
-    #     except AttributeError:
-    #         pass
-    #     else:
-    #         z, zkw = _parselatexstrandopts(z)
-    #         if not zkw:  # if no kwargs
-    #             zkw = xkw.get('zlabel', {})
-    #             if not zkw:
-    #                 zkw = {_stripprefix(k, 'zlabel_'): xkw.get(k, v)
-    #                        for k, v in _zlabelkdf}
-    #         if units is True:
-    #             rf"{z} [{ax.get_zlabel()}]"
-    #         ax.set_zlabel(z, **zkw)
-
 
 ###############################################################################
 # Axis Limits
@@ -621,9 +589,12 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
 def set_xlim(ax=None, x=None):
     r"""starkplot wrapper for set_xlim
     """
+    if x is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if x is not None:
-        return ax.set_xlim(*x)
+    return ax.set_xlim(*x)
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_ylim.__doc__,
@@ -631,9 +602,12 @@ def set_xlim(ax=None, x=None):
 def set_ylim(ax=None, y=None):
     r"""starkplot wrapper for set_ylim
     """
+    if y is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if y is not None:
-        return ax.set_ylim(*y)
+    return ax.set_ylim(*y)
+# /def
 
 
 # @docstring.Appender(pyplot.Axes.set_zlim.__doc__,
@@ -641,12 +615,15 @@ def set_ylim(ax=None, y=None):
 def set_zlim(ax=None, z=None):
     r"""starkplot wrapper for set_zlim
     """
+    if z is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if z is not None:
-        try:
-            return ax.set_zlim(*z)
-        except AttributeError:
-            pass
+    try:
+        return ax.set_zlim(*z)
+    except AttributeError:
+        pass
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_xlim.__doc__,
@@ -662,15 +639,6 @@ def axisLimits(ax=None, x=None, y=None, z=None):
     set_xlim(ax=ax, x=x)
     set_ylim(ax=ax, y=y)
     set_zlim(ax=ax, z=z)
-    # if x is not None:
-    #     ax.set_xlim(*x)
-    # if y is not None:
-    #     ax.set_ylim(*y)
-    # if z is not None:
-    #     try:
-    #         ax.set_zlim(*z)
-    #     except AttributeError:
-    #         pass
 
 
 ###############################################################################
@@ -722,15 +690,6 @@ def invertAxis(ax=None, x=False, y=False, z=False):
         invert_yaxis(ax=ax)
     if z:
         invert_zaxis(ax=ax)
-    # if x is not False:
-    #     ax.invert_xaxis()
-    # if y is not False:
-    #     ax.invert_yaxis()
-    # if z is not False:
-    #     try:
-    #         ax.invert_zaxis()
-    #     except AttributeError:
-    #         pass
 
 
 ###############################################################################
@@ -741,12 +700,14 @@ def invertAxis(ax=None, x=False, y=False, z=False):
 def set_xscale(ax=None, x=None, **kw):
     r"""starkplot wrapper for set_xscale
     """
+    if x is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if x is not None:
-        x, nkw = _parsestrandopts(x)
-        if not nkw:  # if no kwargs
-            nkw = kw.get('xscale', {})
-        ax.set_xscale(x, **nkw)
+    x, nkw = _parsestrandopts(x)
+    if not nkw:  # if no kwargs
+        nkw = kw.get('xscale', {})
+    ax.set_xscale(x, **nkw)
 
 
 @docstring.Appender(pyplot.Axes.set_yscale.__doc__,
@@ -754,12 +715,14 @@ def set_xscale(ax=None, x=None, **kw):
 def set_yscale(ax=None, y=None, **kw):
     r"""starkplot wrapper for set_yscale
     """
+    if y is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if y is not None:
-        y, nkw = _parsestrandopts(y)
-        if not nkw:  # if no kwargs
-            nkw = kw.get('yscale', {})
-        ax.set_yscale(y, **nkw)
+    y, nkw = _parsestrandopts(y)
+    if not nkw:  # if no kwargs
+        nkw = kw.get('yscale', {})
+    ax.set_yscale(y, **nkw)
 
 
 # @docstring.Appender(pyplot.Axes.set_zscale.__doc__,
@@ -767,17 +730,19 @@ def set_yscale(ax=None, y=None, **kw):
 def set_zscale(ax=None, z=None, **kw):
     r"""starkplot wrapper for set_zscale
     """
+    if z is None:
+        return
+
     ax = ax if ax is not None else pyplot.gca()
-    if z is not None:
-        try:
-            ax.get_zscale()
-        except AttributeError:
-            pass
-        else:
-            z, nkw = _parsestrandopts(z)
-            if not nkw:  # if no kwargs
-                nkw = kw.get('zscale', {})
-            ax.set_zscale(z, **nkw)
+    try:
+        ax.get_zscale()
+    except AttributeError:
+        pass
+    else:
+        z, nkw = _parsestrandopts(z)
+        if not nkw:  # if no kwargs
+            nkw = kw.get('zscale', {})
+        ax.set_zscale(z, **nkw)
 
 
 @docstring.Appender(pyplot.Axes.set_xscale.__doc__,
@@ -792,26 +757,6 @@ def axisScales(ax=None, x=None, y=None, z=None, **kw):
     set_xscale(ax=ax, x=x, **kw)
     set_yscale(ax=ax, y=y, **kw)
     set_zscale(ax=ax, z=z, **kw)
-    # if x is not None:
-    #     x, xlkw = _parsestrandopts(x)
-    #     if not xlkw:  # if no kwargs
-    #         xlkw = xkw.get('xscale', {})
-    #     ax.set_xscale(x, **xlkw)
-    # if y is not None:
-    #     y, ykw = _parsestrandopts(y)
-    #     if not ykw:  # if no kwargs
-    #         ykw = xkw.get('yscale', {})
-    #     ax.set_yscale(y, **ykw)
-    # if z is not None:
-    #     try:
-    #         ax.get_zscale()
-    #     except AttributeError:
-    #         pass
-    #     else:
-    #         z, zkw = _parsestrandopts(z)
-    #         if not zkw:  # if no kwargs
-    #             zkw = xkw.get('zscale', {})
-    #         ax.set_zscale(z, **zkw)
 
 
 ###############################################################################

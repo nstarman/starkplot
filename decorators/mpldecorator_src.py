@@ -1134,7 +1134,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     # style
                     stylesheet=self.stylesheet,
                     tight_layout=self.tight_layout,
-                    #modifying arguments
+                    # modifying arguments
                     xkw=self.xkw,
                     **func_kwargs):
             """

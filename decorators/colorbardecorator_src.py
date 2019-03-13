@@ -5,7 +5,6 @@
 """
   Docstring
 
-
 #############################################################################
 
 Copyright (c) 2018-  Nathaniel Starkman
@@ -51,12 +50,9 @@ import types
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-# from matplotlib.figure import Figure
-# from matplotlib.ticker import NullFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # 3rd Party Imports
-
 try:
     from astropy.utils.decorators import wraps
 except ImportError as e:
@@ -64,17 +60,12 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
-
-# from ..util import axisLabels, axisScales, axisLimits, invertAxis
-# from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
+from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..docstring import dedent, strthentwoline
-
 from ..util import prepareAxes
 from ..util import _stripprefix
 from ..util import _cbark
-
-from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 #############################################################################
 # Info

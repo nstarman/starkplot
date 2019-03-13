@@ -5,7 +5,6 @@
 """
   Docstring
 
-
 #############################################################################
 
 Copyright (c) 2018-  Nathaniel Starkman
@@ -64,14 +63,14 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
+from .util import MatplotlibDecoratorBase, _funcdocprefix
 
+from ..docstring import dedent, strthentwoline
 from ..util import prepareAxes, axisLabels, axisLimits, invertAxis, axisScales
 from ..util import setTitle
 from ..util import _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
 
-from ..docstring import dedent, strthentwoline
 
-from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 #############################################################################
 # Info

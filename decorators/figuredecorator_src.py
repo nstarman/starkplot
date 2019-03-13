@@ -52,13 +52,9 @@ make xkw be in the docstring depending on whether toplevel or not
 # import numpy as np
 from warnings import warn
 import types
-
-# from functools import partialmethod
-
 import matplotlib.pyplot as plt
 
 # 3rd Party Imports
-
 try:
     from astropy.utils.decorators import wraps
 except ImportError as e:
@@ -66,12 +62,10 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
+from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..util import prepareFigure, saveFigure, overrideFigure, setSuptitle, tightLayout
-
 from ..docstring import dedent, strthentwoline
-
-from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 #############################################################################
 # Info

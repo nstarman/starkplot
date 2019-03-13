@@ -5,7 +5,6 @@
 """
   Docstring
 
-
 #############################################################################
 
 Copyright (c) 2018-  Nathaniel Starkman
@@ -309,7 +308,7 @@ _mplattrs = (
     # axes
     'ax',
     'title', 'xlabel', 'ylabel', 'zlabel', 'unit_labels',
-    'xlim', 'ylim', 'zlim', 'invert_axis', 
+    'xlim', 'ylim', 'zlim', 'invert_axis',
     'xscale', 'yscale', 'zscale', 'aspect',
     'legend',
     # colorbar arguments

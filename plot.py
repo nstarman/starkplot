@@ -337,6 +337,8 @@ def barbs(*args, **kwargs):
     r"""starkplot wrapper for barbs"""
     return pyplot.barbs(*args, **kwargs)
 
+# barbs = mpl_decorator(pyplot.barbs)
+
 
 @mpl_decorator(funcdoc=pyplot.barh.__doc__)
 def barh(*args, **kwargs):
@@ -488,10 +490,10 @@ def pie(*args, **kwargs):
     return pyplot.pie(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.plot.__doc__)
-def plot(*args, **kwargs):
-    r"""starkplot wrapper for plot"""
-    return pyplot.plot(*args, **kwargs)
+# @mpl_decorator(funcdoc=pyplot.plot.__doc__)
+# def plot(*args, **kwargs):
+#     r"""starkplot wrapper for plot"""
+#     return pyplot.plot(*args, **kwargs)
 
 
 @mpl_decorator(funcdoc=pyplot.plot_date.__doc__)

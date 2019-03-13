@@ -1032,7 +1032,9 @@ def add_text(ax=None, *args, **kwargs):
 
 @mpl_decorator()
 def plotproperties(**kw):
-    pass
+    r"""A blanck function for accessing any mpl_decorator property
+    """
+    return None
 
 
 def add_axis_limits(ax=None, x=None, y=None, z=None):

@@ -1217,8 +1217,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
             # +---- colorbar ----+
             if colorbar:
-                print('colorbar')
-
                 ckw = xkw.get('colorbar', {})
                 if not ckw:
                     # allowable arguments

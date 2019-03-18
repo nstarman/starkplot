@@ -632,16 +632,33 @@ class AxesDecorator(MatplotlibDecoratorBase):
             fig = plt.gcf()
 
             # +---- axes ----+
-            ax = prepareAxes(ax=ax, fig=fig)
+            if np.isscalar(ax):
 
-            # /PRE
-            # CALL
+                ax = prepareAxes(ax=ax, fig=fig)
 
-            if stylesheet is not None:
-                with plt.style.context(stylesheet):
+                # /PRE
+                # CALL
+
+                if stylesheet is not None:
+                    with plt.style.context(stylesheet):
+                        return_ = wrapped_function(*func_args, **func_kwargs)
+                else:
                     return_ = wrapped_function(*func_args, **func_kwargs)
-            else:
-                return_ = wrapped_function(*func_args, **func_kwargs)
+
+
+            else:  # it's a list of axes
+                pass
+                # for a in ax:
+                #     a = prepareAxes(ax=a, fig=fig)
+                #
+                #     # /PRE
+                #     # CALL
+                #
+                #     if stylesheet is not None:
+                #         with plt.style.context(stylesheet):
+                #             return_ = wrapped_function(*func_args, **func_kwargs)
+                #     else:
+                #         return_ = wrapped_function(*func_args, **func_kwargs)
 
             # /CALL
             # POST
@@ -663,30 +680,62 @@ class AxesDecorator(MatplotlibDecoratorBase):
             # TODO check that all these play well with
             # Getting current axis for assigning plot properties
             if ax is not None:
-                ax = plt.gca()
+                if np.isscalar(ax):
 
-                # set title
-                if title is not None:
-                    setTitle(title, ax=ax, **wkw)
+                    ax = plt.gca()
 
-                ax.set_aspect(aspect)
+                    # set title
+                    if title is not None:
+                        setTitle(title, ax=ax, **wkw)
 
-                # setting axisLabels/limits/scales
-                axisLabels(ax, x=xlabel, y=ylabel, z=zlabel,
-                           units=unit_labels, **wkw)
-                axisLimits(ax, x=xlim, y=ylim, z=zlim)
+                    ax.set_aspect(aspect)
 
-                if invert_axis is not None:
-                    invertAxis(ax, x='x' in invert_axis, y='y' in invert_axis,
-                               z='z' in invert_axis)
+                    # setting axisLabels/limits/scales
+                    axisLabels(ax, x=xlabel, y=ylabel, z=zlabel,
+                               units=unit_labels, **wkw)
+                    axisLimits(ax, x=xlim, y=ylim, z=zlim)
 
-                axisScales(ax, x=xscale, y=yscale, z=zscale, **wkw)
+                    if invert_axis is not None:
+                        invertAxis(ax, x='x' in invert_axis, y='y' in invert_axis,
+                                   z='z' in invert_axis)
 
-                # Legend
-                handles, labels = ax.get_legend_handles_labels()
-                if labels:
-                    legend = _parseoptsdict(legend)
-                    ax.legend(handles=handles, labels=labels, **legend)
+                    axisScales(ax, x=xscale, y=yscale, z=zscale, **wkw)
+
+                    # Legend
+                    handles, labels = ax.get_legend_handles_labels()
+                    if labels:
+                        legend = _parseoptsdict(legend)
+                        ax.legend(handles=handles, labels=labels, **legend)
+
+                else:
+                    pass
+                    # for a in ax:
+                    #
+                    #     # set title
+                    #     if title is not None:
+                    #         setTitle(title, ax=ax, **wkw)
+                    #
+                    #     ax.set_aspect(aspect)
+                    #
+                    #     # setting axisLabels/limits/scales
+                    #     axisLabels(ax, x=xlabel, y=ylabel, z=zlabel,
+                    #                units=unit_labels, **wkw)
+                    #     axisLimits(ax, x=xlim, y=ylim, z=zlim)
+                    #
+                    #     if invert_axis is not None:
+                    #         invertAxis(ax, x='x' in invert_axis, y='y' in invert_axis,
+                    #                    z='z' in invert_axis)
+                    #
+                    #     axisScales(ax, x=xscale, y=yscale, z=zscale, **wkw)
+                    #
+                    #     # Legend
+                    #     handles, labels = ax.get_legend_handles_labels()
+                    #     if labels:
+                    #         legend = _parseoptsdict(legend)
+                    #         ax.legend(handles=handles, labels=labels, **legend)
+                    #
+                    # plt.sca(ax[0])
+
 
             # Returning
             return return_

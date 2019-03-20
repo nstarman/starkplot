@@ -48,7 +48,7 @@ make xkw be in the docstring depending on whether toplevel or not
 #############################################################################
 # Imports
 
-# import numpy as np
+import numpy as np
 from warnings import warn
 import types
 
@@ -639,12 +639,13 @@ class AxesDecorator(MatplotlibDecoratorBase):
                 # /PRE
                 # CALL
 
+                func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
+
                 if stylesheet is not None:
                     with plt.style.context(stylesheet):
                         return_ = wrapped_function(*func_args, **func_kwargs)
                 else:
                     return_ = wrapped_function(*func_args, **func_kwargs)
-
 
             else:  # it's a list of axes
                 pass
@@ -741,7 +742,6 @@ class AxesDecorator(MatplotlibDecoratorBase):
             return return_
         # /def
 
-        # TODO move out of call, so not so slow
         # modifying wrapped_function docstring
         _doc = (self.funcdoc +
                 _descrhead.format(func=wrapped_function.__name__) +

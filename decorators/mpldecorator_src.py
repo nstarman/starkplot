@@ -1163,6 +1163,8 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             # /PRE
             # CALL
 
+            func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
+
             if stylesheet is not None:
                 with plt.style.context(stylesheet):
                     _res = wrapped_function(*func_args, **func_kwargs)

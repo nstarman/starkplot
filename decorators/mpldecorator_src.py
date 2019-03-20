@@ -124,7 +124,7 @@ rtcf: bool, None
     whether to return to the current Figure at the end
     default: {rtcf}
     rtcf = True: always return to current Figure
-    rtcf = None: only if passing fig=Figure()
+    rtcf = None: only if passing fig=Figure(), int
         ie. fig='new' will not return to old Figure at end
     rtcf = False: does not return to current figure
 figsize: tuple, None
@@ -373,7 +373,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
     funcdoc:
 
-    fig: Figure, None, 'new'
+    fig: Figure, None, 'new', int
         default: {fig}
         uses Figure, current figure (if None), or makes new figure (if 'new')
         if fig='new': options from xkw (key, value)
@@ -641,7 +641,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             whether to return to the current Figure at the end
             default: None
             rtcf = True: always return to current Figure
-            rtcf = None: only if passing fig=Figure()
+            rtcf = None: only if passing fig=Figure(), int
                 ie. fig='new' will not return to old Figure at end
             rtcf = False: does not return to current figure
         figsize: tuple, None

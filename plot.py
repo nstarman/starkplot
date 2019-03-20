@@ -175,6 +175,13 @@ def axes(*args, **kw):
     return pyplot.axes(*args, **kw)
 
 
+def gcf():
+    return plt.gcf()
+
+def gca():
+    return plt.gca()
+
+
 # @mpl_decorator()
 # def figure(*args, **kw):
 #     return pyplot.gcf()
@@ -1033,6 +1040,13 @@ def add_text(ax=None, *args, **kwargs):
 @mpl_decorator()
 def plotproperties(**kw):
     r"""A blanck function for accessing any mpl_decorator property
+    __deprecated__
+    """
+    return None
+
+@mpl_decorator()
+def set(**kw):
+    r"""A blanck function for accessing any mpl_decorator property
     """
     return None
 
@@ -1106,7 +1120,20 @@ def add_minorticks(ax=None, x=True, y=True, z=True):
 def plot_help():
     r"""
 
-StarkPlot Plot Additions
+StarkPlot Plot Additions:
+`scatterplot`
+`save_and_close`
+`add_axis_labels`
+`add_unit_axis_labels`
+`add_text`
+`set`
+`add_axis_limits`
+`add_axis_limits`
+`add_axis_scales`
+`add_minorticks`
+
+
+
 
 # TODO get this from pyplot.plotting
 Matplotlib's Plotting (accessible via .pyplot):
@@ -1183,7 +1210,7 @@ Function                     Description
 `pcolormesh`                 Create a pseudocolor plot with a non-regular rectangular grid.
 `phase_spectrum`             Plot the phase spectrum.
 `pie`                        Plot a pie chart.
-`plot`                       Plot y versus x as lines and/or markers.
+`plot`                       Plot y versus x as lines and/or markers.  ** + many extra options**
 `plot_date`                  Plot data that contains dates.
 `plotfile`                   Plot the data in a file.
 `polar`                      Make a polar plot.

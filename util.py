@@ -40,6 +40,8 @@ Planned Features
 #############################################################################
 # Imports
 
+import numpy as np
+
 from matplotlib import pyplot
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
@@ -313,6 +315,13 @@ def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
         if rtcf in (True, None):  # preserve oldfig
             oldfig = plt.gcf()
         plt.figure(fig.number)  # makes figure current
+
+    elif isinstance(fig, (int, np.integer)):
+        if rtcf in (True, None):  # preserve oldfig
+            oldfig = plt.gcf()
+        plt.figure(fig)  # makes figure current
+
+        fig = plt.gcf()
 
     # get current figure
     elif fig is None:

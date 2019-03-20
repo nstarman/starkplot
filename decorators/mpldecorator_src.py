@@ -1207,7 +1207,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 tightLayout(fig=fig, tlkw=tight_layout, **wkw)
 
             # saving
-            if savefig is not None:
+            if savefig:  # T/F
                 saveFigure(savefig, fig=fig, **wkw)
 
             if closefig:

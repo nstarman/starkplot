@@ -132,7 +132,7 @@ figsize: tuple, None
     auto used if fig='new' else only if overridefig=True
     None does nothing
 overridefig: bool
-    to override current figure properties.
+    to override current figure properties (like figsize).
     default: {overridefig}
     If True calls from xkw:
         figsize, dpi, facecolor, edgecolor, frameon
@@ -173,6 +173,7 @@ tight_layout: dict, bool
 stylesheet: None, str
     temporary stylesheet
     default: {stylesheet}
+    ** NOT WORKING
 
 ax: Axes Artist, None, int, False,
     default: {ax}
@@ -332,7 +333,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
     """docstring for MatplotlibDecorator
 
     call signature::
-        FigureDecorator(
+        MatplotlibDecorator(
             func=None, funcdoc=None,
             # fig
             fig={fig}, rtcf={rtcf},
@@ -591,318 +592,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
              dict(xkw[o] for o in option_names)
     """
 
-    @classmethod
-    def as_decorator(cls, func=None, funcdoc=None,
-                     # figure
-                     fig=None, rtcf=None,
-                     figsize=None, overridefig=True,
-                     savefig=False, closefig=False,
-                     suptitle=None,
-                     # axes
-                     ax=None,
-                     title=None,
-                     xlabel=None, ylabel=None, zlabel=None, unit_labels=False,
-                     xlim=None, ylim=None, zlim=None,
-                     invert_axis=None,
-                     xscale='linear', yscale='linear', zscale='linear',
-                     aspect='auto',
-                     legend={},
-                     # colorbar
-                     colorbar=False, clabel=None, clim=None, cloc=None,
-                     # sidehists
-                     sidehists=False, shtype='stepfilled',
-                     shbins=None, shcolor='k',
-                     shfc=None, shec='k',
-                     shxdensity=True, shydensity=True,
-                     shxweights=None, shyweights=None,
-                     # style
-                     stylesheet=None,
-                     tight_layout=False,
-                     # modifying arguments
-                     xkw={}):
-        r"""MatplotlibDecorator
-
-        Arguments  # TODO fill out text
-        ---------
-        func:
-
-        funcdoc:
-
-        fig: Figure, None, 'new'
-            default: None
-            uses Figure, current figure (if None), or makes new figure (if 'new')
-            if fig='new': options from xkw (key, value)
-            prefers xkw['fig'] else tries from xkw:
-                (override key prefix: 'fig_')
-                'num', 'dpi', 'facecolor' 'edgecolor', 'frameon' 'FigureClass',
-                'clear', 'sublotpars', 'constrained_layout', 'linewidth',
-                * uses figsize arguments
-        rtcf: bool, None
-            whether to return to the current Figure at the end
-            default: None
-            rtcf = True: always return to current Figure
-            rtcf = None: only if passing fig=Figure(), int
-                ie. fig='new' will not return to old Figure at end
-            rtcf = False: does not return to current figure
-        figsize: tuple, None
-            default: None
-            auto used if fig='new' else only if overridefig=True
-            None does nothing
-        overridefig: bool
-            to override current figure properties.
-            default: True
-            If True calls from xkw:
-                figsize, dpi, facecolor, edgecolor, frameon
-        savefig: None, str, (str, dict)
-            default: False
-            None: does not save
-            str: fname
-            dict: savefig kwargs. If no dict, draws from xkw.
-            prefers xkw['savefig'] else tries from xkw:
-                (override key prefix: 'savefig_')
-                'dpi', 'quality', 'facecolor', 'edgecolor', 'orientation',
-                'portrait', 'papertype', 'format', 'transparent', 'bbox_inches',
-                'pad_inches', 'frameon', 'metadata'
-            # TODO allow file-like object, not only str
-        closefig: bool
-            whether to close figure after plotting
-            default: False
-        suptitle: None, str, (str, dict)
-            default: None
-            None: does not assign
-            str: suptitle
-            dict: kwargs. If no dict, draws from xkw.
-            prefers xkw['suptitle'] else tries from xkw:
-                (override key prefix: 'suptitle_')
-                'suptitle_x', 'suptitle_y',
-                'suptitle_horizontalalignment', 'suptitle_ha',
-                'suptitle_verticalalignment', 'suptitle_va',
-                'fontsize', 'fontweight'
-        tight_layout: dict, bool
-            default: False
-            dict: tight_layout is kwargs for fig.tight_layout()
-            True: call tight_layout with options from xkw
-            False, empty dict: do not call tight_layout
-            prefers xkw['tight_layout'] else tries from xkw:
-                (override key prefix: 'tight_layout_')
-                'pad', 'h_pad', 'w_pad', 'rect'
-        stylesheet: None, str
-            temporary stylesheet
-            default: None
-
-        ax: Axes Artist, None, int, False,
-            default: None
-            uses Axes, gets current axes (if None), make/get subplot (at int),
-            turns off all axes controls (if False)
-            **Warning if ax=False then all further methods should
-                NOT be used, nor have user-set defaults.
-        title: None, str, (str, dict)
-            default: None
-            None: no title
-            dict: title kwargs. If no dict, draws from xkw.
-            prefers xkw['title'] else tries from xkw:
-                'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
-        xlabel: None, str, (str, dict)
-            default: None
-            None: no xlabel
-            dict: xlabel kwargs. If no dict, draws from xkw.
-            prefers xkw['xlabel'] else tries from xkw:
-                'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
-        ylabel: None, str, (str, dict)
-            default: None
-            None: no ylabel
-            dict: ylabel kwargs. If no dict, draws from xkw.
-            prefers xkw['ylabel'] else tries from xkw:
-                'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
-        zlabel: None, str, (str, dict)
-            default: None
-            None: no zlabel
-            dict: zlabel kwargs. If no dict, draws from xkw.
-            prefers xkw['zlabel'] else tries from xkw:
-                'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
-        unit_labels: bool
-            whether to use auto labels from astropy.quantity_support()
-            default: False
-        xlim: (lim1, lim2) or (lim1, lim2, emit, auto)
-            default: None
-            can ignore all by (None, None, True, False)
-        ylim:(lim1, lim2) or (lim1, lim2, emit, auto)
-            default: None
-            can ignore all by (None, None, True, False)
-        zlim: (lim1, lim2) or (lim1, lim2, emit, auto)
-            default: None
-            can ignore all by (None, None, True, False)
-        xscale: None, str, (str, dict)
-            default: 'linear'
-            None: no xscale
-            dict: xscale kwargs. If no dict, draws from xkw.
-            prefers xkw['xscale'] else tries from xkw:
-                depends on scale type
-        yscale: None, str, (str, dict)
-            default: 'linear'
-            None: no yscale
-            dict: yscale kwargs. If no dict, draws from xkw.
-            prefers xkw['yscale'] else tries from xkw:
-                depends on scale type
-        zscale: None, str, (str, dict)
-            default: 'linear'
-            None: no zscale
-            dict: zscale kwargs. If no dict, draws from xkw.
-            prefers xkw['zscale'] else tries from xkw:
-                depends on scale type
-        aspect: str
-            the axes aspect
-            default: 'auto'
-        legend: dict
-            kwargs for ax.legend()
-            default: empty dict()
-
-        ax: Axes Artist, None, int, False,
-            default: None
-            uses Axes, gets current axes (if None), make/get subplot (at int),
-            turns off all axes controls (if False)
-            **Warning if ax=False then all further methods should
-                NOT be used, nor have user-set defaults.
-        colorbar: dict, bool
-            default: True
-            dict: colorbar is kwargs for colorbar()
-            True: call colorbar with options from xkw
-            False, empty dict: do not call colorbar
-            prefers xkw['colorbar'] else tries from xkw:
-                (override key prefix: 'colorbar')
-                'use_gridspec'
-        clabel: str, None
-            colorbar label
-            default: None
-        clim: tuple, none
-            colorbar limits
-            default: None
-            does nothing if None
-        cloc: str, None, mpl.axes.Axes
-            default: None
-            None: uses plt.colorbar(ax=)
-            'in': uses plt.colorbar(cax=)
-            'out': uses plt.colorbar(ax=)
-            Axes: uses plt.colorbar(ax=)
-
-        sidehists: bool
-            whether to use sidehists
-            default: True
-        shtype: str
-            ax.hist histtype
-            default: 'stepfilled'
-        shbins: None, int, array
-            ax.hist bins
-            default: None
-            None uses function args if arg is ndarray, list, or tuple,
-                else shbins=30
-        shcolor:
-            ax.hist color
-            default: 'k'
-        shfc:
-            ax.hist facecolor (fc)
-            default: None
-        shec:
-            ax.hist edgecolor (ec)
-            default: 'k'
-        shxdensity:
-            xaxis ax.hist density
-            default: True
-        shydensity:
-            yaxis ax.hist density
-            default: True
-        shxweights:
-            xaxis ax.hist weights
-            default: None
-        shyweights:
-            yaxis ax.hist weights
-            default: None
-
-        xkw: dict
-            all the other figure, axes, colorbar options
-            any method (listed below) will first look for a same-named item.
-                failing that, it will draw from the general dict,
-                preferring items with keys suffixed by the method's name
-                order: 1) 'fig'=dict(...)
-                       2) 'fig_dpi', ...   3) 'dpi', ...
-            default: empty dict()
-            possible keys:
-                # full keys
-                fig, savefig, suptitle, tight_layout,
-                title, xlabel, ylabel, zlabel, colorbar
-                # general keys
-                num, dpi, facecolor, edgecolor, frameon, FigureClass,
-                clear, subplotpars, constrained_layout, line_width,
-                pad, h_pad, w_pad, rect,
-                orientation, portrait, papertype, format, transparent,
-                bbox_inches, pad_inches, metadata,
-                fontsize, fontweight,
-                'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
-                'use_gridspec', plt.colorbar kwargs
-            used in:
-                fig, overridefig, suptitle[*], savefig[*], tight_layout[*],
-                title[*], xlabel[*], ylabel[*], zlabel[*], xlim, ylim, zlim,
-                invert_xaxis, invert_yaxis, invert_zaxis,
-                xscale[*], yscale[*], zscale[*],
-                colorbar[*]
-                [*] if options not in argument
-                # TODO add more
-            ex:  xkw['savefig'] = **savefig kwargs
-                 dict(xkw[o] for o in option_names)
-
-        Returns
-        -------
-        decorator if func = None
-        decorated function otherwise
-        """
-
-        # making instance from base class
-        self = super(MatplotlibDecorator, cls).__new__(cls)
-
-        # modifying docstring
-        _locals = locals()
-        self.__doc__ = self.__doc__.format(
-            # classname=func.__repr__() if func is not None else 'SideHists',
-            **{k: _locals.get(k).__repr__() for k in set(_mplattrs)})
-
-        # init
-        self.__init__(
-            funcdoc=funcdoc,
-            # figure
-            fig=fig, rtcf=rtcf,
-            figsize=figsize, overridefig=overridefig,
-            savefig=savefig, closefig=closefig,
-            suptitle=suptitle,
-            # axes
-            ax=ax,
-            title=title,
-            xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
-            unit_labels=unit_labels,
-            xlim=xlim, ylim=ylim, zlim=zlim,
-            invert_axis=invert_axis,
-            xscale=xscale, yscale=yscale, zscale=zscale,
-            aspect=aspect,
-            legend=legend,
-            # colorbar
-            colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
-            # sidehists
-            sidehists=sidehists, shbins=shbins,
-            shtype=shtype, shcolor=shcolor,
-            shfc=shfc, shec=shec,
-            shxdensity=shxdensity, shydensity=shydensity,
-            shxweights=shxweights, shyweights=shyweights,
-            # style
-            stylesheet=stylesheet,
-            tight_layout=tight_layout,
-            # modifying arguments
-            xkw=xkw,
-        )
-        if func is not None:
-            return self(func)
-        else:
-            return self
-    # /def
-
     # __new__
     def __new__(cls, func=None, funcdoc=None,
                 # figure
@@ -928,9 +617,12 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 shxdensity=True, shydensity=True,
                 shxweights=None, shyweights=None,
                 # style
-                stylesheet=None, tight_layout=True,
+                stylesheet=None, tight_layout=False,
                 # modifying arguments
-                xkw={}, **kw):
+                xkw={},
+                # ARGUMENTS FOR COMPOSITIONS
+                _as_decorator=True,
+                **kw):
 
         # making instance from base class
         self = super(MatplotlibDecorator, cls).__new__(cls)
@@ -938,44 +630,330 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
         # modifying docstring
         _locals = locals()
         self.__doc__ = self.__doc__.format(
-            # classname=func.__repr__() if func is not None else 'SideHists',
-            **{k: _locals.get(k).__repr__() for k in set(_mplattrs)})
-
-        # init
-        self.__init__(
-            # func=newfunc,
-            funcdoc=funcdoc,
-            # figure
-            fig=fig, rtcf=rtcf,
-            figsize=figsize, overridefig=overridefig,
-            savefig=savefig, closefig=closefig,
-            suptitle=suptitle,
-            # axes
-            ax=ax,
-            title=title,
-            xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
-            unit_labels=unit_labels,
-            xlim=xlim, ylim=ylim, zlim=zlim,
-            invert_axis=invert_axis,
-            xscale=xscale, yscale=yscale, zscale=zscale,
-            aspect=aspect,
-            legend=legend,
-            # colorbar
-            colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
-            # sidehists
-            sidehists=sidehists, shbins=shbins,
-            shtype=shtype, shcolor=shcolor,
-            shfc=shfc, shec=shec,
-            shxdensity=shxdensity, shydensity=shydensity,
-            shxweights=shxweights, shyweights=shyweights,
-            # style
-            stylesheet=stylesheet,
-            tight_layout=tight_layout,
-            # modifying arguments
-            xkw=xkw, **kw
+            **{k: _locals.get(k).__repr__() for k in set(_mplattrs)}
         )
 
-        return self.as_decorator
+        def decorator(func=func, funcdoc=funcdoc,
+                         # figure
+                         fig=fig, rtcf=rtcf,
+                         figsize=figsize, overridefig=overridefig,
+                         savefig=savefig, closefig=closefig,
+                         suptitle=suptitle,
+                         # axes
+                         ax=ax,
+                         title=title,
+                         xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, unit_labels=unit_labels,
+                         xlim=xlim, ylim=ylim, zlim=zlim,
+                         invert_axis=invert_axis,
+                         xscale=xscale, yscale=yscale, zscale=zscale,
+                         aspect=aspect,
+                         legend=legend,
+                         # colorbar
+                         colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
+                         # sidehists
+                         sidehists=sidehists, shtype=shtype,
+                         shbins=shbins, shcolor=shcolor,
+                         shfc=shfc, shec=shec,
+                         shxdensity=shxdensity, shydensity=shydensity,
+                         shxweights=shxweights, shyweights=shyweights,
+                         # style
+                         stylesheet=stylesheet,
+                         tight_layout=tight_layout,
+                         # modifying arguments
+                         xkw=xkw):
+            """MatplotlibDecorator
+
+            Arguments  # TODO fill out text
+            ---------
+            func:
+
+            funcdoc:
+
+            fig: Figure, None, 'new'
+                default: {fig}
+                uses Figure, current figure (if None), or makes new figure (if 'new')
+                if fig='new': options from xkw (key, value)
+                prefers xkw['fig'] else tries from xkw:
+                    (override key prefix: 'fig_')
+                    'num', 'dpi', 'facecolor' 'edgecolor', 'frameon' 'FigureClass',
+                    'clear', 'sublotpars', 'constrained_layout', 'linewidth',
+                    * uses figsize arguments
+            rtcf: bool, None
+                whether to return to the current Figure at the end
+                default: {rtcf}
+                rtcf = True: always return to current Figure
+                rtcf = None: only if passing fig=Figure(), int
+                    ie. fig='new' will not return to old Figure at end
+                rtcf = False: does not return to current figure
+            figsize: tuple, None
+                default: {figsize}
+                auto used if fig='new' else only if overridefig=True
+                None does nothing
+            overridefig: bool
+                to override current figure properties.
+                default: {overridefig}
+                If True calls from xkw:
+                    figsize, dpi, facecolor, edgecolor, frameon
+            savefig: None, str, (str, dict)
+                default: {savefig}
+                None: does not save
+                str: fname
+                dict: savefig kwargs. If no dict, draws from xkw.
+                prefers xkw['savefig'] else tries from xkw:
+                    (override key prefix: 'savefig_')
+                    'dpi', 'quality', 'facecolor', 'edgecolor', 'orientation',
+                    'portrait', 'papertype', 'format', 'transparent', 'bbox_inches',
+                    'pad_inches', 'frameon', 'metadata'
+                # TODO allow file-like object, not only str
+            closefig: bool
+                whether to close figure after plotting
+                default: {closefig}
+            suptitle: None, str, (str, dict)
+                default: {suptitle}
+                None: does not assign
+                str: suptitle
+                dict: kwargs. If no dict, draws from xkw.
+                prefers xkw['suptitle'] else tries from xkw:
+                    (override key prefix: 'suptitle_')
+                    'suptitle_x', 'suptitle_y',
+                    'suptitle_horizontalalignment', 'suptitle_ha',
+                    'suptitle_verticalalignment', 'suptitle_va',
+                    'fontsize', 'fontweight'
+            tight_layout: dict, bool
+                default: {tight_layout}
+                dict: tight_layout is kwargs for fig.tight_layout()
+                True: call tight_layout with options from xkw
+                False, empty dict: do not call tight_layout
+                prefers xkw['tight_layout'] else tries from xkw:
+                    (override key prefix: 'tight_layout_')
+                    'pad', 'h_pad', 'w_pad', 'rect'
+            stylesheet: None, str
+                temporary stylesheet
+                default: {stylesheet}
+
+            ax: Axes Artist, None, int, False,
+                default: {ax}
+                uses Axes, gets current axes (if None), make/get subplot (at int),
+                turns off all axes controls (if False)
+                **Warning if ax=False then all further methods should
+                    NOT be used, nor have user-set defaults.
+            title: None, str, (str, dict)
+                default: {title}
+                None: no title
+                dict: title kwargs. If no dict, draws from xkw.
+                prefers xkw['title'] else tries from xkw:
+                    'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
+            xlabel: None, str, (str, dict)
+                default: {xlabel}
+                None: no xlabel
+                dict: xlabel kwargs. If no dict, draws from xkw.
+                prefers xkw['xlabel'] else tries from xkw:
+                    'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
+            ylabel: None, str, (str, dict)
+                default: {ylabel}
+                None: no ylabel
+                dict: ylabel kwargs. If no dict, draws from xkw.
+                prefers xkw['ylabel'] else tries from xkw:
+                    'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
+            zlabel: None, str, (str, dict)
+                default: {zlabel}
+                None: no zlabel
+                dict: zlabel kwargs. If no dict, draws from xkw.
+                prefers xkw['zlabel'] else tries from xkw:
+                    'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
+            unit_labels: bool
+                whether to use auto labels from astropy.quantity_support()
+                default: {unit_labels}
+            xlim: (lim1, lim2) or (lim1, lim2, emit, auto)
+                default: xlim
+                can ignore all by (None, None, True, False)
+            ylim:(lim1, lim2) or (lim1, lim2, emit, auto)
+                default: {ylim}
+                can ignore all by (None, None, True, False)
+            zlim: (lim1, lim2) or (lim1, lim2, emit, auto)
+                default: {zlim}
+                can ignore all by (None, None, True, False)
+            xscale: None, str, (str, dict)
+                default: {xscale}
+                None: no xscale
+                dict: xscale kwargs. If no dict, draws from xkw.
+                prefers xkw['xscale'] else tries from xkw:
+                    depends on scale type
+            yscale: None, str, (str, dict)
+                default: {yscale}
+                None: no yscale
+                dict: yscale kwargs. If no dict, draws from xkw.
+                prefers xkw['yscale'] else tries from xkw:
+                    depends on scale type
+            zscale: None, str, (str, dict)
+                default: {zscale}
+                None: no zscale
+                dict: zscale kwargs. If no dict, draws from xkw.
+                prefers xkw['zscale'] else tries from xkw:
+                    depends on scale type
+            aspect: str
+                the axes aspect
+                default: {aspect}
+            legend: dict
+                kwargs for ax.legend()
+                default: {legend}
+
+            ax: Axes Artist, None, int, False,
+                default: {ax}
+                uses Axes, gets current axes (if None), make/get subplot (at int),
+                turns off all axes controls (if False)
+                **Warning if ax=False then all further methods should
+                    NOT be used, nor have user-set defaults.
+            colorbar: dict, bool
+                default: {colorbar}
+                dict: colorbar is kwargs for colorbar()
+                True: call colorbar with options from xkw
+                False, empty dict: do not call colorbar
+                prefers xkw['colorbar'] else tries from xkw:
+                    (override key prefix: 'colorbar')
+                    'use_gridspec'
+            clabel: str, None
+                colorbar label
+                default: {clabel}
+            clim: tuple, none
+                colorbar limits
+                default: {clim}
+                does nothing if None
+            cloc: str, None, mpl.axes.Axes
+                default: {cloc}
+                None: uses plt.colorbar(ax=)
+                'in': uses plt.colorbar(cax=)
+                'out': uses plt.colorbar(ax=)
+                Axes: uses plt.colorbar(ax=)
+
+            sidehists: bool
+                whether to use sidehists
+                default: {sidehists}
+            shtype: str
+                ax.hist histtype
+                default: {shtype}
+            shbins: None, int, array
+                ax.hist bins
+                default: {shbins}
+                None uses function args if arg is ndarray, list, or tuple,
+                    else shbins=30
+            shcolor:
+                ax.hist color
+                default: {shcolor}
+            shfc:
+                ax.hist facecolor (fc)
+                default: {shfc}
+            shec:
+                ax.hist edgecolor (ec)
+                default: {shec}
+            shxdensity:
+                xaxis ax.hist density
+                default: {shxdensity}
+            shydensity:
+                yaxis ax.hist density
+                default: {shydensity}
+            shxweights:
+                xaxis ax.hist weights
+                default: {shxweights}
+            shyweights:
+                yaxis ax.hist weights
+                default: {shyweights}
+
+            xkw: dict
+                all the other figure, axes, colorbar options
+                any method (listed below) will first look for a same-named item.
+                    failing that, it will draw from the general dict,
+                    preferring items with keys suffixed by the method's name
+                    order: 1) 'fig'=dict(...)
+                           2) 'fig_dpi', ...   3) 'dpi', ...
+                default: {xkw}
+                possible keys:
+                    # full keys
+                    fig, savefig, suptitle, tight_layout,
+                    title, xlabel, ylabel, zlabel, colorbar
+                    # general keys
+                    num, dpi, facecolor, edgecolor, frameon, FigureClass,
+                    clear, subplotpars, constrained_layout, line_width,
+                    pad, h_pad, w_pad, rect,
+                    orientation, portrait, papertype, format, transparent,
+                    bbox_inches, pad_inches, metadata,
+                    fontsize, fontweight,
+                    'fontdict', 'loc', 'pad', anything in matplotlib.text.Text
+                    'use_gridspec', plt.colorbar kwargs
+                used in:
+                    fig, overridefig, suptitle[*], savefig[*], tight_layout[*],
+                    title[*], xlabel[*], ylabel[*], zlabel[*], xlim, ylim, zlim,
+                    invert_xaxis, invert_yaxis, invert_zaxis,
+                    xscale[*], yscale[*], zscale[*],
+                    colorbar[*]
+                    [*] if options not in argument
+                    # TODO add more
+                ex:  xkw['savefig'] = **savefig kwargs
+                     dict(xkw[o] for o in option_names)
+
+            Returns
+            -------
+            decorator if func = None
+            decorated function otherwise
+            """
+
+            # making instance from base class
+            # self = super(MatplotlibDecorator, cls).__new__(cls)
+
+            # # modifying docstring
+            # _locals = locals()
+            # self.__doc__ = self.__doc__.format(
+            #     # classname=func.__repr__() if func is not None else 'SideHists',
+            #     **{k: _locals.get(k).__repr__() for k in set(_mplattrs)})
+
+            # init
+            self.__init__(
+                funcdoc=funcdoc,
+                # figure
+                fig=fig, rtcf=rtcf,
+                figsize=figsize, overridefig=overridefig,
+                savefig=savefig, closefig=closefig,
+                suptitle=suptitle,
+                # axes
+                ax=ax,
+                title=title,
+                xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
+                unit_labels=unit_labels,
+                xlim=xlim, ylim=ylim, zlim=zlim,
+                invert_axis=invert_axis,
+                xscale=xscale, yscale=yscale, zscale=zscale,
+                aspect=aspect,
+                legend=legend,
+                # colorbar
+                colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
+                # sidehists
+                sidehists=sidehists, shbins=shbins,
+                shtype=shtype, shcolor=shcolor,
+                shfc=shfc, shec=shec,
+                shxdensity=shxdensity, shydensity=shydensity,
+                shxweights=shxweights, shyweights=shyweights,
+                # style
+                stylesheet=stylesheet,
+                tight_layout=tight_layout,
+                # modifying arguments
+                xkw=xkw,
+            )
+            if func is not None:
+                return self(func)
+            else:
+                return self
+        # /def
+
+        decorator.__doc__ = decorator.__doc__.format(
+            **{k: _locals.get(k).__repr__() for k in set(_mplattrs)}
+        )
+
+        self.decorator = decorator
+
+        if _as_decorator:
+            return self.decorator
+        else:
+            return self
     # /def
 
     # __init__
@@ -1158,7 +1136,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 setSuptitle(suptitle, fig=fig, **wkw)
 
             # +---- axes ----+
-            ax = prepareAxes(ax=ax, fig=fig)
+            ax, oldax = prepareAxes(ax=ax, fig=fig, rtcf=rtcf)
 
             # /PRE
             # CALL
@@ -1166,6 +1144,10 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
 
             if stylesheet is not None:
+                print('not noNone')
+                if isinstance(stylesheet, str):
+                    stylesheet = (stylesheet,)
+
                 with plt.style.context(stylesheet):
                     _res = wrapped_function(*func_args, **func_kwargs)
             else:
@@ -1196,10 +1178,11 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 axisScales(ax, x=xscale, y=yscale, z=zscale, **wkw)
 
                 # Legend
-                handles, labels = ax.get_legend_handles_labels()
-                if labels:
-                    legend = _parseoptsdict(legend)
-                    ax.legend(handles=handles, labels=labels, **legend)
+                if legend is not False:
+                    handles, labels = ax.get_legend_handles_labels()
+                    if labels:
+                        legend = _parseoptsdict(legend)
+                        ax.legend(handles=handles, labels=labels, **legend)
 
             # +---- figure ----+
             # tight layout
@@ -1216,6 +1199,9 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             # old figure
             if oldfig is not None:  # Returning old figure to current status
                 plt.figure(oldfig.number)
+            # old axes
+            if oldax is not None:
+                plt.sca(oldax)
 
             # +---- colorbar ----+
             if colorbar:
@@ -1237,12 +1223,16 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     cbar = fig.colorbar(_res, ax=ax, **ckw)
                 elif isinstance(cloc, mpl.axes.Axes):
                     cbar = fig.colorbar(_res, ax=cloc, **ckw)
+
+                else:
+                    raise TypeError('cloc wrong type')
                 # TODO cax in arbitrary axes
                 # elif cloc[0] == 'in & isinstance(cloc[1], mpl.axes.Axes):
                 #     cbar = fig.colorbar(return_, cax=cloc[1], **ckw)
 
                 if clim is not None:
                     cbar.set_clim(*clim)
+
                 if clabel is not None:
                     cbar.set_label(clabel)
 
@@ -1290,7 +1280,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             # /POST
 
             # Returning
-            # res = ObjectWrapper(_res, figure=fig)
             return _res
         # /def
 
@@ -1307,6 +1296,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 ###############################################################################
 # as_decorator
 
-mpl_decorator = MatplotlibDecorator.as_decorator
+mpl_decorator = MatplotlibDecorator()
 
 ###############################################################################

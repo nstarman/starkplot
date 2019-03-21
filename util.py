@@ -368,12 +368,12 @@ def overrideFigure(fig=None, **kw):
 # /def
 
 
-def setSuptitle(suptitle, fig=None, **kw):
+def setSuptitle(supertitle, fig=None, **kw):
     r"""
     """
     fig = _gcf(fig)
 
-    suptitle, stkw = _parsestrandopts(suptitle)  # get val & kw
+    supertitle, stkw = _parsestrandopts(supertitle)  # get val & kw
     if not stkw:  # if no kwargs, try from kw
         stkw = kw.get('suptitle', {})
         if not stkw:  # still no kwargs, scrape together from kw
@@ -383,7 +383,7 @@ def setSuptitle(suptitle, fig=None, **kw):
             stkw.update({_stripprefix(k, 'suptitle_'): v
                          for k, v in kw.items()
                          if k.startswith('suptitle_')})
-    fig.suptitle(suptitle, **stkw)
+    fig.suptitle(supertitle, **stkw)
 
 
 def tightLayout(fig=None, tlkw={}, **kw):
@@ -435,7 +435,7 @@ def _gca(ax):
 # /def
 
 
-def prepareAxes(ax=None, fig=None):
+def prepareAxes(ax=None, fig=None, rtcf=True):
     r"""
     """
     fig = _gcf(fig)
@@ -447,6 +447,11 @@ def prepareAxes(ax=None, fig=None):
     # ax = int geta/sets subplot with this number
     # ex = next # TODO
     # #TODO should ax=False impact how the figure is treated?
+
+    if rtcf in (True, ):  # preserve oldfig
+        oldax = plt.gca()
+    else:
+        oldax = None
 
     if ax is False:  # this turns off most stuff
         pass
@@ -462,13 +467,13 @@ def prepareAxes(ax=None, fig=None):
     else:  # TODO check it's an axes instance
         ax = fig.sca(ax)
 
-    return ax
+    return ax, oldax
 # /def
 
 
-def setTitle(title, ax=None, **kw):
+def setTitle(Title, ax=None, **kw):
     ax = _gca(ax)
-    title, titlekw = _parsestrandopts(title)
+    Title, titlekw = _parsestrandopts(Title)
     if not titlekw:  # if no kwargs
         titlekw = kw.get('title', {})
         if not titlekw:  # still no kwargs
@@ -476,7 +481,7 @@ def setTitle(title, ax=None, **kw):
             titlekw.update({_stripprefix(k, 'title_'): v
                             for k, v in kw.items()
                             if k.startswith('title_')})
-    ax.set_title(title, **titlekw)
+    ax.set_title(Title, **titlekw)
 # /def
 
 
@@ -502,9 +507,9 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
     ax = ax if ax is not None else pyplot.gca()
 
     x, nkw = _parselatexstrandopts(x)
-    if not kw:  # if no kwargs
+    if not nkw:  # if no kwargs
         nkw = kw.get('xlabel', {})
-        if not kw:
+        if not nkw:
             nkw = {k: kw.get(k) for k in _xlabelk if k in kw}
             nkw.update({_stripprefix(k, 'xlabel_'): v
                         for k, v in kw.items()
@@ -533,9 +538,9 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
     ax = ax if ax is not None else pyplot.gca()
 
     y, nkw = _parselatexstrandopts(y)
-    if not kw:  # if no kwargs
+    if not nkw:  # if no kwargs
         nkw = kw.get('ylabel', {})
-        if not kw:
+        if not nkw:
             nkw = {k: kw.get(k) for k in _ylabelk if k in kw}
             nkw.update({_stripprefix(k, 'ylabel_'): v
                         for k, v in kw.items()
@@ -568,9 +573,9 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
         pass
     else:
         z, nkw = _parselatexstrandopts(z)
-        if not kw:  # if no kwargs
+        if not nkw:  # if no kwargs
             nkw = kw.get('zlabel', {})
-            if not kw:
+            if not nkw:
                 nkw = {k: kw.get(k) for k in _zlabelk if k in kw}
                 nkw.update({_stripprefix(k, 'zlabel_'): v
                             for k, v in kw.items()

@@ -40,7 +40,10 @@ Planned Features
 #############################################################################
 # Imports
 
+from . import plot
+
 from .decorators.mpldecorator_src import mpl_decorator
+from .decorators.mpldecorator_src import MatplotlibDecorator
 
 #############################################################################
 # Info

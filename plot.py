@@ -176,10 +176,10 @@ def axes(*args, **kw):
 
 
 def gcf():
-    return plt.gcf()
+    return pyplot.gcf()
 
 def gca():
-    return plt.gca()
+    return pyplot.gca()
 
 
 # @mpl_decorator()

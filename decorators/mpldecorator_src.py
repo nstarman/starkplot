@@ -51,6 +51,7 @@ Planned Features
 import numpy as np
 import types
 from warnings import warn
+# import inspect
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -634,33 +635,33 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
         )
 
         def decorator(func=func, funcdoc=funcdoc,
-                         # figure
-                         fig=fig, rtcf=rtcf,
-                         figsize=figsize, overridefig=overridefig,
-                         savefig=savefig, closefig=closefig,
-                         suptitle=suptitle,
-                         # axes
-                         ax=ax,
-                         title=title,
-                         xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, unit_labels=unit_labels,
-                         xlim=xlim, ylim=ylim, zlim=zlim,
-                         invert_axis=invert_axis,
-                         xscale=xscale, yscale=yscale, zscale=zscale,
-                         aspect=aspect,
-                         legend=legend,
-                         # colorbar
-                         colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
-                         # sidehists
-                         sidehists=sidehists, shtype=shtype,
-                         shbins=shbins, shcolor=shcolor,
-                         shfc=shfc, shec=shec,
-                         shxdensity=shxdensity, shydensity=shydensity,
-                         shxweights=shxweights, shyweights=shyweights,
-                         # style
-                         stylesheet=stylesheet,
-                         tight_layout=tight_layout,
-                         # modifying arguments
-                         xkw=xkw):
+                      # figure
+                      fig=fig, rtcf=rtcf,
+                      figsize=figsize, overridefig=overridefig,
+                      savefig=savefig, closefig=closefig,
+                      suptitle=suptitle,
+                      # axes
+                      ax=ax,
+                      title=title,
+                      xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, unit_labels=unit_labels,
+                      xlim=xlim, ylim=ylim, zlim=zlim,
+                      invert_axis=invert_axis,
+                      xscale=xscale, yscale=yscale, zscale=zscale,
+                      aspect=aspect,
+                      legend=legend,
+                      # colorbar
+                      colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
+                      # sidehists
+                      sidehists=sidehists, shtype=shtype,
+                      shbins=shbins, shcolor=shcolor,
+                      shfc=shfc, shec=shec,
+                      shxdensity=shxdensity, shydensity=shydensity,
+                      shxweights=shxweights, shyweights=shyweights,
+                      # style
+                      stylesheet=stylesheet,
+                      tight_layout=tight_layout,
+                      # modifying arguments
+                      xkw=xkw):
             """MatplotlibDecorator
 
             Arguments  # TODO fill out text
@@ -1136,7 +1137,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 setSuptitle(suptitle, fig=fig, **wkw)
 
             # +---- axes ----+
-            ax, oldax = prepareAxes(ax=ax, fig=fig, rtcf=rtcf)
+            ax, oldax = prepareAxes(ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig)
 
             # /PRE
             # CALL
@@ -1144,14 +1145,17 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
 
             if stylesheet is not None:
-                print('not noNone')
+                print(stylesheet)
                 if isinstance(stylesheet, str):
                     stylesheet = (stylesheet,)
-
-                with plt.style.context(stylesheet):
-                    _res = wrapped_function(*func_args, **func_kwargs)
             else:
-                _res = wrapped_function(*func_args, **func_kwargs)
+                stylesheet = 'default'
+
+            with plt.style.context(stylesheet):
+                if not func_kwargs:
+                    _res = wrapped_function(*func_args)
+                else:
+                    _res = wrapped_function(*func_args, **func_kwargs)
 
             # /CALL
             # POST
@@ -1183,25 +1187,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     if labels:
                         legend = _parseoptsdict(legend)
                         ax.legend(handles=handles, labels=labels, **legend)
-
-            # +---- figure ----+
-            # tight layout
-            if tight_layout:
-                tightLayout(fig=fig, tlkw=tight_layout, **wkw)
-
-            # saving
-            if savefig:  # T/F
-                saveFigure(savefig, fig=fig, **wkw)
-
-            if closefig:
-                plt.close(fig)
-
-            # old figure
-            if oldfig is not None:  # Returning old figure to current status
-                plt.figure(oldfig.number)
-            # old axes
-            if oldax is not None:
-                plt.sca(oldax)
 
             # +---- colorbar ----+
             if colorbar:
@@ -1276,6 +1261,28 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     # range=sorted(ylim),
                     color=shcolor, fc=shfc, ec=shec
                 )
+
+
+            # +---- figure ----+
+            # tight layout
+            if tight_layout:
+                tightLayout(fig=fig, tlkw=tight_layout, **wkw)
+
+            # saving
+            if savefig:  # T/F
+                saveFigure(savefig, fig=fig, **wkw)
+
+            if closefig:
+                plt.close(fig)
+
+            # old figure
+            if oldfig is not None:  # Returning old figure to current status
+                plt.figure(oldfig.number)
+                fig = plt.gcf()
+
+            # old axes
+            if oldax is not None:
+                fig.sca(oldax)
 
             # /POST
 

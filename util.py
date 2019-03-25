@@ -161,18 +161,6 @@ _newfigk = (
     'constrained_layout',
     'linewidth',
 )
-# # keys & default values for a new figure
-# self._newfigkdf = (
-#     ('num', None),
-#     # ('figsize', None),
-#     ('dpi', None),
-#     ('facecolor', None), ('edgecolor', None),
-#     ('frameon', None), ('FigureClass', Figure), ('clear', False),
-#     # from kwargs
-#     ('sublotpars', None),
-#     # ('tight_layout', None),
-#     ('constrained_layout', None)
-# )
 
 _tightlayoutk = (
     'pad', 'h_pad', 'w_pad', 'rect'
@@ -187,15 +175,6 @@ _savefigk = (
     'bbox_inches', 'pad_inches', 'frameon',
     'metadata'
 )
-# self._savefigkdf = (
-#     ('dpi', None),
-#     ('quality', None),
-#     ('facecolor', None), ('edgecolor', None),
-#     ('orientation', 'portrait'), ('papertype', None),
-#     ('format', None), ('transparent', False),
-#     ('bbox_inches', None), ('pad_inches', None), ('frameon', None),
-#     ('metadata', None)
-# )
 
 _suptitlek = (
     # x, y
@@ -205,12 +184,6 @@ _suptitlek = (
     # fontproperties  # include?
     # kwargs
 )
-# self._suptitlekdf = (
-#     # ('suptitle_x', .5), ('suptitle_y', .98),
-#     # ('suptitle_ha', 'center'), ('suptitle_va', 'top'),
-#     ('fontsize', None), ('fontweight', None),
-#     # ('fontproperties', None),  # include?
-# )
 
 _titlek = (
     # fontdict, loc, pad,
@@ -304,7 +277,6 @@ def _gcf(fig):
 def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
     r"""
     """
-    fig = _gcf(fig)
     # Figure
     # Checking on the state of the figure
     # gets / makes figure and determines whether to return the old figure.
@@ -315,6 +287,8 @@ def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
         if rtcf in (True, None):  # preserve oldfig
             oldfig = plt.gcf()
         plt.figure(fig.number)  # makes figure current
+
+        fig = plt.gcf()
 
     elif isinstance(fig, (int, np.integer)):
         if rtcf in (True, None):  # preserve oldfig
@@ -342,7 +316,7 @@ def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
 
     # not yet covered
     else:
-        raise ValueError("fig is not Figure, None, or 'new'")
+        raise ValueError("fig is not Figure, int, None, or 'new'")
 
     return fig, oldfig
 # /def
@@ -435,10 +409,10 @@ def _gca(ax):
 # /def
 
 
-def prepareAxes(ax=None, fig=None, rtcf=True):
+def prepareAxes(ax=None, rtcf=True, _fig=None, _oldfig=None):
     r"""
     """
-    fig = _gcf(fig)
+    fig = _gcf(_fig)
 
     # Axes
     # Explaining axes options
@@ -448,8 +422,11 @@ def prepareAxes(ax=None, fig=None, rtcf=True):
     # ex = next # TODO
     # #TODO should ax=False impact how the figure is treated?
 
-    if rtcf in (True, ):  # preserve oldfig
-        oldax = plt.gca()
+    if rtcf in (True, ):  # preserve oldax
+        if _oldfig is None:
+            oldax = fig.gca()
+        else:
+            oldax = _oldfig.gca()
     else:
         oldax = None
 

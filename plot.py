@@ -1045,6 +1045,7 @@ def plotproperties(**kw):
     """
     return None
 
+
 @mpl_decorator()
 def set(**kw):
     r"""A blanck function for accessing any mpl_decorator property

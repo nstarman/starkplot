@@ -102,7 +102,7 @@ __status__ = "Production"
 #############################################################################
 # Helper Stuff
 
-_plttypes = (
+_pltypes = (
     'acorr', 'angle_spectrum',
     'axhline', 'axhspan', 'axvline', 'axvspan',
     'bar', 'barbs', 'barh', 'broken_barh', 'box', 'boxplot',
@@ -192,9 +192,9 @@ def gca():
 # Plotting Functions
 
 @mpl_decorator()
-def plot(*args, plttype='plot', **kwargs):
+def plot(*args, pltype='plot', **kwargs):
     r"""
-    plttype:
+    pltype:
     ====================== ===================================================
     Function               Description
     ====================== ===================================================
@@ -258,42 +258,42 @@ def plot(*args, plttype='plot', **kwargs):
     """
 
     # The Common Plot Types
-    if plttype == 'plot':
+    if pltype == 'plot':
         res = pyplot.plot(*args, **kwargs)
 
-    elif plttype == 'scatter':
+    elif pltype == 'scatter':
         res = pyplot.scatter(*args, **kwargs)
 
-    elif plttype == 'errorbar':
+    elif pltype == 'errorbar':
         res = pyplot.errorbar(*args, **kwargs)
 
-    elif plttype == 'loglog':
+    elif pltype == 'loglog':
         res = pyplot.loglog(*args, **kwargs)
 
-    elif plttype == 'semilogx':
+    elif pltype == 'semilogx':
         res = pyplot.semilogx(*args, **kwargs)
 
-    elif plttype == 'semilogy':
+    elif pltype == 'semilogy':
         res = pyplot.semilogy(*args, **kwargs)
 
-    elif plttype == 'hist':
+    elif pltype == 'hist':
         res = pyplot.hist(*args, **kwargs)
 
-    # Try all options in _plttypes
-    elif plttype in _plttypes:
-        res = getattr(pyplot, plttype)(*args, **kwargs)
+    # Try all options in _pltypes
+    elif pltype in _pltypes:
+        res = getattr(pyplot, pltype)(*args, **kwargs)
 
     # Permitting any pyplot function
-    elif isinstance(plttype, str):
+    elif isinstance(pltype, str):
         try:
-            getattr(pyplot, plttype)
+            getattr(pyplot, pltype)
         except Exception as e:
-            raise ValueError(f'invalid plttype {plttype}')  #
+            raise ValueError(f'invalid pltype {pltype}')  #
         else:
             warn('using unsanctioned plotting method')
-            getattr(pyplot, plttype)(*args, **kwargs)
+            getattr(pyplot, pltype)(*args, **kwargs)
     else:
-        raise ValueError(f'invalid plttype {plttype}')
+        raise ValueError(f'invalid pltype {pltype}')
 
     return res
 

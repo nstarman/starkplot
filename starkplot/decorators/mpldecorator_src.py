@@ -51,7 +51,7 @@ Planned Features
 import numpy as np
 import types
 from warnings import warn
-# import inspect
+import inspect
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -1115,7 +1115,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     # modifying arguments
                     xkw=self.xkw,
                     **func_kwargs):
-            """
+            r"""
             """
             # PRE
 
@@ -1142,7 +1142,9 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
             # /PRE
             # CALL
 
-            func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
+            # if func_kwargs:
+            #     func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
+
 
             if stylesheet is not None:
                 print(stylesheet)
@@ -1152,6 +1154,9 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                 stylesheet = 'default'
 
             with plt.style.context(stylesheet):
+                # argspec = inspect.getfullargspec(wrapped_function)
+                # if argspec.varkw is not None:  # accepts extra kwargs
+                #     pass
                 if not func_kwargs:
                     _res = wrapped_function(*func_args)
                 else:

@@ -35,3 +35,9 @@ install:
 script: true
     # - pytest # PUT HERE
 
+notifications:
+  email:
+    recipients:
+      - n.starkman@mail.utoronto.ca
+    on_success: change
+    on_failure: change

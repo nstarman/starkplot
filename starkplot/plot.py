@@ -183,9 +183,7 @@ def gca():
     return pyplot.gca()
 
 
-# @mpl_decorator()
-# def figure(*args, **kw):
-#     return pyplot.gcf()
+show = pyplot.show
 
 
 ###############################################################################

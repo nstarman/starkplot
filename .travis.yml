@@ -6,6 +6,9 @@ python:
     # "provisional feature" rules there are significant differences between patch
     # versions for asyncio and typing.
     - 3.5.2
+    # supported python versions
+    - "3.5"
+    - "3.6"
     - "3.7"
 
 

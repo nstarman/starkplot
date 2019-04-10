@@ -58,22 +58,24 @@ Planned Features
 import re
 from warnings import warn
 import numpy as np
-from scipy import special
-from scipy import interpolate
 
-from astropy.utils.decorators import wraps
-
-from matplotlib import pyplot
-from matplotlib.figure import Figure
-# import matplotlib.ticker as ticker
-import matplotlib.cm as cm
-from matplotlib.ticker import NullFormatter, MultipleLocator
+# matplotlib
+from matplotlib.pyplot import *  # start by importing all of pyplot
+from matplotlib import pyplot  # for usage here
 
 # custom imports
 from .decorators import mpl_decorator
 from . import docstring
-from .util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
-from .util import axisLabels, axisScales
+from .util import _parseoptsdict, _parsestrandopts, _parselatexstrandopts,\
+    _stripprefix, _latexstr,\
+    axisLabels, axisScales
+from ._info import _pltypes, _annotations, _customadded, _other
+
+try:
+    from astropy.utils.decorators import wraps  # TODO move to internal file
+except Exception as e:
+    print('cannot import preferred wrapper')
+    from functools import wraps
 
 # TODO get rid of
 try:
@@ -99,91 +101,13 @@ __maintainer__ = "Nathaniel Starkman"
 __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
 
-#############################################################################
-# Helper Stuff
-
-_pltypes = (
-    'acorr', 'angle_spectrum',
-    'axhline', 'axhspan', 'axvline', 'axvspan',
-    'bar', 'barbs', 'barh', 'broken_barh', 'box', 'boxplot',
-    'cohere', 'contour', 'contourf', 'csd',
-    'errorbar', 'eventplot',
-    'figimage', 'fill', 'fill_between', 'fill_betweenx',
-    'hexbin', 'hist', 'hist2d', 'hlines',
-    'imshow',
-    'loglog',
-    'magnitude_spectrum', 'matshow',
-    'pcolor', 'pcolormesh', 'phase_spectrum', 'pie',
-    'plot', 'plot_date', 'plotfile', 'polar', 'psd',
-    'quiver',
-    'rgrids',
-    'scatter', 'sci', 'semilogx', 'semilogy', 'specgram',
-    'spy', 'stackplot', 'stem', 'step', 'streamplot',
-    'tricontour', 'tricontourf', 'tripcolor', 'triplot',
-    'violinplot', 'vlines',
-    'xcorr',
-)
-
-_annotations = (
-    'add_axis_labels', 'add_unit_axis_labels', 'annotate', 'clabel',
-    'colorbar', 'figlegend', 'figtext', 'legend', 'suptitle',
-    'table', 'text', 'title', 'xlabel', 'ylabel')
-
-_customadded = (
-    'add_axis_labels', 'add_unit_axis_labels',
-    'add_axis_limits',
-    'add_axis_scales',
-                )
-
-_other = (
-    'autoscale', 'axes', 'axis',
-    'cla', 'clf', 'clim', 'close', 'cm', 'colormaps', 'connect', 'cycler',
-    'dedent', 'delaxes', 'deprecated', 'disconnect',
-    'docstring', 'draw', 'draw_all', 'draw_if_interactive',
-    'figaspect', 'fignum_exists', 'figure', 'findobj',
-    'gca', 'gcf', 'gci', 'get', 'get_backend', 'get_cmap',
-    'get_current_fig_manager', 'get_figlabels', 'get_fignums',
-    'get_plot_commands', 'get_scale_docs', 'get_scale_names', 'getp',
-    'ginput', 'grid',
-    'importlib', 'imread', 'imsave', 'inspect', 'install_repl_displayhook',
-    'interactive', 'ioff', 'ion', 'isinteractive',
-    'locator_params', 'logging',
-    'margins', 'matplotlib', 'minorticks_off', 'minorticks_on', 'mlab',
-    'new_figure_manager',
-    'pause', 'plotting', 'prism', 'pylab_setup',
-    'quiverkey',
-    'rc', 'rcParams', 'rcParamsDefault', 'rcParamsOrig', 'rc_context',
-    'rcdefaults', 'rcsetup', 're', 'register_cmap',
-    'savefig', 'sca', 'set_cmap', 'setp', 'show', 'silent_list', 'style',
-    'subplot', 'subplot2grid', 'subplot_tool', 'subplots',
-    'subplots_adjust', 'switch_backend', 'sys',
-    'thetagrids', 'tick_params', 'ticklabel_format', 'tight_layout',
-    'time', 'twinx', 'twiny',
-    'uninstall_repl_displayhook',
-    'waitforbuttonpress', 'warn_deprecated', 'warnings',
-    'xkcd', 'xlim',
-    'xscale', 'xticks',
-    'ylim', 'yscale', 'yticks'
-)
-
 
 ###############################################################################
 # To Organize Functions
 
 @mpl_decorator()
-def axes(*args, **kw):
+def axes(*args, **kw):  # TODO improve
     return pyplot.axes(*args, **kw)
-
-
-def gcf():
-    return pyplot.gcf()
-
-
-def gca():
-    return pyplot.gca()
-
-
-show = pyplot.show
 
 
 ###############################################################################
@@ -342,8 +266,6 @@ def bar(*args, **kwargs):
 def barbs(*args, **kwargs):
     r"""starkplot wrapper for barbs"""
     return pyplot.barbs(*args, **kwargs)
-
-# barbs = mpl_decorator(pyplot.barbs)
 
 
 @mpl_decorator(funcdoc=pyplot.barh.__doc__)
@@ -712,6 +634,10 @@ def scatterplot(x, y, *args, **kwargs):
        2019-02-09 - copied & modified - Starkman (Toronto)
 
     """
+    from scipy import special, interpolate
+    import matplotlib.cm as cm
+    from matplotlib.ticker import NullFormatter, MultipleLocator
+
     xlabel = kwargs.pop('xlabel', None)
     ylabel = kwargs.pop('ylabel', None)
     if 'xrange' in kwargs:

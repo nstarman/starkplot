@@ -40,7 +40,7 @@ Planned Features
 #############################################################################
 # Imports
 
-from . import plot
+from .plot import *
 
 from .decorators.mpldecorator_src import mpl_decorator
 from .decorators.mpldecorator_src import MatplotlibDecorator
@@ -50,7 +50,7 @@ from .decorators.mpldecorator_src import MatplotlibDecorator
 
 __author__ = "Nathaniel Starkman"
 __copyright__ = "Copyright 2018, "
-__credits__ = [""]
+__credits__ = ["The Matplotlib Team"]
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = "Nathaniel Starkman"

@@ -75,8 +75,8 @@ from ..util import _newfigk, _savefigk, _suptitlek
 from ..util import _titlek, _xlabelk, _ylabelk, _zlabelk
 from ..util import _cbark
 
-from ..util import prepareFigure, saveFigure, overrideFigure, setSuptitle, tightLayout
-from ..util import prepareAxes, setTitle
+from ..util import prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout
+from ..util import prepareAxes, set_title
 
 from ..docstring import dedent, strthentwoline
 
@@ -1134,7 +1134,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
             # set supertitle
             if suptitle is not None:
-                setSuptitle(suptitle, fig=fig, **wkw)
+                set_suptitle(suptitle, fig=fig, **wkw)
 
             # +---- axes ----+
             ax, oldax = prepareAxes(ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig)
@@ -1171,7 +1171,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
                 # set title
                 if title is not None:
-                    setTitle(title, ax=ax, **wkw)
+                    set_title(title, ax=ax, **wkw)
 
                 ax.set_aspect(aspect)
 
@@ -1267,10 +1267,11 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
                     color=shcolor, fc=shfc, ec=shec
                 )
 
-
             # +---- figure ----+
             # tight layout
             if tight_layout:
+                # if isinstance(tight_layout, bool):
+                #     tight_layout = {}
                 tightLayout(fig=fig, tlkw=tight_layout, **wkw)
 
             # saving

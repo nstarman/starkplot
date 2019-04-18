@@ -67,7 +67,7 @@ from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..docstring import dedent, strthentwoline
 from ..util import prepareAxes, axisLabels, axisLimits, invertAxis, axisScales
-from ..util import setTitle
+from ..util import set_title
 from ..util import _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
 
 
@@ -687,7 +687,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
 
                     # set title
                     if title is not None:
-                        setTitle(title, ax=ax, **wkw)
+                        set_title(title, ax=ax, **wkw)
 
                     ax.set_aspect(aspect)
 
@@ -714,7 +714,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
                     #
                     #     # set title
                     #     if title is not None:
-                    #         setTitle(title, ax=ax, **wkw)
+                    #         set_title(title, ax=ax, **wkw)
                     #
                     #     ax.set_aspect(aspect)
                     #

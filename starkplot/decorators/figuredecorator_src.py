@@ -64,7 +64,7 @@ except ImportError as e:
 # Custom Imports
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
-from ..util import prepareFigure, saveFigure, overrideFigure, setSuptitle, tightLayout
+from ..util import prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout
 from ..docstring import dedent, strthentwoline
 
 #############################################################################
@@ -601,7 +601,7 @@ class FigureDecorator(MatplotlibDecoratorBase):
 
             # set supertitle
             if suptitle is not None:
-                setSuptitle(suptitle, fig=fig, **wkw)
+                set_suptitle(suptitle, fig=fig, **wkw)
 
             # /PRE
             # CALL

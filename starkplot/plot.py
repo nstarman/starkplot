@@ -872,30 +872,6 @@ def add_axis_labels(ax=None, x=None, y=None, z=None, units=False):
     2018-10-30 - written - Starkman (Toronto)
     2019-02-09 - modified - Starkman (Toronto) ref bovy_plot._add_axislabels
     """
-    # ax = ax if ax is not None else pyplot.gca()
-
-    # if x is not None:
-    #     x, xkw = _parselatexstrandopts(x)
-    #     if units is True:
-    #         x = rf"{x} [{ax.get_xlabel()}]"
-    #     ax.set_xlabel(x, **xkw)
-
-    # if y is not None:
-    #     y, ykw = _parselatexstrandopts(y)
-    #     if units is True:
-    #         y = rf"{y} [{ax.get_ylabel()}]"
-    #     ax.set_ylabel(y, **ykw)
-
-    # if z is not None:
-    #     try:
-    #         ax.get_zlabel()
-    #     except AttributeError:
-    #         pass
-    #     else:
-    #         z, zkw = _parselatexstrandopts(z)
-    #         if units is True:
-    #             z = rf"{z} [{ax.get_zlabel()}]"
-    #         ax.set_zlabel(z, **zkw)
     axisLabels(ax=ax, x=x, y=y, z=z, units=units)
 
 

@@ -232,7 +232,7 @@ def _parseoptsdict(attr):
     return attr
 
 
-def _latexstr(attr):
+def _latexstr(attr):  # TODO FIXME
     if not attr:  # empty string
         return rf'{attr}'
     # elif not attr.startswith('$'):
@@ -264,6 +264,44 @@ def _parsestrandopts(attr):
         return attr, {}
     else:
         return attr[0], attr[1]
+
+
+def _parsexkwandopts(kw, arg, name, compatible, parser, prefix=None, allowupdate=True):
+
+    if parser in (_parsestrandopts, _parselatexstrandopts):  # check if (arg, opts)
+        arg, argkw0 = parser(arg)
+    elif parser == _parseoptsdict:  # check if opts
+        argkw0 = parser(arg)
+    else:                           # check if (arg, opts)
+        arg, argkw0 = parser(arg)
+
+    if allowupdate:
+        update = argkw0.get('update', False)
+    else:
+        update = False
+
+    if not argkw0 or update:  # if no kwargs
+        argkw1 = kw.get(name, {})
+
+        if allowupdate:
+            update = argkw1.get('update', False)
+        else:
+            update = False
+
+        if not argkw1 or update:  # still no kwargs
+            # start with any compatible options in kw
+            argkw2 = {k: kw.get(k) for k in compatible if k in kw}
+            # overwrite with any specific options
+            if prefix is None:
+                prefix = name + '_'
+            argkw2.update({_stripprefix(k, prefix): v for k, v in kw.items()
+                           if k.startswith(prefix)})
+    # updating & maintaining priority
+    argkw = argkw2
+    argkw.update(argkw1)
+    argkw.update(argkw0)
+
+    return arg, argkw
 
 
 ###############################################################################
@@ -342,22 +380,27 @@ def overrideFigure(fig=None, **kw):
 # /def
 
 
-def setSuptitle(supertitle, fig=None, **kw):
+def set_suptitle(supertitle, fig=None, **kw):
     r"""
     """
     fig = _gcf(fig)
 
-    supertitle, stkw = _parsestrandopts(supertitle)  # get val & kw
-    if not stkw:  # if no kwargs, try from kw
-        stkw = kw.get('suptitle', {})
-        if not stkw:  # still no kwargs, scrape together from kw
-            # allowable arguments
-            stkw = {k: kw.get(k) for k in _suptitlek if k in kw}
-            # any specific overrides
-            stkw.update({_stripprefix(k, 'suptitle_'): v
-                         for k, v in kw.items()
-                         if k.startswith('suptitle_')})
+    # supertitle, stkw = _parsestrandopts(supertitle)  # get val & kw
+    # if not stkw:  # if no kwargs, try from kw
+    #     stkw = kw.get('suptitle', {})
+    #     if not stkw:  # still no kwargs, scrape together from kw
+    #         # allowable arguments
+    #         stkw = {k: kw.get(k) for k in _suptitlek if k in kw}
+    #         # any specific overrides
+    #         stkw.update({_stripprefix(k, 'suptitle_'): v
+    #                      for k, v in kw.items()
+    #                      if k.startswith('suptitle_')})
+    supertitle, stkw = _parsexkwandopts(kw, supertitle, 'suptitle', _suptitlek,
+                                        _parsestrandopts)
     fig.suptitle(supertitle, **stkw)
+
+
+set_supertitle = set_suptitle  # alias 
 
 
 def tightLayout(fig=None, tlkw={}, **kw):
@@ -365,16 +408,18 @@ def tightLayout(fig=None, tlkw={}, **kw):
     """
     fig = _gcf(fig)
 
-    tlkw = _parseoptsdict(tlkw)
-    if not tlkw:  # if empty
-        tlkw = kw.get('tight_layout', {})
-        if not tlkw:  # if empty
-            # allowable arguments
-            tlkw = {k: kw.get(k) for k in _tightlayoutk if k in kw}
-            # any specific overrides
-            tlkw.update({_stripprefix(k, 'tight_layout_'): v
-                         for k, v in kw.items()
-                         if k.startswith('tight_layout_')})
+    # tlkw = _parseoptsdict(tlkw)
+    # if not tlkw:  # if empty
+    #     tlkw = kw.get('tight_layout', {})
+    #     if not tlkw:  # if empty
+    #         # allowable arguments
+    #         tlkw = {k: kw.get(k) for k in _tightlayoutk if k in kw}
+    #         # any specific overrides
+    #         tlkw.update({_stripprefix(k, 'tight_layout_'): v
+    #                      for k, v in kw.items()
+    #                      if k.startswith('tight_layout_')})
+    _, tlkw = _parsexkwandopts(kw, tlkw, 'tight_layout', _tightlayoutk,
+                               _parseoptsdict)
 
     fig.tight_layout(**tlkw)
 
@@ -384,16 +429,18 @@ def saveFigure(fname, fig=None, **kw):
     """
     fig = _gcf(fig)
 
-    fname, sfgkw = _parsestrandopts(fname)  # get val & kw
-    if not sfgkw:  # if no kwargs
-        sfgkw = kw.get('savefig', {})
-        if not sfgkw:  # still no kwargs
-            # allowable arguments
-            sfgkw = {k: kw.get(k) for k in _savefigk if k in kw}
-            # any specific overrides
-            sfgkw.update({_stripprefix(k, 'savefig_'): v
-                          for k, v in kw.items()
-                          if k.startswith('savefig_')})
+    # fname, sfgkw = _parsestrandopts(fname)  # get val & kw
+    # if not sfgkw:  # if no kwargs
+    #     sfgkw = kw.get('savefig', {})
+    #     if not sfgkw:  # still no kwargs
+    #         # allowable arguments
+    #         sfgkw = {k: kw.get(k) for k in _savefigk if k in kw}
+    #         # any specific overrides
+    #         sfgkw.update({_stripprefix(k, 'savefig_'): v
+    #                       for k, v in kw.items()
+    #                       if k.startswith('savefig_')})
+    fname, tlkw = _parsexkwandopts(kw, fname, 'savefig', _savefigk,
+                                   _parsestrandopts)
 
     if fname is None:
         fname = 'plot' + str(fig.number)
@@ -448,17 +495,48 @@ def prepareAxes(ax=None, rtcf=True, _fig=None, _oldfig=None):
 # /def
 
 
-def setTitle(Title, ax=None, **kw):
+def set_title(title, ax=None, **kw):
+    r"""set title
+    Arguments
+    ---------
+    title: str or (str, dict)
+        the title (and options)
+        included options have highest priority
+    ax: ax  (default None -> gca())
+
+    Key-Word Arguments
+    ------------------
+    Only used if no dict in *title* or if `update`: True in *title* dict
+    Will first look for a same-named item.
+        if found, will only use this dict unless `update`: True
+    Failing that, will draw from the general dict, preferring items
+        with keys suffixed by `title_`
+    Order: 1) 'title'=dict(...)
+           2) 'title_fontsize', ...   3) 'fontsize', ...
+    compatible options: 'fontsize', 'fontweight'
+    """
     ax = _gca(ax)
-    Title, titlekw = _parsestrandopts(Title)
-    if not titlekw:  # if no kwargs
-        titlekw = kw.get('title', {})
-        if not titlekw:  # still no kwargs
-            titlekw = {k: kw.get(k) for k in _titlek if k in kw}
-            titlekw.update({_stripprefix(k, 'title_'): v
-                            for k, v in kw.items()
-                            if k.startswith('title_')})
-    ax.set_title(Title, **titlekw)
+
+    # title, titlekw0 = _parsestrandopts(title)  # check if (title, opts)
+
+    # if not titlekw0 or titlekw0.get('update', False):  # if no kwargs
+    #     titlekw1 = kw.get('title', {})
+
+    #     if not titlekw1 or titlekw1.get('update', False):  # still no kwargs
+    #         # start with any compatible options in kw
+    #         titlekw2 = {k: kw.get(k) for k in _titlek if k in kw}
+    #         # overwrite with any specific options
+    #         titlekw2.update({_stripprefix(k, 'title_'): v
+    #                          for k, v in kw.items()
+    #                          if k.startswith('title_')})
+    # # updating & maintaining priority
+    # titlekw = titlekw2
+    # titlekw.update(titlekw1)
+    # titlekw.update(titlekw0)
+    title, titlekw = _parsexkwandopts(kw, title, 'title', _titlek,
+                                      _parsestrandopts)
+
+    ax.set_title(title, **titlekw)
 # /def
 
 
@@ -483,14 +561,15 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
 
     ax = ax if ax is not None else pyplot.gca()
 
-    x, nkw = _parselatexstrandopts(x)
-    if not nkw:  # if no kwargs
-        nkw = kw.get('xlabel', {})
-        if not nkw:
-            nkw = {k: kw.get(k) for k in _xlabelk if k in kw}
-            nkw.update({_stripprefix(k, 'xlabel_'): v
-                        for k, v in kw.items()
-                        if k.startswith('xlabel_')})
+    # x, nkw = _parselatexstrandopts(x)
+    # if not nkw:  # if no kwargs
+    #     nkw = kw.get('xlabel', {})
+    #     if not nkw:
+    #         nkw = {k: kw.get(k) for k in _xlabelk if k in kw}
+    #         nkw.update({_stripprefix(k, 'xlabel_'): v
+    #                     for k, v in kw.items()
+    #                     if k.startswith('xlabel_')})
+    x, nkw = _parsexkwandopts(kw, x, 'xlabel', _xlabelk, _parselatexstrandopts)
     if units is True:
         x = rf"{x} [{ax.get_xlabel()}]"
     ax.set_xlabel(x, **nkw)
@@ -514,14 +593,15 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
 
     ax = ax if ax is not None else pyplot.gca()
 
-    y, nkw = _parselatexstrandopts(y)
-    if not nkw:  # if no kwargs
-        nkw = kw.get('ylabel', {})
-        if not nkw:
-            nkw = {k: kw.get(k) for k in _ylabelk if k in kw}
-            nkw.update({_stripprefix(k, 'ylabel_'): v
-                        for k, v in kw.items()
-                        if k.startswith('ylabel_')})
+    # y, nkw = _parselatexstrandopts(y)
+    # if not nkw:  # if no kwargs
+    #     nkw = kw.get('ylabel', {})
+    #     if not nkw:
+    #         nkw = {k: kw.get(k) for k in _ylabelk if k in kw}
+    #         nkw.update({_stripprefix(k, 'ylabel_'): v
+    #                     for k, v in kw.items()
+    #                     if k.startswith('ylabel_')})
+    y, nkw = _parsexkwandopts(kw, y, 'ylabel', _ylabelk, _parselatexstrandopts)
     if units is True:
         y = rf"{y} [{ax.get_ylabel()}]"
     ax.set_ylabel(y, **nkw)
@@ -549,14 +629,15 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
     except AttributeError:
         pass
     else:
-        z, nkw = _parselatexstrandopts(z)
-        if not nkw:  # if no kwargs
-            nkw = kw.get('zlabel', {})
-            if not nkw:
-                nkw = {k: kw.get(k) for k in _zlabelk if k in kw}
-                nkw.update({_stripprefix(k, 'zlabel_'): v
-                            for k, v in kw.items()
-                            if k.startswith('zlabel_')})
+        # z, nkw = _parselatexstrandopts(z)
+        # if not nkw:  # if no kwargs
+        #     nkw = kw.get('zlabel', {})
+        #     if not nkw:
+        #         nkw = {k: kw.get(k) for k in _zlabelk if k in kw}
+        #         nkw.update({_stripprefix(k, 'zlabel_'): v
+        #                     for k, v in kw.items()
+        #                     if k.startswith('zlabel_')})
+        z, nkw = _parsexkwandopts(kw, z, 'zlabel', _zlabelk, _parselatexstrandopts)
         if units is True:
             rf"{z} [{ax.get_zlabel()}]"
         ax.set_zlabel(z, **nkw)

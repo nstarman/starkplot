@@ -167,21 +167,20 @@ _tightlayoutk = (
 )
 
 _savefigk = (
-    'dpi',
-    'quality',
+    'dpi', 'quality',
     'facecolor', 'edgecolor',
-    'orientation', 'portrait', 'papertype',
+    'orientation', 'papertype',
     'format', 'transparent',
-    'bbox_inches', 'pad_inches', 'frameon',
-    'metadata'
+    'frameon', 'bbox_inches', 'pad_inches',
+    'bbox_extra_artists', 'metadata'
 )
 
 _suptitlek = (
-    # x, y
-    # horizontalalignment, ha, verticalalignment, va
+    'x', 'y',
+    'horizontalalignment', 'ha', 'verticalalignment', 'va',
     'fontsize', 'fontweight',
-    # size, weight
-    # fontproperties  # include?
+    'size', 'weight'
+    # 'fontproperties'  # include?
     # kwargs
 )
 
@@ -225,11 +224,13 @@ def _stripprefix(s, prefix):
         return s[len(prefix):]
     else:
         return s
+# /def
 
 
 def _parseoptsdict(attr):
     attr = attr if isinstance(attr, dict) else {}
     return attr
+# /def
 
 
 def _latexstr(attr):  # TODO FIXME
@@ -239,6 +240,7 @@ def _latexstr(attr):  # TODO FIXME
     #     return rf'${attr}$'
     else:
         return rf'{attr}'
+# /def
 
 
 def _parselatexstrandopts(attr):
@@ -249,6 +251,7 @@ def _parselatexstrandopts(attr):
         return _latexstr(attr), {}
     else:
         return _latexstr(attr[0]), attr[1]
+# /def
 
 
 def _parsestrandopts(attr):
@@ -264,12 +267,13 @@ def _parsestrandopts(attr):
         return attr, {}
     else:
         return attr[0], attr[1]
+# /def
 
 
 def _parsexkwandopts(arg, kw, name, compatible, parser,
                      prefix=None, allowupdate=True):
     r"""
-    Arguments
+    Parameters
     ---------
     kw:
     arg:
@@ -323,6 +327,7 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
     argkw.update(argkw0)
 
     return arg, argkw
+# /def
 
 
 ###############################################################################
@@ -333,7 +338,7 @@ def _gcf(fig):
 # /def
 
 
-def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
+def prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
     r"""
     """
     # Figure
@@ -381,8 +386,20 @@ def prepareFigure(fig=None, rtcf=True, figsize=None, **kw):
 # /def
 
 
-def overrideFigure(fig=None, **kw):
-    r"""
+def override_figure(fig=None, **kw):
+    r"""override figure properties
+    Parameters
+    ---------
+    figsize:
+        uses set_size_inches
+    dpi:
+        uses set_dpi
+    facecolor:
+        uses set_facecolor
+    edgecolor:
+        uses edgecolor
+    frameon:
+        uses frameon
     """
     fig = _gcf(fig)
 
@@ -391,22 +408,22 @@ def overrideFigure(fig=None, **kw):
 
     if 'dpi' in kw:  # TODO better methods
         fig.set_dpi(kw.get('dpi'))
-    elif 'dpi' in kw:
+    elif 'fig_dpi' in kw:
         fig.set_dpi(kw.get('fig_dpi'))
 
     if 'facecolor' in kw:  # TODO better methods
         fig.set_facecolor(kw.get('facecolor'))
-    elif 'facecolor' in kw:
+    elif 'fig_facecolor' in kw:
         fig.set_facecolor(kw.get('fig_facecolor'))
 
     if 'edgecolor' in kw:  # TODO better methods
         fig.set_edgecolor(kw.get('edgecolor'))
-    elif 'edgecolor' in kw:
+    elif 'fig_edgecolor' in kw:
         fig.set_edgecolor(kw.get('fig_edgecolor'))
 
     if 'frameon' in kw:  # TODO better methods
         fig.set_frameon(kw.get('frameon'))
-    elif 'frameon' in kw:
+    elif 'fig_frameon' in kw:
         fig.set_frameon(kw.get('fig_frameon'))
 
     # FigureClass
@@ -417,27 +434,25 @@ def overrideFigure(fig=None, **kw):
 # /def
 
 
-def set_suptitle(supertitle, fig=None, **kw):
-    r"""
+def set_suptitle(t, fig=None, **kw):
+    r"""Add a centered title to the figure.
+
+    Parameters
+    ----------
+    t : str
+        The title text.
+    fig : Figure, None  (default None)
+        figure to set supertitle
+        None -> current figure
+    # TODO explanantion of _parsexkwandopts
     """
     fig = _gcf(fig)
 
-    # supertitle, stkw = _parsestrandopts(supertitle)  # get val & kw
-    # if not stkw:  # if no kwargs, try from kw
-    #     stkw = kw.get('suptitle', {})
-    #     if not stkw:  # still no kwargs, scrape together from kw
-    #         # allowable arguments
-    #         stkw = {k: kw.get(k) for k in _suptitlek if k in kw}
-    #         # any specific overrides
-    #         stkw.update({_stripprefix(k, 'suptitle_'): v
-    #                      for k, v in kw.items()
-    #                      if k.startswith('suptitle_')})
-    supertitle, stkw = _parsexkwandopts(
-        supertitle, kw, 'suptitle', _suptitlek, _parsestrandopts)
-    fig.suptitle(supertitle, **stkw)
-
-
-set_supertitle = set_suptitle  # alias 
+    t, stkw = _parsexkwandopts(
+        t, kw, 'suptitle', _suptitlek, _parsestrandopts)
+    res = fig.suptitle(t, **stkw)
+    return res
+# /def
 
 
 def tightLayout(fig=None, tlkw={}, **kw):
@@ -445,37 +460,26 @@ def tightLayout(fig=None, tlkw={}, **kw):
     """
     fig = _gcf(fig)
 
-    # tlkw = _parseoptsdict(tlkw)
-    # if not tlkw:  # if empty
-    #     tlkw = kw.get('tight_layout', {})
-    #     if not tlkw:  # if empty
-    #         # allowable arguments
-    #         tlkw = {k: kw.get(k) for k in _tightlayoutk if k in kw}
-    #         # any specific overrides
-    #         tlkw.update({_stripprefix(k, 'tight_layout_'): v
-    #                      for k, v in kw.items()
-    #                      if k.startswith('tight_layout_')})
     _, tlkw = _parsexkwandopts(tlkw, kw, 'tight_layout', _tightlayoutk,
                                _parseoptsdict)
 
     fig.tight_layout(**tlkw)
+# /def
 
 
-def saveFigure(fname, fig=None, **kw):
-    r"""
+def save_figure(fname, fig=None, **kw):
+    r"""save figure
+
+    Parameters
+    ----------
+    fname: str or file-like object
+    fig: Figure, None
+        figure to save
+        None -> current figure
+    # TODO explanantion of _parsexkwandopts
     """
     fig = _gcf(fig)
 
-    # fname, sfgkw = _parsestrandopts(fname)  # get val & kw
-    # if not sfgkw:  # if no kwargs
-    #     sfgkw = kw.get('savefig', {})
-    #     if not sfgkw:  # still no kwargs
-    #         # allowable arguments
-    #         sfgkw = {k: kw.get(k) for k in _savefigk if k in kw}
-    #         # any specific overrides
-    #         sfgkw.update({_stripprefix(k, 'savefig_'): v
-    #                       for k, v in kw.items()
-    #                       if k.startswith('savefig_')})
     fname, sfgkw = _parsexkwandopts(fname, kw, 'savefig', _savefigk,
                                     _parsestrandopts)
 
@@ -483,6 +487,7 @@ def saveFigure(fname, fig=None, **kw):
         fname = 'plot' + str(fig.number)
 
     fig.savefig(fname, **sfgkw)
+# /def
 
 
 ###############################################################################
@@ -493,7 +498,7 @@ def _gca(ax):
 # /def
 
 
-def prepareAxes(ax=None, rtcf=True, _fig=None, _oldfig=None):
+def prepare_axes(ax=None, rtcf=True, _fig=None, _oldfig=None):
     r"""
     """
     fig = _gcf(_fig)
@@ -532,16 +537,16 @@ def prepareAxes(ax=None, rtcf=True, _fig=None, _oldfig=None):
 # /def
 
 
-def set_title(Title, ax=None, **kw):
+def set_title(t, ax=None, **kw):
     r"""set title
-    Arguments
+    Parameters
     ---------
-    Title: str or (str, dict)
+    t: str or (str, dict)
         the title (and options)
         included options have highest priority
     ax: ax  (default None -> gca())
 
-    Key-Word Arguments
+    Key-Word Parameters
     ------------------
     Only used if no dict in *title* or if `update`: True in *title* dict
     Will first look for a same-named item.
@@ -570,7 +575,7 @@ def set_title(Title, ax=None, **kw):
     # titlekw = titlekw2
     # titlekw.update(titlekw1)
     # titlekw.update(titlekw0)
-    title, titlekw = _parsexkwandopts(Title, kw, 'title', _titlek,
+    title, titlekw = _parsexkwandopts(t, kw, 'title', _titlek,
                                       _parsestrandopts)
 
     ax.set_title(title, **titlekw)
@@ -585,7 +590,7 @@ def set_title(Title, ax=None, **kw):
 def set_xlabel(ax=None, x=None, units=True, **kw):
     r"""starkplot wrapper for set_xlabel
 
-    Arguments
+    Parameters
     ---------
     ax: axis, None
     x:
@@ -611,6 +616,7 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
     if units is True:
         x = rf"{x} [{ax.get_xlabel()}]"
     ax.set_xlabel(x, **nkw)
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_ylabel.__doc__,
@@ -618,7 +624,7 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
 def set_ylabel(ax=None, y=None, units=True, **kw):
     r"""starkplot wrapper for set_ylabel
 
-    Arguments
+    Parameters
     ---------
     ax: axis, None
     y:
@@ -644,6 +650,7 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
     if units is True:
         y = rf"{y} [{ax.get_ylabel()}]"
     ax.set_ylabel(y, **nkw)
+# /def
 
 
 # @docstring.Appender(pyplot.Axes.set_zlabel.__doc__,
@@ -651,7 +658,7 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
 def set_zlabel(ax=None, z=None, units=True, **kw):
     r"""starkplot wrapper for set_zlabel
 
-    Arguments
+    Parameters
     ---------
     ax: axis, None
     z:
@@ -681,6 +688,7 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
         if units is True:
             rf"{z} [{ax.get_zlabel()}]"
         ax.set_zlabel(z, **nkw)
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
@@ -697,7 +705,7 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
 
       add_axis_labels(ax=None, x=None, y=None, z=None, units=False)
 
-    Arguments
+    Parameters
     ---------
     ax: axes or None
         axes instance or None, which will then call pyplot.gca()
@@ -722,6 +730,7 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
     set_xlabel(ax=ax, x=x, units=units, **kw)
     set_ylabel(ax=ax, y=y, units=units, **kw)
     set_zlabel(ax=ax, z=z, units=units, **kw)
+# /def
 
 
 ###############################################################################
@@ -782,6 +791,7 @@ def axisLimits(ax=None, x=None, y=None, z=None):
     set_xlim(ax=ax, x=x)
     set_ylim(ax=ax, y=y)
     set_zlim(ax=ax, z=z)
+# /def
 
 
 ###############################################################################
@@ -794,6 +804,7 @@ def invert_xaxis(ax=None):
     """
     ax = ax if ax is not None else pyplot.gca()
     ax.invert_xaxis()
+# /def
 
 
 @docstring.Appender(pyplot.Axes.invert_yaxis.__doc__,
@@ -803,6 +814,7 @@ def invert_yaxis(ax=None):
     """
     ax = ax if ax is not None else pyplot.gca()
     ax.invert_yaxis()
+# /def
 
 
 # @docstring.Appender(pyplot.Axes.invert_zaxis.__doc__,
@@ -815,6 +827,7 @@ def invert_zaxis(ax=None):
         ax.invert_zaxis()
     except AttributeError:
         pass
+# /def
 
 
 @docstring.Appender(pyplot.Axes.invert_xaxis.__doc__,
@@ -833,6 +846,7 @@ def invertAxis(ax=None, x=False, y=False, z=False):
         invert_yaxis(ax=ax)
     if z:
         invert_zaxis(ax=ax)
+# /def
 
 
 ###############################################################################
@@ -851,6 +865,7 @@ def set_xscale(ax=None, x=None, **kw):
     if not nkw:  # if no kwargs
         nkw = kw.get('xscale', {})
     ax.set_xscale(x, **nkw)
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_yscale.__doc__,
@@ -866,6 +881,7 @@ def set_yscale(ax=None, y=None, **kw):
     if not nkw:  # if no kwargs
         nkw = kw.get('yscale', {})
     ax.set_yscale(y, **nkw)
+# /def
 
 
 # @docstring.Appender(pyplot.Axes.set_zscale.__doc__,
@@ -886,6 +902,7 @@ def set_zscale(ax=None, z=None, **kw):
         if not nkw:  # if no kwargs
             nkw = kw.get('zscale', {})
         ax.set_zscale(z, **nkw)
+# /def
 
 
 @docstring.Appender(pyplot.Axes.set_xscale.__doc__,
@@ -900,9 +917,12 @@ def axisScales(ax=None, x=None, y=None, z=None, **kw):
     set_xscale(ax=ax, x=x, **kw)
     set_yscale(ax=ax, y=y, **kw)
     set_zscale(ax=ax, z=z, **kw)
+# /def
 
 
 ###############################################################################
-# Axis Ticks
+# Aliases
+
+set_supertitle = set_suptitle  # alias for set_suptitle
 
 # axisTicks(ax, x=None, y=None)

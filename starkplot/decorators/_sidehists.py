@@ -174,7 +174,7 @@ class SideHists(MatplotlibDecoratorBase):
     -------
     .as_decorator
 
-    Arguments
+    Parameters
     ---------
     func:
 

@@ -85,9 +85,9 @@ from ..util import (
 
 from ..util import (
     # figure
-    prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout,
+    prepare_figure, save_figure, override_figure, set_suptitle, tightLayout,
     # axes
-    prepareAxes, set_title
+    prepare_axes, set_title
 )
 
 #############################################################################
@@ -1127,19 +1127,19 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
             # +---- figure ----+
             overridefig = True if fig == 'new' else overridefig
-            fig, oldfig = prepareFigure(fig=fig, rtcf=rtcf,
+            fig, oldfig = prepare_figure(fig=fig, rtcf=rtcf,
                                         figsize=figsize, **wkw)
 
             # override currrent figure properties
             if overridefig:
-                overrideFigure(fig, figsize=figsize, **wkw)
+                override_figure(fig, figsize=figsize, **wkw)
 
             # set supertitle
             if suptitle is not None:
                 set_suptitle(suptitle, fig=fig, **wkw)
 
             # +---- axes ----+
-            ax, oldax = prepareAxes(ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig)
+            ax, oldax = prepare_axes(ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig)
 
             # /PRE
             # CALL
@@ -1149,7 +1149,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
 
             if stylesheet is not None:
-                print(stylesheet)
                 if isinstance(stylesheet, str):
                     stylesheet = (stylesheet,)
             else:
@@ -1173,7 +1172,6 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
                 # set title
                 if title is not None:
-                    print(wkw)
                     set_title(title, ax=ax, **wkw)
 
                 ax.set_aspect(aspect)
@@ -1272,14 +1270,20 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
             # +---- figure ----+
             # tight layout
-            if tight_layout:
+            if tight_layout:  # True or non-empty dict
                 # if isinstance(tight_layout, bool):
                 #     tight_layout = {}
+    # tight_layout: dict, bool
+    # kwargs for plt.tight_layout()
+    # default: {tight_layout}
+    # dict: tight_layout is kwargs for fig.tight_layout()
+    # True: call tight_layout with options from xkw
+    # False, empty dict: do not call tight_layout
                 tightLayout(fig=fig, tlkw=tight_layout, **wkw)
 
             # saving
             if savefig:  # T/F
-                saveFigure(savefig, fig=fig, **wkw)
+                save_figure(savefig, fig=fig, **wkw)
 
             if closefig:
                 plt.close(fig)

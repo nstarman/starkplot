@@ -821,7 +821,7 @@ def save_and_close(filename, **kw):
     Wrapper for pyplot.savefig
     Calls pyplot.savefig() & pyplot.close()
 
-    Arguments
+    Parameters
     ---------
     see savefig docstring
     if format not included, tries to get format from filename
@@ -851,7 +851,7 @@ def add_axis_labels(ax=None, x=None, y=None, z=None, units=False):
 
       add_axis_labels(ax=None, x=None, y=None, z=None, units=False)
 
-    Arguments
+    Parameters
     ---------
     ax: axes or None
         axes instance or None, which will then call pyplot.gca()

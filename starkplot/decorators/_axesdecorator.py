@@ -67,7 +67,7 @@ from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..util import (
-    prepareAxes, axisLabels, axisLimits, invertAxis, axisScales,
+    prepare_axes, axisLabels, axisLimits, invertAxis, axisScales,
     set_title,
     _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
 )
@@ -635,7 +635,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
             # +---- axes ----+
             if np.isscalar(ax):
 
-                ax = prepareAxes(ax=ax, fig=fig)
+                ax = prepare_axes(ax=ax, fig=fig)
 
                 # /PRE
                 # CALL

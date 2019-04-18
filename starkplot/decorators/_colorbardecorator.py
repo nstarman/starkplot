@@ -63,7 +63,7 @@ except ImportError as e:
 from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
-from ..util import prepareAxes
+from ..util import prepare_axes
 from ..util import _stripprefix
 from ..util import _cbark
 

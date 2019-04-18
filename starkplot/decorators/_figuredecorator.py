@@ -64,7 +64,7 @@ except ImportError as e:
 # Custom Imports
 from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
-from ..util import prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout
+from ..util import prepare_figure, save_figure, override_figure, set_suptitle, tightLayout
 
 #############################################################################
 # Info
@@ -591,12 +591,12 @@ class FigureDecorator(MatplotlibDecoratorBase):
             wkw.update(xkw)
 
             overridefig = True if fig == 'new' else overridefig
-            fig, oldfig = prepareFigure(fig=fig, rtcf=rtcf,
-                                        figsize=figsize, **wkw)
+            fig, oldfig = prepare_figure(fig=fig, rtcf=rtcf,
+                                         figsize=figsize, **wkw)
 
             # override currrent figure properties
             if overridefig:
-                overrideFigure(fig, figsize=figsize, **wkw)
+                override_figure(fig, figsize=figsize, **wkw)
 
             # set supertitle
             if suptitle is not None:
@@ -620,7 +620,7 @@ class FigureDecorator(MatplotlibDecoratorBase):
 
             # saving
             if savefig:  # T/F
-                saveFigure(savefig, fig=fig, **wkw)
+                save_figure(savefig, fig=fig, **wkw)
 
             if closefig:
                 plt.close(fig)

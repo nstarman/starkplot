@@ -368,10 +368,26 @@ def overrideFigure(fig=None, **kw):
     if kw.get('figsize', None) is not None:
         fig.set_size_inches(kw.get('figsize'), forward=True)
 
-    fig.set_dpi(kw.get(_stripprefix('dpi', 'fig_'), fig.get_dpi()))
-    fig.set_facecolor(kw.get(_stripprefix('facecolor', 'fig_'), fig.get_facecolor()))
-    fig.set_edgecolor(kw.get(_stripprefix('edgecolor', 'fig_'), fig.get_edgecolor()))
-    fig.set_frameon(kw.get(_stripprefix('frameon', 'fig_'), fig.get_frameon()))
+    if 'dpi' in kw:  # TODO better methods
+        fig.set_dpi(kw.get('dpi'))
+    elif 'dpi' in kw:
+        fig.set_dpi(kw.get('fig_dpi'))
+
+    if 'facecolor' in kw:  # TODO better methods
+        fig.set_facecolor(kw.get('facecolor'))
+    elif 'facecolor' in kw:
+        fig.set_facecolor(kw.get('fig_facecolor'))
+
+    if 'edgecolor' in kw:  # TODO better methods
+        fig.set_edgecolor(kw.get('edgecolor'))
+    elif 'edgecolor' in kw:
+        fig.set_edgecolor(kw.get('fig_edgecolor'))
+
+    if 'frameon' in kw:  # TODO better methods
+        fig.set_frameon(kw.get('frameon'))
+    elif 'frameon' in kw:
+        fig.set_frameon(kw.get('fig_frameon'))
+
     # FigureClass
     # clear
     # subplotpars

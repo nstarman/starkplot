@@ -47,17 +47,14 @@ Planned Features
 #############################################################################
 # Imports
 
-# import pdb
 import numpy as np
 import types
 from warnings import warn
-import inspect
 
+# plotting
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
-# 3rd Party Imports
 
 try:
     from astropy.utils.decorators import wraps
@@ -66,27 +63,32 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
+# decorators
+from ._figuredecorator import FigureDecorator, fig_decorator
+from ._sidehists import SideHists, sidehist_decorator
+from ._colorbardecorator import ColorbarDecorator, cbar_decorator
+from ._axesdecorator import AxesDecorator, ax_decorator
+#
+from .docstring import dedent, strthentwoline
+from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..util import ObjectWrapper
 from ..util import axisLabels, axisScales, axisLimits, invertAxis
 from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
 
-from ..util import _newfigk, _savefigk, _suptitlek
-from ..util import _titlek, _xlabelk, _ylabelk, _zlabelk
-from ..util import _cbark
+from ..util import (
+    # figure
+    _newfigk, _savefigk, _suptitlek,
+    # axes
+    _titlek, _xlabelk, _ylabelk, _zlabelk, _cbark
+)
 
-from ..util import prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout
-from ..util import prepareAxes, set_title
-
-from ..docstring import dedent, strthentwoline
-
-from .util import MatplotlibDecoratorBase, _funcdocprefix
-
-# decorators
-from .figuredecorator_src import FigureDecorator, fig_decorator
-from .sidehists_src import SideHists, sidehist_decorator
-from .colorbardecorator_src import ColorbarDecorator, cbar_decorator
-from .axesdecorator_src import AxesDecorator, ax_decorator
+from ..util import (
+    # figure
+    prepareFigure, saveFigure, overrideFigure, set_suptitle, tightLayout,
+    # axes
+    prepareAxes, set_title
+)
 
 #############################################################################
 # Info
@@ -1171,6 +1173,7 @@ class MatplotlibDecorator(MatplotlibDecoratorBase):
 
                 # set title
                 if title is not None:
+                    print(wkw)
                     set_title(title, ax=ax, **wkw)
 
                 ax.set_aspect(aspect)

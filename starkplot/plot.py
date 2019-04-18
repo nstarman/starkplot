@@ -64,8 +64,7 @@ from matplotlib.pyplot import *  # start by importing all of pyplot
 from matplotlib import pyplot  # for usage here
 
 # custom imports
-from .decorators import mpl_decorator
-from . import docstring
+from .decorators import mpl_decorator, docstring
 from .util import _parseoptsdict, _parsestrandopts, _parselatexstrandopts,\
     _stripprefix, _latexstr,\
     axisLabels, axisScales

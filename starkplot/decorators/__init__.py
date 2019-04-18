@@ -40,11 +40,11 @@ Planned Features
 #############################################################################
 # Imports
 
-from .mpldecorator_src import MatplotlibDecorator, mpl_decorator
-from .figuredecorator_src import FigureDecorator, fig_decorator
-from .sidehists_src import SideHists, sidehist_decorator
-from .colorbardecorator_src import ColorbarDecorator, cbar_decorator
-from .axesdecorator_src import AxesDecorator, ax_decorator
+from ._mpldecorator import MatplotlibDecorator, mpl_decorator
+from ._figuredecorator import FigureDecorator, fig_decorator
+from ._sidehists import SideHists, sidehist_decorator
+from ._colorbardecorator import ColorbarDecorator, cbar_decorator
+from ._axesdecorator import AxesDecorator, ax_decorator
 
 #############################################################################
 # Info

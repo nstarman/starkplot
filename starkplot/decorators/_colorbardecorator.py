@@ -60,9 +60,9 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
+from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
-from ..docstring import dedent, strthentwoline
 from ..util import prepareAxes
 from ..util import _stripprefix
 from ..util import _cbark

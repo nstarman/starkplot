@@ -46,7 +46,7 @@ from matplotlib import pyplot
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 
-from . import docstring
+from .decorators import docstring
 
 #############################################################################
 # Info
@@ -214,7 +214,7 @@ _cbark = (
     'anchor', 'panchor',
     # colorbar properties
     'extend', 'extendfrac', 'extendrect', 'spacing', 'ticks', 'format', 'drawedges', 'boundaries', 'values',
-    )
+)
 
 
 #############################################################################
@@ -266,8 +266,26 @@ def _parsestrandopts(attr):
         return attr[0], attr[1]
 
 
-def _parsexkwandopts(kw, arg, name, compatible, parser, prefix=None, allowupdate=True):
+def _parsexkwandopts(arg, kw, name, compatible, parser,
+                     prefix=None, allowupdate=True):
+    r"""
+    Arguments
+    ---------
+    kw:
+    arg:
+    name:
+    compatible:
+    parser:
+    prefix:
+    allowupdate:
 
+    Returns
+    -------
+    argument: 
+    options: dict
+    """
+
+    # sorting parsers
     if parser in (_parsestrandopts, _parselatexstrandopts):  # check if (arg, opts)
         arg, argkw0 = parser(arg)
     elif parser == _parseoptsdict:  # check if opts
@@ -275,11 +293,14 @@ def _parsexkwandopts(kw, arg, name, compatible, parser, prefix=None, allowupdate
     else:                           # check if (arg, opts)
         arg, argkw0 = parser(arg)
 
+    # whether to allow kwargs to update
     if allowupdate:
         update = argkw0.get('update', False)
     else:
         update = False
 
+    # setting options
+    argkw0, argkw1, argkw2 = {}, {}, {}  # initializing
     if not argkw0 or update:  # if no kwargs
         argkw1 = kw.get(name, {})
 
@@ -411,8 +432,8 @@ def set_suptitle(supertitle, fig=None, **kw):
     #         stkw.update({_stripprefix(k, 'suptitle_'): v
     #                      for k, v in kw.items()
     #                      if k.startswith('suptitle_')})
-    supertitle, stkw = _parsexkwandopts(kw, supertitle, 'suptitle', _suptitlek,
-                                        _parsestrandopts)
+    supertitle, stkw = _parsexkwandopts(
+        supertitle, kw, 'suptitle', _suptitlek, _parsestrandopts)
     fig.suptitle(supertitle, **stkw)
 
 
@@ -434,7 +455,7 @@ def tightLayout(fig=None, tlkw={}, **kw):
     #         tlkw.update({_stripprefix(k, 'tight_layout_'): v
     #                      for k, v in kw.items()
     #                      if k.startswith('tight_layout_')})
-    _, tlkw = _parsexkwandopts(kw, tlkw, 'tight_layout', _tightlayoutk,
+    _, tlkw = _parsexkwandopts(tlkw, kw, 'tight_layout', _tightlayoutk,
                                _parseoptsdict)
 
     fig.tight_layout(**tlkw)
@@ -455,8 +476,8 @@ def saveFigure(fname, fig=None, **kw):
     #         sfgkw.update({_stripprefix(k, 'savefig_'): v
     #                       for k, v in kw.items()
     #                       if k.startswith('savefig_')})
-    fname, tlkw = _parsexkwandopts(kw, fname, 'savefig', _savefigk,
-                                   _parsestrandopts)
+    fname, sfgkw = _parsexkwandopts(fname, kw, 'savefig', _savefigk,
+                                    _parsestrandopts)
 
     if fname is None:
         fname = 'plot' + str(fig.number)
@@ -511,11 +532,11 @@ def prepareAxes(ax=None, rtcf=True, _fig=None, _oldfig=None):
 # /def
 
 
-def set_title(title, ax=None, **kw):
+def set_title(Title, ax=None, **kw):
     r"""set title
     Arguments
     ---------
-    title: str or (str, dict)
+    Title: str or (str, dict)
         the title (and options)
         included options have highest priority
     ax: ax  (default None -> gca())
@@ -549,7 +570,7 @@ def set_title(title, ax=None, **kw):
     # titlekw = titlekw2
     # titlekw.update(titlekw1)
     # titlekw.update(titlekw0)
-    title, titlekw = _parsexkwandopts(kw, title, 'title', _titlek,
+    title, titlekw = _parsexkwandopts(Title, kw, 'title', _titlek,
                                       _parsestrandopts)
 
     ax.set_title(title, **titlekw)
@@ -585,7 +606,8 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
     #         nkw.update({_stripprefix(k, 'xlabel_'): v
     #                     for k, v in kw.items()
     #                     if k.startswith('xlabel_')})
-    x, nkw = _parsexkwandopts(kw, x, 'xlabel', _xlabelk, _parselatexstrandopts)
+    x, nkw = _parsexkwandopts(x, kw, 'xlabel', _xlabelk,
+                              _parselatexstrandopts)
     if units is True:
         x = rf"{x} [{ax.get_xlabel()}]"
     ax.set_xlabel(x, **nkw)
@@ -617,7 +639,8 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
     #         nkw.update({_stripprefix(k, 'ylabel_'): v
     #                     for k, v in kw.items()
     #                     if k.startswith('ylabel_')})
-    y, nkw = _parsexkwandopts(kw, y, 'ylabel', _ylabelk, _parselatexstrandopts)
+    y, nkw = _parsexkwandopts(y, kw, 'ylabel', _ylabelk,
+                              _parselatexstrandopts)
     if units is True:
         y = rf"{y} [{ax.get_ylabel()}]"
     ax.set_ylabel(y, **nkw)
@@ -653,7 +676,8 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
         #         nkw.update({_stripprefix(k, 'zlabel_'): v
         #                     for k, v in kw.items()
         #                     if k.startswith('zlabel_')})
-        z, nkw = _parsexkwandopts(kw, z, 'zlabel', _zlabelk, _parselatexstrandopts)
+        z, nkw = _parsexkwandopts(z, kw, 'zlabel', _zlabelk,
+                                  _parselatexstrandopts)
         if units is True:
             rf"{z} [{ax.get_zlabel()}]"
         ax.set_zlabel(z, **nkw)

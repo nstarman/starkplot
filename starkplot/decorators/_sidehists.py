@@ -69,8 +69,7 @@ except ImportError as e:
 from ..util import axisLabels, axisScales, axisLimits, invertAxis
 # from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
 
-from ..docstring import dedent, strthentwoline
-
+from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 #############################################################################

@@ -63,13 +63,14 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
+from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
-from ..docstring import dedent, strthentwoline
-from ..util import prepareAxes, axisLabels, axisLimits, invertAxis, axisScales
-from ..util import set_title
-from ..util import _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
-
+from ..util import (
+    prepareAxes, axisLabels, axisLimits, invertAxis, axisScales,
+    set_title,
+    _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
+)
 
 
 #############################################################################

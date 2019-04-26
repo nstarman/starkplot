@@ -64,10 +64,10 @@ except ImportError as e:
 
 # Custom Imports
 # decorators
-from ._figuredecorator import FigureDecorator, fig_decorator
-from ._sidehists import SideHists, sidehist_decorator
-from ._colorbardecorator import ColorbarDecorator, cbar_decorator
-from ._axesdecorator import AxesDecorator, ax_decorator
+# from ._figuredecorator import FigureDecorator, fig_decorator
+# from ._sidehists import SideHists, sidehist_decorator
+# from ._colorbardecorator import ColorbarDecorator, cbar_decorator
+# from ._axesdecorator import AxesDecorator, ax_decorator
 #
 from .docstring import dedent, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix

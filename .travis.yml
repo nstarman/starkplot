@@ -14,7 +14,6 @@ python:
 # blocklist
 branches:
   except:
-  - starkython
   - stream-research
 
 # safelist
@@ -43,7 +42,6 @@ before_install:
 
 # command to install dependencies
 install:
-    - 
     - python setup.py develop
 
 script: true

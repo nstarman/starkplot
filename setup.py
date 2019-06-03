@@ -84,6 +84,7 @@ VERSION = find_version(os.path.join('starkplot', '__init__.py'))
 requirements = [
     'matplotlib',
     'numpy>=1.7',
+    'decorator',  # TODO minimum version
 ]
 
 classifiers = [
@@ -104,7 +105,7 @@ setup(
     license='New BSD',
 
     # Package info
-    packages=find_packages(exclude=('test',)),
+    packages=find_packages(exclude=('test', 'tests')),
 
     zip_safe=True,
     install_requires=requirements,

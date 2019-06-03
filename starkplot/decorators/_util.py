@@ -42,9 +42,10 @@ Planned Features:
 #############################################################################
 # Imports
 
-from ..util import _newfigk, _savefigk, _suptitlek
-from ..util import _titlek, _xlabelk, _ylabelk, _zlabelk
-from ..util import _cbark
+from .._figure import _newfigk, _savefigk, _suptitlek
+from .._util import _titlek, _xlabelk, _ylabelk, _zlabelk
+from .._util import _cbark
+
 
 #############################################################################
 # Info
@@ -97,3 +98,8 @@ class MatplotlibDecoratorBase(object):
 # Strings
 
 _funcdocprefix = "\n\n{0}\n{1}Wrapped Function's Documentation\n{0}\n\n".format('=' * 78, ' ' * 22)
+
+
+#############################################################################
+# Functions
+

@@ -45,6 +45,9 @@ Planned Features
 from matplotlib import cbook
 from matplotlib import docstring as _docstring
 
+# decorator module
+import decorator
+
 #############################################################################
 # Info
 
@@ -166,15 +169,17 @@ def strthentwoline(s):
         return s + '\n\n'
 
 
-def nonestr(s):
-    return s if s is not None else ''
+def strorblank(s):
+    """return '' if not already string
+    """
+    return '' if not isinstance(s, str) else s
 
 
 def dedent(docstring):
     """Dedent a docstring (if present)
     if docstring is None, return ''
     """
-    return nonestr(docstring and cbook.dedent(docstring))
+    return strorblank(docstring and cbook.dedent(docstring))
 
 
 dedentfunc = _docstring.dedent
@@ -210,3 +215,25 @@ copy_dedent = _docstring.copy_dedent
 #     #  or perhaps not.
 #     #  http://mail.python.org/pipermail/patches/2007-February/021687.html
 #     return lambda target: dedent(copy(source)(target))
+
+
+def wrap_func_keep_orig_sign(func, sub_func=None,
+                             doc_pre=None, doc_post=None,
+                             defaults=None, module=None, addsource=True,
+                             **attrs):
+    """helper for decorator.FunctionMaker.create
+
+    takes a function and the main function and makes a
+    new wrapped function which has the signature of the sub_function
+    doc_pre/post allow the sub_func to have it's prefix pre/appended
+    """
+    if sub_func is None:
+        sub_func = func
+
+    doc = dedent(doc_pre) + dedent(sub_func.__doc__) + dedent(doc_post)
+
+    return decorator.FunctionMaker.create(
+        func, 'return f(%(signature)s)', dict(f=sub_func), doc=doc,
+        __wrapped__=sub_func,
+        defaults=defaults, module=module, addsource=addsource, **attrs)
+# /def

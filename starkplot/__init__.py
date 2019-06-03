@@ -1,10 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#############################################################################
-r"""starplot init
+# ----------------------------------------------------------------------------
+#
+# TITLE   : starkplot initialization file
+# AUTHOR  : Nathaniel Starkman
+# PROJECT : starkplot
+#
+# ----------------------------------------------------------------------------
 
-#############################################################################
+### Docstring and Metadata
+r"""initialization file
+
+# ----------------------------------------------------------------------------
 
 Copyright (c) 2018 - Nathaniel Starkman
 All rights reserved.
@@ -32,26 +40,92 @@ AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-
-#############################################################################
-Planned Features
 """
-
-#############################################################################
-# Imports
-
-from .plot import *
-
-from .decorators._mpldecorator import mpl_decorator, MatplotlibDecorator
-
-#############################################################################
-# Info
 
 __author__ = "Nathaniel Starkman"
 __copyright__ = "Copyright 2018, "
-__credits__ = ["The Matplotlib Team"]
-__license__ = "MIT"
-__version__ = "1.0.0"
+__credits__ = ["matplotlib"]
+__license__ = "GPL3"
+__version__ = "0.0.0"
 __maintainer__ = "Nathaniel Starkman"
 __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
+
+##############################################################################
+### Imports
+
+## General
+from matplotlib.pyplot import *
+
+# astropy
+from astropy.visualization import quantity_support
+from astropy.visualization import astropy_mpl_style
+
+## Project-Specific
+
+# importing folders
+from . import decorators, util
+
+# Now overwriting
+from ._plot import *
+from .decorators import mpl_decorator, MatplotlibDecorator
+
+# explicitly import here
+from ._figure import (
+    figure,
+
+    gcf, scf,
+
+    # get/set figure properties
+    get_figsize, set_figsize,
+
+    suptitle, supertitle,
+    get_suptitle, set_suptitle,
+    get_supertitle, set_supertitle,
+
+    get_dpi, set_dpi,
+    get_facecolor, set_facecolor,
+    get_edgecolor, set_edgecolor,
+    get_frameon, set_frameon,
+
+    override_figure,
+    tight_layout,
+
+    savefig, save_figure,
+    close, closefig,
+    save_and_close,
+)
+
+
+from ._axes import (
+    gca, sca,
+
+    # get/set axes properties
+    get_title, set_title,
+    get_xlabel, set_xlabel,
+    get_ylabel, set_ylabel,
+    # get_zlabel, set_zlabel,
+    # get_label, set_label,
+
+    get_xlim, set_xlim,
+    get_ylim, set_ylim,
+    # get_zlim, set_zlim,
+
+    invert_xaxis,
+    invert_yaxis,
+    # invert_zaxis,
+    # invert_axis,
+
+    get_xscale, set_xscale,
+    get_yscale, set_yscale,
+    # get_zscale, set_zscale,
+    # get_scale, set_scale
+
+)
+
+
+#############################################################################
+# Code
+
+quantity_support()
+style.use(astropy_mpl_style)  # using *style* from ._plot

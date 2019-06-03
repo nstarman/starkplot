@@ -48,17 +48,16 @@ from matplotlib.figure import Figure
 
 from .decorators import docstring
 
+from ._figure._info import _newfigk, _tightlayoutk, _savefigk, _suptitlek
+from ._axes._info import _titlek, _xlabelk, _ylabelk, _zlabelk
+
+# from .util.colorbar._info import _colorbark as _cbark
+
 #############################################################################
 # Info
 
 __author__ = "Nathaniel Starkman"
-__copyright__ = "Copyright 2018, "
-__credits__ = ["Jo Bovy", "The Matplotlib Team"]
-__license__ = "MIT"
-__version__ = "1.0.0"
-__maintainer__ = "Nathaniel Starkman"
-__email__ = "n.starkman@mail.utoronto.ca"
-__status__ = "Production"
+__credits__ = ["matplotlib"]
 
 #############################################################################
 # NoneType
@@ -67,144 +66,7 @@ NoneType = type(None)
 
 
 #############################################################################
-# Wrapper
-
-class ObjectWrapper(object):
-    def __init__(self, obj, **kwargs):
-        # r"""
-        # TODO: does this assign **kwargs into the object or keep them separate?
-        #       does setattr() set into the obj or this wrapper?
-        # """
-
-        if obj is None:
-            obj = NoneType
-        self.__class__ = type(obj.__class__.__name__,
-                              (self.__class__, obj.__class__),
-                              {})
-        self.__dict__ = obj.__dict__
-
-        for key, val in kwargs.items():
-            setattr(self, key, val)
-
-    # def overriddenMethod(self):
-    #     pass
-
-
-class Wrapper(object):
-    """Wrapper class that provides proxy access to an instance of some
-       internal instance.
-       **Copied from stack overflow**
-    """
-
-    __wraps__ = None
-    __ignore__ = "class mro new init setattr getattr getattribute"
-
-    def __init__(self, obj, **kwargs):
-        if self.__wraps__ is None:
-            raise TypeError("base class Wrapper may not be instantiated")
-        elif isinstance(obj, self.__wraps__):
-            self._obj = obj
-        else:
-            raise ValueError("wrapped object must be of %s" % self.__wraps__)
-
-        for key, val in kwargs.items():
-            setattr(self, key, val)
-
-    # provide proxy access to regular attributes of wrapped object
-    def __getattr__(self, name):
-        return getattr(self._obj, name)
-
-    # create proxies for wrapped object's double-underscore attributes
-    class __metaclass__(type):
-        def __init__(cls, name, bases, dct):
-
-            def make_proxy(name):
-                def proxy(self, *args):
-                    return getattr(self._obj, name)
-                return proxy
-
-            type.__init__(cls, name, bases, dct)
-            if cls.__wraps__:
-                ignore = set("__%s__" % n for n in cls.__ignore__.split())
-                for name in dir(cls.__wraps__):
-                    if name.startswith("__"):
-                        if name not in ignore and name not in dct:
-                            setattr(cls, name, property(make_proxy(name)))
-
-
-class FigureWrapper(Wrapper):
-    __wraps__ = Figure
-
-
-# class ObjectWrapper(object):
-#     """docstring for ObjectWrapper"""
-#     def __new__(cls, obj, **kwargs):
-
-#         class objectWrapper(Wrapper):
-#             __wraps__ = type(obj)
-
-#         return objectWrapper(obj, **kwargs)
-
-
-#############################################################################
-# Allowable Key Words
-
-_newfigk = (
-    'num',
-    # 'figsize'  # already a kwarg
-    'dpi',
-    'facecolor' 'edgecolor'
-    'frameon' 'FigureClass', 'clear',
-    # from kwargs: (extra .Figure options)
-    'sublotpars'
-    # 'tight_layout'  # already a kwarg, used later
-    'constrained_layout',
-    'linewidth',
-)
-
-_tightlayoutk = (
-    'pad', 'h_pad', 'w_pad', 'rect'
-)
-
-_savefigk = (
-    'dpi', 'quality',
-    'facecolor', 'edgecolor',
-    'orientation', 'papertype',
-    'format', 'transparent',
-    'frameon', 'bbox_inches', 'pad_inches',
-    'bbox_extra_artists', 'metadata'
-)
-
-_suptitlek = (
-    'x', 'y',
-    'horizontalalignment', 'ha', 'verticalalignment', 'va',
-    'fontsize', 'fontweight',
-    'size', 'weight'
-    # 'fontproperties'  # include?
-    # kwargs
-)
-
-_titlek = (
-    # fontdict, loc, pad,
-    'fontsize', 'fontweight',
-    # size, weight
-    # fontproperties  # include?
-    # kwargs
-)
-
-_xlabelk = ('labelpad', 'fontsize', 'fontweight',)
-_ylabelk = ('labelpad', 'fontsize', 'fontweight',)
-_zlabelk = ('labelpad', 'fontsize', 'fontweight',)
-
-_xlabelkdf = (
-    ('xlabel_labelpad', None),
-    ('fontsize', None), ('fontweight', None))
-_ylabelkdf = (
-    ('xlabel_labelpad', None),
-    ('fontsize', None), ('fontweight', None))
-_zlabelkdf = (
-    ('xlabel_labelpad', None),
-    ('fontsize', None), ('fontweight', None))
+### Allowable Key Words
 
 # Colorbar
 _cbark = (
@@ -212,7 +74,8 @@ _cbark = (
     'orientation', 'fraction', 'pad', 'shrink', 'aspect',
     'anchor', 'panchor',
     # colorbar properties
-    'extend', 'extendfrac', 'extendrect', 'spacing', 'ticks', 'format', 'drawedges', 'boundaries', 'values',
+    'extend', 'extendfrac', 'extendrect', 'spacing', 'ticks',
+    'format', 'drawedges', 'boundaries', 'values',
 )
 
 
@@ -285,7 +148,7 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
 
     Returns
     -------
-    argument: 
+    argument:
     options: dict
     """
 
@@ -333,13 +196,14 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
 ###############################################################################
 # Figure
 
-def _gcf(fig):
+def _gcf(fig):  # TODO deprecate
     return fig if fig is not None else plt.gcf()
 # /def
 
 
-def prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
+def _prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
     r"""
+    TODO move into decorators._prepare_figure
     """
     # Figure
     # Checking on the state of the figure
@@ -386,75 +250,6 @@ def prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
 # /def
 
 
-def override_figure(fig=None, **kw):
-    r"""override figure properties
-    Parameters
-    ---------
-    figsize:
-        uses set_size_inches
-    dpi:
-        uses set_dpi
-    facecolor:
-        uses set_facecolor
-    edgecolor:
-        uses edgecolor
-    frameon:
-        uses frameon
-    """
-    fig = _gcf(fig)
-
-    if kw.get('figsize', None) is not None:
-        fig.set_size_inches(kw.get('figsize'), forward=True)
-
-    if 'dpi' in kw:  # TODO better methods
-        fig.set_dpi(kw.get('dpi'))
-    elif 'fig_dpi' in kw:
-        fig.set_dpi(kw.get('fig_dpi'))
-
-    if 'facecolor' in kw:  # TODO better methods
-        fig.set_facecolor(kw.get('facecolor'))
-    elif 'fig_facecolor' in kw:
-        fig.set_facecolor(kw.get('fig_facecolor'))
-
-    if 'edgecolor' in kw:  # TODO better methods
-        fig.set_edgecolor(kw.get('edgecolor'))
-    elif 'fig_edgecolor' in kw:
-        fig.set_edgecolor(kw.get('fig_edgecolor'))
-
-    if 'frameon' in kw:  # TODO better methods
-        fig.set_frameon(kw.get('frameon'))
-    elif 'fig_frameon' in kw:
-        fig.set_frameon(kw.get('fig_frameon'))
-
-    # FigureClass
-    # clear
-    # subplotpars
-    # tight_layout
-    # constrained_layout
-# /def
-
-
-def set_suptitle(t, fig=None, **kw):
-    r"""Add a centered title to the figure.
-
-    Parameters
-    ----------
-    t : str
-        The title text.
-    fig : Figure, None  (default None)
-        figure to set supertitle
-        None -> current figure
-    # TODO explanantion of _parsexkwandopts
-    """
-    fig = _gcf(fig)
-
-    t, stkw = _parsexkwandopts(
-        t, kw, 'suptitle', _suptitlek, _parsestrandopts)
-    res = fig.suptitle(t, **stkw)
-    return res
-# /def
-
-
 def tightLayout(fig=None, tlkw={}, **kw):
     r"""
     """
@@ -464,29 +259,6 @@ def tightLayout(fig=None, tlkw={}, **kw):
                                _parseoptsdict)
 
     fig.tight_layout(**tlkw)
-# /def
-
-
-def save_figure(fname, fig=None, **kw):
-    r"""save figure
-
-    Parameters
-    ----------
-    fname: str or file-like object
-    fig: Figure, None
-        figure to save
-        None -> current figure
-    # TODO explanantion of _parsexkwandopts
-    """
-    fig = _gcf(fig)
-
-    fname, sfgkw = _parsexkwandopts(fname, kw, 'savefig', _savefigk,
-                                    _parsestrandopts)
-
-    if fname is None:
-        fname = 'plot' + str(fig.number)
-
-    fig.savefig(fname, **sfgkw)
 # /def
 
 
@@ -526,10 +298,13 @@ def prepare_axes(ax=None, rtcf=True, _fig=None, _oldfig=None):
     elif isinstance(ax, int):  # make / get subplot @ int
         fig.add_subplot(ax)  # also gets old axes if exists
         # TODO have to check if axes exists see docstring above
-    elif ax == 'next':
-        raise ValueError("`next' not yet supported")
+    elif isinstance(ax, (tuple, list)):
+        fig.add_subplot(*ax)
     elif isinstance(ax, str):
-        raise ValueError("not supported")
+        if ax == 'next':
+            raise ValueError("`next' not yet supported")
+        else:
+            raise ValueError("not supported")
     else:  # TODO check it's an axes instance
         ax = fig.sca(ax)
 
@@ -919,10 +694,4 @@ def axisScales(ax=None, x=None, y=None, z=None, **kw):
     set_zscale(ax=ax, z=z, **kw)
 # /def
 
-
-###############################################################################
-# Aliases
-
-set_supertitle = set_suptitle  # alias for set_suptitle
-
-# axisTicks(ax, x=None, y=None)
+##############################################################################

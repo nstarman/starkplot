@@ -55,37 +55,43 @@ Planned Features
 #############################################################################
 # Imports
 
-import re
+
+## General Imports
 from warnings import warn
-import numpy as np
 
 # matplotlib
-from matplotlib.pyplot import *  # start by importing all of pyplot
-from matplotlib import pyplot  # for usage here
+from matplotlib.pyplot import *  # start by importing all of _pyplot
+from matplotlib import pyplot as _pyplot  # for usage here
 
-# custom imports
+
+## Project-Specific
 from .decorators import mpl_decorator, docstring
-from .util import _parseoptsdict, _parsestrandopts, _parselatexstrandopts,\
-    _stripprefix, _latexstr,\
+from ._util import (
+    _parseoptsdict, _parsestrandopts, _parselatexstrandopts,
+    _stripprefix, _latexstr,
     axisLabels, axisScales
-from ._info import _pltypes, _annotations, _customadded, _other
+)
 
-try:
-    from astropy.utils.decorators import wraps  # TODO move to internal file
-except Exception as e:
-    print('cannot import preferred wrapper')
-    from functools import wraps
+from ._info import (
+    _pltypes,
+    # _annotations,
+    # _customadded,
+    # _other
+)
 
 # TODO get rid of
-try:
-    from galpy.util import bovy_plot
-except Exception as e:
-    print('cannot import galpy.bovy_plot')
+# try:
+#     from galpy.util import bovy_plot as _bovy_plot
+# except Exception as e:
+#     print('cannot import galpy.bovy_plot')
+# else:
+#     from galpy.util.bovy_plot import bovy_dens2d, bovy_plot
 
-    BOVY_PLOT_IMPORTED = False
-else:
-    BOVY_PLOT_IMPORTED = True
-    from galpy.util.bovy_plot import bovy_dens2d, bovy_plot
+
+# Overwriting for internal use
+# TODO use import * b/c have __all__ inside?
+# from ._figure import figure, save_and_close
+# from ._axes import axes
 
 
 #############################################################################
@@ -101,12 +107,7 @@ __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
 
 
-###############################################################################
-# TODO Organize Functions
-
-@mpl_decorator()
-def axes(*args, **kw):  # TODO improve
-    return pyplot.axes(*args, **kw)
+# __all__ = ['']
 
 
 ###############################################################################
@@ -180,665 +181,635 @@ def plot(*args, pltype='plot', **kwargs):
 
     # The Common Plot Types
     if pltype == 'plot':
-        res = pyplot.plot(*args, **kwargs)
+        res = _pyplot.plot(*args, **kwargs)
 
     elif pltype == 'scatter':
-        res = pyplot.scatter(*args, **kwargs)
+        res = _pyplot.scatter(*args, **kwargs)
 
     elif pltype == 'errorbar':
-        res = pyplot.errorbar(*args, **kwargs)
+        res = _pyplot.errorbar(*args, **kwargs)
 
     elif pltype == 'loglog':
-        res = pyplot.loglog(*args, **kwargs)
+        res = _pyplot.loglog(*args, **kwargs)
 
     elif pltype == 'semilogx':
-        res = pyplot.semilogx(*args, **kwargs)
+        res = _pyplot.semilogx(*args, **kwargs)
 
     elif pltype == 'semilogy':
-        res = pyplot.semilogy(*args, **kwargs)
+        res = _pyplot.semilogy(*args, **kwargs)
 
     elif pltype == 'hist':
-        res = pyplot.hist(*args, **kwargs)
+        res = _pyplot.hist(*args, **kwargs)
 
     # Try all options in _pltypes
     elif pltype in _pltypes:
-        res = getattr(pyplot, pltype)(*args, **kwargs)
+        res = getattr(_pyplot, pltype)(*args, **kwargs)
 
-    # Permitting any pyplot function
+    # Permitting any _pyplot function
     elif isinstance(pltype, str):
         try:
-            getattr(pyplot, pltype)
+            getattr(_pyplot, pltype)
         except Exception as e:
             raise ValueError(f'invalid pltype {pltype}')  #
         else:
             warn('using unsanctioned plotting method')
-            getattr(pyplot, pltype)(*args, **kwargs)
+            getattr(_pyplot, pltype)(*args, **kwargs)
     else:
         raise ValueError(f'invalid pltype {pltype}')
 
     return res
 
 
-@mpl_decorator(funcdoc=pyplot.acorr.__doc__)
+@mpl_decorator(funcdoc=_pyplot.acorr.__doc__)
 def acorr(*args, **kwargs):
     r"""starkplot wrapper for acorr"""
-    return pyplot.acorr(*args, **kwargs)
+    return _pyplot.acorr(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.angle_spectrum.__doc__)
+@mpl_decorator(funcdoc=_pyplot.angle_spectrum.__doc__)
 def angle_spectrum(*args, **kwargs):
     r"""starkplot wrapper for angle_spectrum"""
-    return pyplot.angle_spectrum(*args, **kwargs)
+    return _pyplot.angle_spectrum(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.axhline.__doc__)
+@mpl_decorator(funcdoc=_pyplot.axhline.__doc__)
 def axhline(*args, **kwargs):
     r"""starkplot wrapper for axhline"""
-    return pyplot.axhline(*args, **kwargs)
+    return _pyplot.axhline(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.axhspan.__doc__)
+@mpl_decorator(funcdoc=_pyplot.axhspan.__doc__)
 def axhspan(*args, **kwargs):
     r"""starkplot wrapper for axhspan"""
-    return pyplot.axhspan(*args, **kwargs)
+    return _pyplot.axhspan(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.axvline.__doc__)
+@mpl_decorator(funcdoc=_pyplot.axvline.__doc__)
 def axvline(*args, **kwargs):
     r"""starkplot wrapper for axvline"""
-    return pyplot.axvline(*args, **kwargs)
+    return _pyplot.axvline(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.axvspan.__doc__)
+@mpl_decorator(funcdoc=_pyplot.axvspan.__doc__)
 def axvspan(*args, **kwargs):
     r"""starkplot wrapper for axvspan"""
-    return pyplot.axvspan(*args, **kwargs)
+    return _pyplot.axvspan(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.bar.__doc__)
+@mpl_decorator(funcdoc=_pyplot.bar.__doc__)
 def bar(*args, **kwargs):
     r"""starkplot wrapper for bar"""
-    return pyplot.bar(*args, **kwargs)
+    return _pyplot.bar(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.barbs.__doc__)
+@mpl_decorator(funcdoc=_pyplot.barbs.__doc__)
 def barbs(*args, **kwargs):
     r"""starkplot wrapper for barbs"""
-    return pyplot.barbs(*args, **kwargs)
+    return _pyplot.barbs(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.barh.__doc__)
+@mpl_decorator(funcdoc=_pyplot.barh.__doc__)
 def barh(*args, **kwargs):
     r"""starkplot wrapper for barh"""
-    return pyplot.barh(*args, **kwargs)
+    return _pyplot.barh(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.boxplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.boxplot.__doc__)
 def boxplot(*args, **kwargs):
     r"""starkplot wrapper for boxplot"""
-    return pyplot.boxplot(*args, **kwargs)
+    return _pyplot.boxplot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.broken_barh.__doc__)
+@mpl_decorator(funcdoc=_pyplot.broken_barh.__doc__)
 def broken_barh(*args, **kwargs):
     r"""starkplot wrapper for broken_barh"""
-    return pyplot.broken_barh(*args, **kwargs)
+    return _pyplot.broken_barh(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.cohere.__doc__)
+@mpl_decorator(funcdoc=_pyplot.cohere.__doc__)
 def cohere(*args, **kwargs):
     r"""starkplot wrapper for cohere"""
-    return pyplot.cohere(*args, **kwargs)
+    return _pyplot.cohere(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.contour.__doc__)
+@mpl_decorator(funcdoc=_pyplot.contour.__doc__)
 def contour(*args, **kwargs):
     r"""starkplot wrapper for contour"""
-    return pyplot.contour(*args, **kwargs)
+    return _pyplot.contour(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.contourf.__doc__)
+@mpl_decorator(funcdoc=_pyplot.contourf.__doc__)
 def contourf(*args, **kwargs):
     r"""starkplot wrapper for contourf"""
-    return pyplot.contourf(*args, **kwargs)
+    return _pyplot.contourf(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.csd.__doc__)
+@mpl_decorator(funcdoc=_pyplot.csd.__doc__)
 def csd(*args, **kwargs):
     r"""starkplot wrapper for csd"""
-    return pyplot.csd(*args, **kwargs)
+    return _pyplot.csd(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.errorbar.__doc__)
+@mpl_decorator(funcdoc=_pyplot.errorbar.__doc__)
 def errorbar(*args, **kwargs):
     r"""starkplot wrapper for errorbar"""
-    return pyplot.errorbar(*args, **kwargs)
+    return _pyplot.errorbar(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.eventplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.eventplot.__doc__)
 def eventplot(*args, **kwargs):
     r"""starkplot wrapper for eventplot"""
-    return pyplot.eventplot(*args, **kwargs)
+    return _pyplot.eventplot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.figimage.__doc__)
+@mpl_decorator(funcdoc=_pyplot.figimage.__doc__)
 def figimage(*args, **kwargs):
     r"""starkplot wrapper for figimage"""
-    return pyplot.figimage(*args, **kwargs)
+    return _pyplot.figimage(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.fill.__doc__)
+@mpl_decorator(funcdoc=_pyplot.fill.__doc__)
 def fill(*args, **kwargs):
     r"""starkplot wrapper for fill"""
-    return pyplot.fill(*args, **kwargs)
+    return _pyplot.fill(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.fill_between.__doc__)
+@mpl_decorator(funcdoc=_pyplot.fill_between.__doc__)
 def fill_between(*args, **kwargs):
     r"""starkplot wrapper for fill_between"""
-    return pyplot.fill_between(*args, **kwargs)
+    return _pyplot.fill_between(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.fill_betweenx.__doc__)
+@mpl_decorator(funcdoc=_pyplot.fill_betweenx.__doc__)
 def fill_betweenx(*args, **kwargs):
     r"""starkplot wrapper for fill_betweenx"""
-    return pyplot.fill_betweenx(*args, **kwargs)
+    return _pyplot.fill_betweenx(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.hexbin.__doc__)
+@mpl_decorator(funcdoc=_pyplot.hexbin.__doc__)
 def hexbin(*args, **kwargs):
     r"""starkplot wrapper for hexbin"""
-    return pyplot.hexbin(*args, **kwargs)
+    return _pyplot.hexbin(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.hist.__doc__)
+@mpl_decorator(funcdoc=_pyplot.hist.__doc__)
 def hist(*args, **kwargs):
     r"""starkplot wrapper for hist"""
-    return pyplot.hist(*args, **kwargs)
+    return _pyplot.hist(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.hist2d.__doc__)
+@mpl_decorator(funcdoc=_pyplot.hist2d.__doc__)
 def hist2d(*args, **kwargs):
     r"""starkplot wrapper for hist2d"""
-    return pyplot.hist2d(*args, **kwargs)
+    return _pyplot.hist2d(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.hlines.__doc__)
+@mpl_decorator(funcdoc=_pyplot.hlines.__doc__)
 def hlines(*args, **kwargs):
     r"""starkplot wrapper for hlines"""
-    return pyplot.hlines(*args, **kwargs)
+    return _pyplot.hlines(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.imshow.__doc__)
+@mpl_decorator(funcdoc=_pyplot.imshow.__doc__)
 def imshow(*args, **kwargs):
     r"""starkplot wrapper for imshow"""
-    return pyplot.imshow(*args, **kwargs)
+    return _pyplot.imshow(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.loglog.__doc__)
+@mpl_decorator(funcdoc=_pyplot.loglog.__doc__)
 def loglog(*args, **kwargs):
     r"""starkplot wrapper for loglog"""
-    return pyplot.loglog(*args, **kwargs)
+    return _pyplot.loglog(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.magnitude_spectrum.__doc__)
+@mpl_decorator(funcdoc=_pyplot.magnitude_spectrum.__doc__)
 def magnitude_spectrum(*args, **kwargs):
     r"""starkplot wrapper for magnitude_spectrum"""
-    return pyplot.magnitude_spectrum(*args, **kwargs)
+    return _pyplot.magnitude_spectrum(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.matshow.__doc__)
+@mpl_decorator(funcdoc=_pyplot.matshow.__doc__)
 def matshow(*args, **kwargs):
     r"""starkplot wrapper for matshow"""
-    return pyplot.matshow(*args, **kwargs)
+    return _pyplot.matshow(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.pcolor.__doc__)
+@mpl_decorator(funcdoc=_pyplot.pcolor.__doc__)
 def pcolor(*args, **kwargs):
     r"""starkplot wrapper for pcolor"""
-    return pyplot.pcolor(*args, **kwargs)
+    return _pyplot.pcolor(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.pcolormesh.__doc__)
+@mpl_decorator(funcdoc=_pyplot.pcolormesh.__doc__)
 def pcolormesh(*args, **kwargs):
     r"""starkplot wrapper for pcolormesh"""
-    return pyplot.pcolormesh(*args, **kwargs)
+    return _pyplot.pcolormesh(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.phase_spectrum.__doc__)
+@mpl_decorator(funcdoc=_pyplot.phase_spectrum.__doc__)
 def phase_spectrum(*args, **kwargs):
     r"""starkplot wrapper for phase_spectrum"""
-    return pyplot.phase_spectrum(*args, **kwargs)
+    return _pyplot.phase_spectrum(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.pie.__doc__)
+@mpl_decorator(funcdoc=_pyplot.pie.__doc__)
 def pie(*args, **kwargs):
     r"""starkplot wrapper for pie"""
-    return pyplot.pie(*args, **kwargs)
+    return _pyplot.pie(*args, **kwargs)
 
 
-# @mpl_decorator(funcdoc=pyplot.plot.__doc__)
+# @mpl_decorator(funcdoc=_pyplot.plot.__doc__)
 # def plot(*args, **kwargs):
 #     r"""starkplot wrapper for plot"""
-#     return pyplot.plot(*args, **kwargs)
+#     return _pyplot.plot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.plot_date.__doc__)
+@mpl_decorator(funcdoc=_pyplot.plot_date.__doc__)
 def plot_date(*args, **kwargs):
     r"""starkplot wrapper for plot_date"""
-    return pyplot.plot_date(*args, **kwargs)
+    return _pyplot.plot_date(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.plotfile.__doc__)
+@mpl_decorator(funcdoc=_pyplot.plotfile.__doc__)
 def plotfile(*args, **kwargs):
     r"""starkplot wrapper for plotfile"""
-    return pyplot.plotfile(*args, **kwargs)
+    return _pyplot.plotfile(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.polar.__doc__)
+@mpl_decorator(funcdoc=_pyplot.polar.__doc__)
 def polar(*args, **kwargs):
     r"""starkplot wrapper for polar"""
-    return pyplot.polar(*args, **kwargs)
+    return _pyplot.polar(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.psd.__doc__)
+@mpl_decorator(funcdoc=_pyplot.psd.__doc__)
 def psd(*args, **kwargs):
     r"""starkplot wrapper for psd"""
-    return pyplot.psd(*args, **kwargs)
+    return _pyplot.psd(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.quiver.__doc__)
+@mpl_decorator(funcdoc=_pyplot.quiver.__doc__)
 def quiver(*args, **kwargs):
     r"""starkplot wrapper for quiver"""
-    return pyplot.quiver(*args, **kwargs)
+    return _pyplot.quiver(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.rgrids.__doc__)
+@mpl_decorator(funcdoc=_pyplot.rgrids.__doc__)
 def rgrids(*args, **kwargs):
     r"""starkplot wrapper for rgrids"""
-    return pyplot.rgrids(*args, **kwargs)
+    return _pyplot.rgrids(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.scatter.__doc__)
+@mpl_decorator(funcdoc=_pyplot.scatter.__doc__)
 def scatter(*args, **kwargs):
     r"""starkplot wrapper for scatter"""
-    return pyplot.scatter(*args, **kwargs)
+    return _pyplot.scatter(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.semilogx.__doc__)
+@mpl_decorator(funcdoc=_pyplot.semilogx.__doc__)
 def semilogx(*args, **kwargs):
     r"""starkplot wrapper for semilogx"""
-    return pyplot.semilogx(*args, **kwargs)
+    return _pyplot.semilogx(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.semilogy.__doc__)
+@mpl_decorator(funcdoc=_pyplot.semilogy.__doc__)
 def semilogy(*args, **kwargs):
     r"""starkplot wrapper for semilogy"""
-    return pyplot.semilogy(*args, **kwargs)
+    return _pyplot.semilogy(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.specgram.__doc__)
+@mpl_decorator(funcdoc=_pyplot.specgram.__doc__)
 def specgram(*args, **kwargs):
     r"""starkplot wrapper for specgram"""
-    return pyplot.specgram(*args, **kwargs)
+    return _pyplot.specgram(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.spy.__doc__)
+@mpl_decorator(funcdoc=_pyplot.spy.__doc__)
 def spy(*args, **kwargs):
     r"""starkplot wrapper for spy"""
-    return pyplot.spy(*args, **kwargs)
+    return _pyplot.spy(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.stackplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.stackplot.__doc__)
 def stackplot(*args, **kwargs):
     r"""starkplot wrapper for stackplot"""
-    return pyplot.stackplot(*args, **kwargs)
+    return _pyplot.stackplot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.stem.__doc__)
+@mpl_decorator(funcdoc=_pyplot.stem.__doc__)
 def stem(*args, **kwargs):
     r"""starkplot wrapper for stem"""
-    return pyplot.stem(*args, **kwargs)
+    return _pyplot.stem(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.step.__doc__)
+@mpl_decorator(funcdoc=_pyplot.step.__doc__)
 def step(*args, **kwargs):
     r"""starkplot wrapper for step"""
-    return pyplot.step(*args, **kwargs)
+    return _pyplot.step(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.streamplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.streamplot.__doc__)
 def streamplot(*args, **kwargs):
     r"""starkplot wrapper for streamplot"""
-    return pyplot.streamplot(*args, **kwargs)
+    return _pyplot.streamplot(*args, **kwargs)
 
 
 # def table(*args, **kwargs):  # is this an annotation?
 #     r"""starkplot wrapper for table"""
-#     return pyplot.table(*args, **kwargs)
+#     return _pyplot.table(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.tricontour.__doc__)
+@mpl_decorator(funcdoc=_pyplot.tricontour.__doc__)
 def tricontour(*args, **kwargs):
     r"""starkplot wrapper for tricontour"""
-    return pyplot.tricontour(*args, **kwargs)
+    return _pyplot.tricontour(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.tricontourf.__doc__)
+@mpl_decorator(funcdoc=_pyplot.tricontourf.__doc__)
 def tricontourf(*args, **kwargs):
     r"""starkplot wrapper for tricontourf"""
-    return pyplot.tricontourf(*args, **kwargs)
+    return _pyplot.tricontourf(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.tripcolor.__doc__)
+@mpl_decorator(funcdoc=_pyplot.tripcolor.__doc__)
 def tripcolor(*args, **kwargs):
     r"""starkplot wrapper for tripcolor"""
-    return pyplot.tripcolor(*args, **kwargs)
+    return _pyplot.tripcolor(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.triplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.triplot.__doc__)
 def triplot(*args, **kwargs):
     r"""starkplot wrapper for triplot"""
-    return pyplot.triplot(*args, **kwargs)
+    return _pyplot.triplot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.violinplot.__doc__)
+@mpl_decorator(funcdoc=_pyplot.violinplot.__doc__)
 def violinplot(*args, **kwargs):
     r"""starkplot wrapper for violinplot"""
-    return pyplot.violinplot(*args, **kwargs)
+    return _pyplot.violinplot(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.vlines.__doc__)
+@mpl_decorator(funcdoc=_pyplot.vlines.__doc__)
 def vlines(*args, **kwargs):
     r"""starkplot wrapper for vlines"""
-    return pyplot.vlines(*args, **kwargs)
+    return _pyplot.vlines(*args, **kwargs)
 
 
-@mpl_decorator(funcdoc=pyplot.xcorr.__doc__)
+@mpl_decorator(funcdoc=_pyplot.xcorr.__doc__)
 def xcorr(*args, **kwargs):
     r"""starkplot wrapper for xcorr"""
-    return pyplot.xcorr(*args, **kwargs)
+    return _pyplot.xcorr(*args, **kwargs)
 
 
-def scatterplot(x, y, *args, **kwargs):
-    """ #TODO adapt to starkplot. Can test out my SideHists wrapper
-    NAME:
+# def scatterplot(x, y, *args, **kwargs):
+#     """ #TODO adapt to starkplot. Can test out my SideHists wrapper
+#     NAME:
 
-       scatterplot
+#        scatterplot
 
-    PURPOSE:
+#     PURPOSE:
 
-       make a 'smart' scatterplot that is a density plot in high-density
-       regions and a regular scatterplot for outliers
+#        make a 'smart' scatterplot that is a density plot in high-density
+#        regions and a regular scatterplot for outliers
 
-    INPUT:
+#     INPUT:
 
-       x, y
+#        x, y
 
-       xlabel - (raw string!) x-axis label, LaTeX math mode, no $s needed
+#        xlabel - (raw string!) x-axis label, LaTeX math mode, no $s needed
 
-       ylabel - (raw string!) y-axis label, LaTeX math mode, no $s needed
+#        ylabel - (raw string!) y-axis label, LaTeX math mode, no $s needed
 
-       xrange
+#        xrange
 
-       yrange
+#        yrange
 
-       bins - number of bins to use in each dimension
+#        bins - number of bins to use in each dimension
 
-       weights - data-weights
+#        weights - data-weights
 
-       aspect - aspect ratio
+#        aspect - aspect ratio
 
-       conditional - normalize each column separately (for probability densities, i.e., cntrmass=True)
+#        conditional - normalize each column separately (for probability densities, i.e., cntrmass=True)
 
-       gcf=True does not start a new figure (does change the ranges and labels)
+#        gcf=True does not start a new figure (does change the ranges and labels)
 
-       contours - if False, don't plot contours
+#        contours - if False, don't plot contours
 
-       justcontours - if True, only draw contours, no density
+#        justcontours - if True, only draw contours, no density
 
-       cntrcolors - color of contours (can be array as for bovy_dens2d)
+#        cntrcolors - color of contours (can be array as for bovy_dens2d)
 
-       cntrlw, cntrls - linewidths and linestyles for contour
+#        cntrlw, cntrls - linewidths and linestyles for contour
 
-       cntrSmooth - use ndimage.gaussian_filter to smooth before contouring
+#        cntrSmooth - use ndimage.gaussian_filter to smooth before contouring
 
-       levels - contour-levels; data points outside of the last level will be individually shown (so, e.g., if this list is descending, contours and data points will be overplotted)
+#        levels - contour-levels; data points outside of the last level will be individually shown (so, e.g., if this list is descending, contours and data points will be overplotted)
 
-       onedhists - if True, make one-d histograms on the sides
+#        onedhists - if True, make one-d histograms on the sides
 
-       onedhistx - if True, make one-d histograms on the side of the x distribution
+#        onedhistx - if True, make one-d histograms on the side of the x distribution
 
-       onedhisty - if True, make one-d histograms on the side of the y distribution
+#        onedhisty - if True, make one-d histograms on the side of the y distribution
 
-       onedhistcolor, onedhistfc, onedhistec
+#        onedhistcolor, onedhistfc, onedhistec
 
-       onedhistxnormed, onedhistynormed - normed keyword for one-d histograms
+#        onedhistxnormed, onedhistynormed - normed keyword for one-d histograms
        
-       onedhistxweights, onedhistyweights - weights keyword for one-d histograms
+#        onedhistxweights, onedhistyweights - weights keyword for one-d histograms
 
-       cmap= cmap for density plot
+#        cmap= cmap for density plot
 
-       hist= and edges= - you can supply the histogram of the data yourself, this can be useful if you want to censor the data, both need to be set and calculated using scipy.histogramdd with the given range
+#        hist= and edges= - you can supply the histogram of the data yourself, this can be useful if you want to censor the data, both need to be set and calculated using scipy.histogramdd with the given range
 
-       retAxes= return all Axes instances
+#        retAxes= return all Axes instances
 
-    OUTPUT:
+#     OUTPUT:
 
-       plot to output device, Axes instance(s) or not, depending on input
+#        plot to output device, Axes instance(s) or not, depending on input
 
-    HISTORY:
+#     HISTORY:
 
-       2010-04-15 - written - Bovy (NYU)
-       2019-02-09 - copied & modified - Starkman (Toronto)
+#        2010-04-15 - written - Bovy (NYU)
+#        2019-02-09 - copied & modified - Starkman (Toronto)
 
-    """
-    from scipy import special, interpolate
-    import matplotlib.cm as cm
-    from matplotlib.ticker import NullFormatter, MultipleLocator
+#     """
+#     from scipy import special, interpolate
+#     import matplotlib.cm as cm
+#     from matplotlib.ticker import NullFormatter, MultipleLocator
 
-    xlabel = kwargs.pop('xlabel', None)
-    ylabel = kwargs.pop('ylabel', None)
-    if 'xrange' in kwargs:
-        xrng = kwargs.pop('xrange')
-    else:
-        if isinstance(x, list):
-            xrng = [np.amin(x), np.amax(x)]
-        else:
-            xrng = [x.min(), x.max()]
-    if 'yrange' in kwargs:
-        yrng = kwargs.pop('yrange')
-    else:
-        if isinstance(y, list):
-            yrng = [np.amin(y), np.amax(y)]
-        else:
-            yrng = [y.min(), y.max()]
-    ndata = len(x)
-    bins = kwargs.pop('bins', round(0.3 * np.sqrt(ndata)))
-    weights = kwargs.pop('weights', None)
-    levels = kwargs.pop('levels', special.erf(np.arange(1, 4) / np.sqrt(2.)))
-    aspect = kwargs.pop('aspect', (xrng[1] - xrng[0]) / (yrng[1] - yrng[0]))
-    conditional = kwargs.pop('conditional', False)
-    contours = kwargs.pop('contours', True)
-    justcontours = kwargs.pop('justcontours', False)
-    cntrcolors = kwargs.pop('cntrcolors', 'k')
-    cntrlw = kwargs.pop('cntrlw', None)
-    cntrls = kwargs.pop('cntrls', None)
-    cntrSmooth = kwargs.pop('cntrSmooth', None)
-    onedhists = kwargs.pop('onedhists', False)
-    onedhistx = kwargs.pop('onedhistx', onedhists)
-    onedhisty = kwargs.pop('onedhisty', onedhists)
-    onedhisttype = kwargs.pop('onedhisttype', 'step')
-    onedhistcolor = kwargs.pop('onedhistcolor', 'k')
-    onedhistfc = kwargs.pop('onedhistfc', 'w')
-    onedhistec = kwargs.pop('onedhistec', 'k')
-    onedhistls = kwargs.pop('onedhistls', 'solid')
-    onedhistlw = kwargs.pop('onedhistlw', None)
-    onedhistsbins = kwargs.pop('onedhistsbins', round(0.3 * np.sqrt(ndata)))
-    overplot = kwargs.pop('overplot', False)
-    gcf = kwargs.pop('gcf', False)
-    cmap = kwargs.pop('cmap', cm.gist_yarg)
-    onedhistxnormed = kwargs.pop('onedhistxnormed', True)
-    onedhistynormed = kwargs.pop('onedhistynormed', True)
-    onedhistxweights = kwargs.pop('onedhistxweights', weights)
-    onedhistyweights = kwargs.pop('onedhistyweights', weights)
-    retAxes = kwargs.pop('retAxes', False)
-    if onedhists or onedhistx or onedhisty:
-        if overplot or gcf:
-            fig = pyplot.gcf()
-        else:
-            fig = pyplot.figure()
-        nullfmt = NullFormatter()         # no labels
-        # definitions for the axes
-        left, width = 0.1, 0.65
-        bottom, height = 0.1, 0.65
-        bottom_h = left_h = left + width
-        rect_scatter = [left, bottom, width, height]
-        rect_histx = [left, bottom_h, width, 0.2]
-        rect_histy = [left_h, bottom, 0.2, height]
-        axScatter = pyplot.axes(rect_scatter)
-        if onedhistx:
-            axHistx = pyplot.axes(rect_histx)
-            # no labels
-            axHistx.xaxis.set_major_formatter(nullfmt)
-            axHistx.yaxis.set_major_formatter(nullfmt)
-        if onedhisty:
-            axHisty = pyplot.axes(rect_histy)
-            # no labels
-            axHisty.xaxis.set_major_formatter(nullfmt)
-            axHisty.yaxis.set_major_formatter(nullfmt)
-        fig.sca(axScatter)
-    data = np.array([x, y]).T
-    if 'hist' in kwargs and 'edges' in kwargs:
-        hist = kwargs['hist']
-        kwargs.pop('hist')
-        edges = kwargs['edges']
-        kwargs.pop('edges')
-    else:
-        hist, edges = np.histogramdd(data, bins=bins, range=[xrng, yrng],
-                                     weights=weights)
-    if contours:
-        cumimage = bovy_dens2d(hist.T, contours=contours, levels=levels,
-                               cntrmass=contours, cntrSmooth=cntrSmooth,
-                               cntrcolors=cntrcolors, cmap=cmap, origin='lower',
-                               xrange=xrng, yrange=yrng, xlabel=xlabel,
-                               ylabel=ylabel, interpolation='nearest',
-                               retCumImage=True, aspect=aspect,
-                               conditional=conditional,
-                               cntrlw=cntrlw, cntrls=cntrls,
-                               justcontours=justcontours,
-                               zorder=5 * justcontours,
-                               overplot=(gcf or onedhists or overplot or onedhistx or onedhisty))
-    else:
-        cumimage = bovy_dens2d(hist.T, contours=contours,
-                               cntrcolors=cntrcolors,
-                               cmap=cmap, origin='lower',
-                               xrange=xrng, yrange=yrng, xlabel=xlabel,
-                               ylabel=ylabel, interpolation='nearest',
-                               conditional=conditional,
-                               retCumImage=True, aspect=aspect,
-                               cntrlw=cntrlw, cntrls=cntrls,
-                               overplot=(gcf or onedhists or overplot or onedhistx or onedhisty))
-    #Set axes and labels
-    pyplot.axis(list(xrng) + list(yrng))
-    if not overplot:
-        add_axis_labels(xlabel, ylabel)
-        add_minorticks()
-    binxs = []
-    xedge = edges[0]
-    for ii in range(len(xedge) - 1):
-        binxs.append((xedge[ii] + xedge[ii + 1]) / 2.)
-    binxs = np.array(binxs)
-    binys = []
-    yedge = edges[1]
-    for ii in range(len(yedge)-1):
-        binys.append((yedge[ii]+yedge[ii+1])/2.)
-    binys = np.array(binys)
-    cumInterp = interpolate.RectBivariateSpline(binxs, binys, cumimage.T,
-                                                kx=1, ky=1)
-    cums = []
-    for ii in range(len(x)):
-        cums.append(cumInterp(x[ii], y[ii])[0, 0])
-    cums = np.array(cums)
-    plotx = x[cums > levels[-1]]
-    ploty = y[cums > levels[-1]]
-    if not len(plotx) == 0:
-        if not weights == None:
-            w8 = weights[cums > levels[-1]]
-            for ii in range(len(plotx)):
-                bovy_plot(plotx[ii], ploty[ii], overplot=True,
-                          color='%.2f' % (1. - w8[ii]), *args, **kwargs)
-        else:
-            bovy_plot(plotx, ploty, overplot=True, zorder=1, *args, **kwargs)
-    #Add onedhists
-    if not (onedhists or onedhistx or onedhisty):
-        if retAxes:
-            return pyplot.gca()
-        else:
-            return None
-    if onedhistx:
-        histx, edges, patches = axHistx.hist(x, bins=onedhistsbins,
-                                             normed=onedhistxnormed,
-                                             weights=onedhistxweights,
-                                             histtype=onedhisttype,
-                                             range=sorted(xrng),
-                                             color=onedhistcolor, fc=onedhistfc,
-                                             ec=onedhistec, ls=onedhistls,
-                                             lw=onedhistlw)
-    if onedhisty:
-        histy, edges, patches = axHisty.hist(y, bins=onedhistsbins,
-                                             orientation='horizontal',
-                                             weights=onedhistyweights,
-                                             normed=onedhistynormed,
-                                             histtype=onedhisttype,
-                                             range=sorted(yrng),
-                                             color=onedhistcolor, fc=onedhistfc,
-                                             ec=onedhistec, ls=onedhistls,
-                                             lw=onedhistlw)
-    if onedhistx and not overplot:
-        axHistx.set_xlim(axScatter.get_xlim() )
-        axHistx.set_ylim(0, 1.2 * np.amax(histx))
-    if onedhisty and not overplot:
-        axHisty.set_ylim(axScatter.get_ylim() )
-        axHisty.set_xlim(0, 1.2 * np.amax(histy))
-    if not onedhistx:
-        axHistx = None
-    if not onedhisty:
-        axHisty = None
-    if retAxes:
-        return (axScatter, axHistx, axHisty)
-    else:
-        return None
-
-
-###############################################################################
-# Save and Close
-
-@docstring.Appender(pyplot.savefig.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
-def save_and_close(filename, **kw):
-    """
-    Wrapper for pyplot.savefig
-    Calls pyplot.savefig() & pyplot.close()
-
-    Parameters
-    ---------
-    see savefig docstring
-    if format not included, tries to get format from filename
-
-    History
-    -------
-    2009-12-23 - bovy_end_print written - Bovy (NYU)
-    2019-02-08 - written - Starkman (Toronto)
-    """
-
-    if 'format' is not None:
-        pyplot.savefig(filename, **kw)
-
-    else:
-        pyplot.savefig(filename,
-                       format=re.split(r'\.', filename)[-1], **kw)
-    pyplot.close()
+#     xlabel = kwargs.pop('xlabel', None)
+#     ylabel = kwargs.pop('ylabel', None)
+#     if 'xrange' in kwargs:
+#         xrng = kwargs.pop('xrange')
+#     else:
+#         if isinstance(x, list):
+#             xrng = [np.amin(x), np.amax(x)]
+#         else:
+#             xrng = [x.min(), x.max()]
+#     if 'yrange' in kwargs:
+#         yrng = kwargs.pop('yrange')
+#     else:
+#         if isinstance(y, list):
+#             yrng = [np.amin(y), np.amax(y)]
+#         else:
+#             yrng = [y.min(), y.max()]
+#     ndata = len(x)
+#     bins = kwargs.pop('bins', round(0.3 * np.sqrt(ndata)))
+#     weights = kwargs.pop('weights', None)
+#     levels = kwargs.pop('levels', special.erf(np.arange(1, 4) / np.sqrt(2.)))
+#     aspect = kwargs.pop('aspect', (xrng[1] - xrng[0]) / (yrng[1] - yrng[0]))
+#     conditional = kwargs.pop('conditional', False)
+#     contours = kwargs.pop('contours', True)
+#     justcontours = kwargs.pop('justcontours', False)
+#     cntrcolors = kwargs.pop('cntrcolors', 'k')
+#     cntrlw = kwargs.pop('cntrlw', None)
+#     cntrls = kwargs.pop('cntrls', None)
+#     cntrSmooth = kwargs.pop('cntrSmooth', None)
+#     onedhists = kwargs.pop('onedhists', False)
+#     onedhistx = kwargs.pop('onedhistx', onedhists)
+#     onedhisty = kwargs.pop('onedhisty', onedhists)
+#     onedhisttype = kwargs.pop('onedhisttype', 'step')
+#     onedhistcolor = kwargs.pop('onedhistcolor', 'k')
+#     onedhistfc = kwargs.pop('onedhistfc', 'w')
+#     onedhistec = kwargs.pop('onedhistec', 'k')
+#     onedhistls = kwargs.pop('onedhistls', 'solid')
+#     onedhistlw = kwargs.pop('onedhistlw', None)
+#     onedhistsbins = kwargs.pop('onedhistsbins', round(0.3 * np.sqrt(ndata)))
+#     overplot = kwargs.pop('overplot', False)
+#     gcf = kwargs.pop('gcf', False)
+#     cmap = kwargs.pop('cmap', cm.gist_yarg)
+#     onedhistxnormed = kwargs.pop('onedhistxnormed', True)
+#     onedhistynormed = kwargs.pop('onedhistynormed', True)
+#     onedhistxweights = kwargs.pop('onedhistxweights', weights)
+#     onedhistyweights = kwargs.pop('onedhistyweights', weights)
+#     retAxes = kwargs.pop('retAxes', False)
+#     if onedhists or onedhistx or onedhisty:
+#         if overplot or gcf:
+#             fig = _pyplot.gcf()
+#         else:
+#             fig = _pyplot.figure()
+#         nullfmt = NullFormatter()         # no labels
+#         # definitions for the axes
+#         left, width = 0.1, 0.65
+#         bottom, height = 0.1, 0.65
+#         bottom_h = left_h = left + width
+#         rect_scatter = [left, bottom, width, height]
+#         rect_histx = [left, bottom_h, width, 0.2]
+#         rect_histy = [left_h, bottom, 0.2, height]
+#         axScatter = _pyplot.axes(rect_scatter)
+#         if onedhistx:
+#             axHistx = _pyplot.axes(rect_histx)
+#             # no labels
+#             axHistx.xaxis.set_major_formatter(nullfmt)
+#             axHistx.yaxis.set_major_formatter(nullfmt)
+#         if onedhisty:
+#             axHisty = _pyplot.axes(rect_histy)
+#             # no labels
+#             axHisty.xaxis.set_major_formatter(nullfmt)
+#             axHisty.yaxis.set_major_formatter(nullfmt)
+#         fig.sca(axScatter)
+#     data = np.array([x, y]).T
+#     if 'hist' in kwargs and 'edges' in kwargs:
+#         hist = kwargs['hist']
+#         kwargs.pop('hist')
+#         edges = kwargs['edges']
+#         kwargs.pop('edges')
+#     else:
+#         hist, edges = np.histogramdd(data, bins=bins, range=[xrng, yrng],
+#                                      weights=weights)
+#     if contours:
+#         cumimage = bovy_dens2d(hist.T, contours=contours, levels=levels,
+#                                cntrmass=contours, cntrSmooth=cntrSmooth,
+#                                cntrcolors=cntrcolors, cmap=cmap, origin='lower',
+#                                xrange=xrng, yrange=yrng, xlabel=xlabel,
+#                                ylabel=ylabel, interpolation='nearest',
+#                                retCumImage=True, aspect=aspect,
+#                                conditional=conditional,
+#                                cntrlw=cntrlw, cntrls=cntrls,
+#                                justcontours=justcontours,
+#                                zorder=5 * justcontours,
+#                                overplot=(gcf or onedhists or overplot or onedhistx or onedhisty))
+#     else:
+#         cumimage = bovy_dens2d(hist.T, contours=contours,
+#                                cntrcolors=cntrcolors,
+#                                cmap=cmap, origin='lower',
+#                                xrange=xrng, yrange=yrng, xlabel=xlabel,
+#                                ylabel=ylabel, interpolation='nearest',
+#                                conditional=conditional,
+#                                retCumImage=True, aspect=aspect,
+#                                cntrlw=cntrlw, cntrls=cntrls,
+#                                overplot=(gcf or onedhists or overplot or onedhistx or onedhisty))
+#     #Set axes and labels
+#     _pyplot.axis(list(xrng) + list(yrng))
+#     if not overplot:
+#         add_axis_labels(xlabel, ylabel)
+#         add_minorticks()
+#     binxs = []
+#     xedge = edges[0]
+#     for ii in range(len(xedge) - 1):
+#         binxs.append((xedge[ii] + xedge[ii + 1]) / 2.)
+#     binxs = np.array(binxs)
+#     binys = []
+#     yedge = edges[1]
+#     for ii in range(len(yedge)-1):
+#         binys.append((yedge[ii]+yedge[ii+1])/2.)
+#     binys = np.array(binys)
+#     cumInterp = interpolate.RectBivariateSpline(binxs, binys, cumimage.T,
+#                                                 kx=1, ky=1)
+#     cums = []
+#     for ii in range(len(x)):
+#         cums.append(cumInterp(x[ii], y[ii])[0, 0])
+#     cums = np.array(cums)
+#     plotx = x[cums > levels[-1]]
+#     ploty = y[cums > levels[-1]]
+#     if not len(plotx) == 0:
+#         if not weights == None:
+#             w8 = weights[cums > levels[-1]]
+#             for ii in range(len(plotx)):
+#                 bovy_plot(plotx[ii], ploty[ii], overplot=True,
+#                           color='%.2f' % (1. - w8[ii]), *args, **kwargs)
+#         else:
+#             bovy_plot(plotx, ploty, overplot=True, zorder=1, *args, **kwargs)
+#     #Add onedhists
+#     if not (onedhists or onedhistx or onedhisty):
+#         if retAxes:
+#             return _pyplot.gca()
+#         else:
+#             return None
+#     if onedhistx:
+#         histx, edges, patches = axHistx.hist(x, bins=onedhistsbins,
+#                                              normed=onedhistxnormed,
+#                                              weights=onedhistxweights,
+#                                              histtype=onedhisttype,
+#                                              range=sorted(xrng),
+#                                              color=onedhistcolor, fc=onedhistfc,
+#                                              ec=onedhistec, ls=onedhistls,
+#                                              lw=onedhistlw)
+#     if onedhisty:
+#         histy, edges, patches = axHisty.hist(y, bins=onedhistsbins,
+#                                              orientation='horizontal',
+#                                              weights=onedhistyweights,
+#                                              normed=onedhistynormed,
+#                                              histtype=onedhisttype,
+#                                              range=sorted(yrng),
+#                                              color=onedhistcolor, fc=onedhistfc,
+#                                              ec=onedhistec, ls=onedhistls,
+#                                              lw=onedhistlw)
+#     if onedhistx and not overplot:
+#         axHistx.set_xlim(axScatter.get_xlim() )
+#         axHistx.set_ylim(0, 1.2 * np.amax(histx))
+#     if onedhisty and not overplot:
+#         axHisty.set_ylim(axScatter.get_ylim() )
+#         axHisty.set_xlim(0, 1.2 * np.amax(histy))
+#     if not onedhistx:
+#         axHistx = None
+#     if not onedhisty:
+#         axHisty = None
+#     if retAxes:
+#         return (axScatter, axHistx, axHisty)
+#     else:
+#         return None
 
 
 ###############################################################################
@@ -854,7 +825,7 @@ def add_axis_labels(ax=None, x=None, y=None, z=None, units=False):
     Parameters
     ---------
     ax: axes or None
-        axes instance or None, which will then call pyplot.gca()
+        axes instance or None, which will then call _pyplot.gca()
         to get the current axes
     x/y/z: str or 2-item tuple
         the x/y/z axis label
@@ -897,7 +868,7 @@ def add_text(ax=None, *args, **kwargs):
     INPUT
     -----
     see matplotlib's text
-       (http://matplotlib.sourceforge.net/api/pyplot_api.html#matplotlib.pyplot.text)
+       (http://matplotlib.sourceforge.net/api/_pyplot_api.html#matplotlib._pyplot.text)
 
     OUTPUT
     ------
@@ -908,7 +879,7 @@ def add_text(ax=None, *args, **kwargs):
     2010-01-26 - written - Bovy (NYU)
     2019-02-09 - copied & modified - Starkman (Toronto)
     """
-    ax = ax if ax is not None else pyplot.gca()
+    ax = ax if ax is not None else _pyplot.gca()
 
     if kwargs.pop('title', False):
         ax.annotate(args[0], (0.5, 1.05),
@@ -916,22 +887,22 @@ def add_text(ax=None, *args, **kwargs):
                     horizontalalignment='center', verticalalignment='top',
                     **kwargs)
     elif kwargs.pop('bottom_left', False):
-        pyplot.annotate(args[0], (0.05, 0.05),
+        _pyplot.annotate(args[0], (0.05, 0.05),
                         xycoords='axes fraction', **kwargs)
     elif kwargs.pop('bottom_right', False):
-        pyplot.annotate(args[0], (0.95, 0.05), xycoords='axes fraction',
+        _pyplot.annotate(args[0], (0.95, 0.05), xycoords='axes fraction',
                         horizontalalignment='right', **kwargs)
     elif kwargs.pop('top_right', False):
-        pyplot.annotate(args[0], (0.95, 0.95),
+        _pyplot.annotate(args[0], (0.95, 0.95),
                         xycoords='axes fraction',
                         horizontalalignment='right', verticalalignment='top',
                         **kwargs)
     elif kwargs.pop('top_left', False):
-        pyplot.annotate(args[0], (0.05, 0.95),
+        _pyplot.annotate(args[0], (0.05, 0.95),
                         xycoords='axes fraction', verticalalignment='top',
                         **kwargs)
     else:
-        pyplot.text(*args, **kwargs)
+        _pyplot.text(*args, **kwargs)
 
 
 ###############################################################################
@@ -945,7 +916,7 @@ def plotproperties(**kw):
     return None
 
 
-@mpl_decorator()
+@mpl_decorator(overridefig=True)
 def set(**kw):
     r"""A blanck function for accessing any mpl_decorator property
     """
@@ -956,7 +927,7 @@ def add_axis_limits(ax=None, x=None, y=None, z=None):
     r"""
     """
 
-    ax = ax if ax is not None else pyplot.gca()
+    ax = ax if ax is not None else _pyplot.gca()
 
     if x is not None:
         ax.set_xlim(x)
@@ -972,7 +943,7 @@ def add_axis_limits(ax=None, x=None, y=None, z=None):
 def add_axis_scales(ax=None, x=None, y=None, z=None, **kw):
     r"""
     """
-    # ax = ax if ax is not None else pyplot.gca()
+    # ax = ax if ax is not None else _pyplot.gca()
     # if x is not None:
     #     ax.set_xscale(x)
     # if y is not None:
@@ -993,7 +964,7 @@ def add_minorticks(ax=None, x=True, y=True, z=True):
        2009-12-23 - _add_ticks written - Bovy (NYU)
        2019-02-099 - written - Starkman (Toronto)
     """
-    ax = ax if ax is not None else pyplot.gca()
+    ax = ax if ax is not None else _pyplot.gca()
 
     if x:
         xstep = ax.xaxis.get_majorticklocs()
@@ -1036,8 +1007,8 @@ StarkPlot Plot Additions:
 
 
 
-# TODO get this from pyplot.plotting
-Matplotlib's Plotting (accessible via .pyplot):
+# TODO get this from _pyplot.plotting
+Matplotlib's Plotting (accessible via ._pyplot):
 ============================ =============================================================================================================================
 Function                     Description
 ============================ =============================================================================================================================

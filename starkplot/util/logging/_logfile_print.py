@@ -9,9 +9,7 @@
 # ----------------------------------------------------------------------------
 
 ### Docstring and Metadata
-r"""functions for logging
-
-TODO use a decorator for setting docstrings
+"""functions for logging
 """
 
 __author__ = "Nathaniel Starkman"
@@ -19,11 +17,6 @@ __author__ = "Nathaniel Starkman"
 
 ##############################################################################
 ### Imports
-
-## General
-# from _io import TextIOWrapper
-
-## Project-Specific
 
 
 ##############################################################################
@@ -44,9 +37,11 @@ class PrintLog(object):
         self.sec_div = sec_div
 
         # making file header
-        if header is not False:  # makes header
+        # header = False skips the header
+        # header = None, True makes a blank heaader
+        if header is not False:
             if header in (None, True):
-                header = __name__
+                header = ''
             self.write(f"{header} Log:", endsection='=')
     # /def
 
@@ -77,11 +72,11 @@ class PrintLog(object):
         """helper method to print and call _write
         this is implemented solely to be overwritten by child classes
         """
-        self.print(*string, start=start, sep=sep, end=end)  # printing
+        self.print(*string, start=start, sep=sep, end=end)   # printing
         self._write(*string, start=start, sep=sep, end=end)  # writing
     # /def
 
-    def newsection(self, div=None, _print=True):
+    def newsection(self, title=None, div=None, _print=True):
         """make new section
 
         Parameters
@@ -90,15 +85,18 @@ class PrintLog(object):
             the divider
             None -> sec_div from initalization
         """
+        if title is None:
+            title = ''
+
         if div is None:  # get default divider if custom one not provided
             div = self.sec_div
 
         full_div = div * int(79 / len(div))  # round out to full line length
 
         if _print:
-            self._print_and_write(full_div, start='\n', end='\n\n')
+            self._print_and_write(full_div, title, start='\n', sep='\n', end='\n')
         else:
-            self._write(full_div, start='\n', end='\n\n')
+            self._write(full_div, title, start='\n', sep='\n', end='\n\n')
     # /def
 
     def write(self, *text, start='', sep=' ', end='\n',
@@ -140,7 +138,7 @@ class PrintLog(object):
                 self.newsection(_print=_print)
     # /def
 
-    def record(self, *text, start='', end='\n', sep=' ',
+    def record(self, *text, start='', sep=' ', end='\n',
                startsection=False, endsection=False):
         """redirects to write, which goes to print
         this is implemented solely for compatibility
@@ -183,7 +181,8 @@ class PrintLog(object):
         else:                                   # inside message options
             msg = msgs[verbose - _start_at]
 
-        if msg == '': msg = None  # catching null messages
+        if str(msg) == '':
+            msg = None  # catching null messages
 
         if msg is not None:
             if _write:
@@ -216,7 +215,10 @@ class PrintLog(object):
         file = open(filename, mode='r', buffering=buffering, encoding=encoding,
                     errors=errors, newline=newline, closefd=closefd,
                     opener=opener)
-        print(file.read())
+        log = file.read()
+
+        print(log)
+        return log
     # /def
 
 # /class
@@ -257,7 +259,7 @@ class LogFile(PrintLog):
         'a' open for writing, appending to the end of the file if it exists
         'b' binary mode
         't' text mode
-        NOT ALLOWED '+' open a disk file for updating (reading and writing)
+         NOT ALLOWED '+' open a disk file for updating (reading and writing)
 
     Inherited Methods
     -----------------
@@ -310,15 +312,15 @@ class LogFile(PrintLog):
             errors=errors, newline=newline, closefd=closefd, opener=opener
         )
 
-        # file header
         if mode == 'r':
             return
 
+        # making file header
         if header is False:
             self.write(f"{''} Log:", endsection='=', _print=False)
         else:
             if header in (None, True):
-                header = __name__
+                header = ''
             self.write(f"{header} Log:", endsection='=')
     # /def
 
@@ -485,7 +487,7 @@ class LogFile(PrintLog):
     # /def
 
     def record(self, *text, start='', end='\n',
-               startsection=False, endsection=False):
+           startsection=False, endsection=False):
         """same as write, but doesn't print as well as write to file
         """
         super().record(*text, start=start, end=end,

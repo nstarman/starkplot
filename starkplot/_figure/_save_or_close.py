@@ -25,7 +25,7 @@ __all__ = [
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 from matplotlib import pyplot

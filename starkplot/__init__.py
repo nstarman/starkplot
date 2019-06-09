@@ -52,7 +52,7 @@ __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 from matplotlib.pyplot import *

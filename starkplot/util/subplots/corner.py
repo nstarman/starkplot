@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -23,7 +24,7 @@ make this work with bovy_plot scatterplot
 __author__ = "Nathaniel Starkman"
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 import numpy as np

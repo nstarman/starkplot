@@ -15,7 +15,7 @@ r"""initialization file for subplots
 __author__ = "Nathaniel Starkman"
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## Project-Specific
 from .square import (

@@ -16,7 +16,7 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 from IPython.core.interactiveshell import InteractiveShell
@@ -41,4 +41,4 @@ get_ipython().magic("config InlineBackend.figure_format='retina'")
 
 
 ##############################################################################
-### Code
+### CODE

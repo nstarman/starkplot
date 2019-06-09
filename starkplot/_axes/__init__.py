@@ -21,7 +21,7 @@ __credits__ = ["matplotlib"]
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 from ._current_axes import gca, sca

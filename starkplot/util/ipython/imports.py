@@ -60,7 +60,7 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 import os, sys                        # operating system

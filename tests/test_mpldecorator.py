@@ -17,7 +17,7 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 from starkplot import MatplotlibDecorator
 from starkplot import mpl_decorator

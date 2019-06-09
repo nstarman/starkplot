@@ -17,7 +17,7 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 from importlib import import_module
 

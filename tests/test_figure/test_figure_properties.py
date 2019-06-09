@@ -17,7 +17,7 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 import numpy as np

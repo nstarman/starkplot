@@ -15,7 +15,7 @@ r"""initialization file for colorbar
 __author__ = "Nathaniel Starkman"
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 

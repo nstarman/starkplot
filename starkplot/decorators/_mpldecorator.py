@@ -25,7 +25,7 @@ __credits__ = ["astropy, matplotlib"]
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 ## General
 import numpy as np

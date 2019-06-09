@@ -20,7 +20,7 @@ __credits__ = ["matplotlib"]
 
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 # matplotlib
 from matplotlib.pyplot import figure

@@ -15,7 +15,7 @@ r"""initialization file for util
 __author__ = "Nathaniel Starkman"
 
 ##############################################################################
-### Imports
+### IMPORTS
 
 # General
 from collections import OrderedDict
@@ -35,6 +35,7 @@ from .subplots import (
 
 
 ##############################################################################
+### CODE
 
 class ObjDict(OrderedDict):
     """ObjDict

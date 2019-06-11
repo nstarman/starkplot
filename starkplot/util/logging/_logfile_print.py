@@ -20,13 +20,13 @@ __author__ = "Nathaniel Starkman"
 
 
 ##############################################################################
-### PrintLog
+### PRINTLOG
 
 class PrintLog(object):
     """a basic logger wrapper for print
     """
 
-    def __init__(self, verbose=0, sec_div='-', header=None):
+    def __init__(self, verbose=0, sec_div='-', header=None, show_header=True):
         """Initialize PrintLog
         start the file header (just printing)
         """
@@ -42,7 +42,8 @@ class PrintLog(object):
         if header is not False:
             if header in (None, True):
                 header = ''
-            self.write(f"{header} Log:", endsection='=')
+
+            self.write(f"{header} Log:", endsection='=', print=show_header)
     # /def
 
     def print(self, *text, start='', sep=' ', end='\n'):
@@ -76,7 +77,7 @@ class PrintLog(object):
         self._write(*string, start=start, sep=sep, end=end)  # writing
     # /def
 
-    def newsection(self, title=None, div=None, _print=True):
+    def newsection(self, title=None, div=None, print=True):
         """make new section
 
         Parameters
@@ -93,14 +94,14 @@ class PrintLog(object):
 
         full_div = div * int(79 / len(div))  # round out to full line length
 
-        if _print:
+        if print:
             self._print_and_write(full_div, title, start='\n', sep='\n', end='\n')
         else:
             self._write(full_div, title, start='\n', sep='\n', end='\n\n')
     # /def
 
     def write(self, *text, start='', sep=' ', end='\n',
-              startsection=False, endsection=False, _print=True):
+              startsection=False, endsection=False, print=True):
         """print text
 
         TODO implement sep method for write
@@ -122,20 +123,20 @@ class PrintLog(object):
 
         if startsection is not False:
             if isinstance(startsection, str):
-                self.newsection(div=startsection, _print=_print)
+                self.newsection(div=startsection, print=print)
             else:
-                self.newsection(_print=_print)
+                self.newsection(print=print)
 
-        if _print:
+        if print:
             self._print_and_write(*text, start=start, sep=sep, end=end)
         else:
             self._write(*text, start=start, sep=sep, end=end)
 
         if endsection is not False:
             if isinstance(endsection, str):
-                self.newsection(div=endsection, _print=_print)
+                self.newsection(div=endsection, print=print)
             else:
-                self.newsection(_print=_print)
+                self.newsection(print=print)
     # /def
 
     def record(self, *text, start='', sep=' ', end='\n',
@@ -145,11 +146,11 @@ class PrintLog(object):
         """
         self.write(*text, start=start, sep=sep, end=end,
                    startsection=startsection, endsection=endsection,
-                   _print=False)
+                   print=False)
     # /def
 
-    def verbort(self, *msgs, verbose=None, _print=True, _write=True,
-                _start_at=1, **kw):
+    def verbort(self, *msgs, verbose=None, print=True, write=True,
+                start_at=1, **kw):
         """a report function whose message is determined by the *verbose*
 
         Parameters
@@ -160,33 +161,33 @@ class PrintLog(object):
         verbose : int, optional
             which message to record
             None (default) uses self.verbose (default = 0, unless specified)
-        _print : bool
+        print : bool
             whether to print, or just record
-        _write : bool
+        write : bool
             whether to write to logger file
             write redirects to print in this class
-        _start_at : int
+        start_at : int
             what level of verbosity is the first *msg*
-            ex: verbort('test', _start_at=3) means 'test' is at verbose=3
+            ex: verbort('test', start_at=3) means 'test' is at verbose=3
         **kw: kwargs for self.write or self.print
         """
 
         if verbose is None:
             verbose = self.verbose
 
-        if verbose < _start_at:                 # below starting verbosity
+        if verbose < start_at:                 # below starting verbosity
             msg = None
-        elif verbose - _start_at >= len(msgs):  # above / at last message
+        elif verbose - start_at >= len(msgs):  # above / at last message
             msg = msgs[-1]
         else:                                   # inside message options
-            msg = msgs[verbose - _start_at]
+            msg = msgs[verbose - start_at]
 
         if str(msg) == '':
             msg = None  # catching null messages
 
         if msg is not None:
-            if _write:
-                self.write(msg, _print=_print, **kw)
+            if write:
+                self.write(msg, print=print, **kw)
             else:
                 self.print(msg, **kw)
     # /def
@@ -317,7 +318,7 @@ class LogFile(PrintLog):
 
         # making file header
         if header is False:
-            self.write(f"{''} Log:", endsection='=', _print=False)
+            self.write(f"{''} Log:", endsection='=', print=False)
         else:
             if header in (None, True):
                 header = ''
@@ -463,7 +464,7 @@ class LogFile(PrintLog):
     # # /def
 
     def write(self, *text, start='', sep=' ', end='\n',
-              startsection=False, endsection=False, _print=True):
+              startsection=False, endsection=False, print=True):
         """Write string to stream and print it to output.
 
         Parameters
@@ -483,19 +484,19 @@ class LogFile(PrintLog):
 
         super().write(*text, start=start, sep=sep, end=end,
                       startsection=startsection, endsection=endsection,
-                      _print=_print)
+                      print=print)
     # /def
 
     def record(self, *text, start='', end='\n',
-           startsection=False, endsection=False):
+               startsection=False, endsection=False):
         """same as write, but doesn't print as well as write to file
         """
         super().record(*text, start=start, end=end,
                        startsection=startsection, endsection=endsection)
     # /def
 
-    def verbort(self, *msgs, verbose=None, _print=True, _write=True,
-                _start_at=1, **kw):
+    def verbort(self, *msgs, verbose=None, print=True, write=True,
+                start_at=1, **kw):
         """a report function whose message is determined by the *verbose*
 
         Parameters
@@ -506,17 +507,17 @@ class LogFile(PrintLog):
         verbose : int, optional
             which message to record
             None (default) uses self.verbose (default = 0, unless specified)
-        _print : bool
+        print : bool
             whether to print, or just record
-        _write : bool
+        write : bool
             whether to write to logger file
-        _start_at : int
+        start_at : int
             what level of verbosity is the first *msg*
-            ex: verbort('test', _start_at=3) means 'test' is at verbose=3
+            ex: verbort('test', start_at=3) means 'test' is at verbose=3
         **kw: kwargs for self.write or self.print
         """
-        super().verbort(*msgs, verbose=verbose, _print=_print, _write=_write,
-                        _start_at=_start_at, **kw)
+        super().verbort(*msgs, verbose=verbose, print=print, write=write,
+                        start_at=start_at, **kw)
     # /def
 
     def close(self):
@@ -528,4 +529,5 @@ class LogFile(PrintLog):
 # /class
 
 
-# --------------------------------------------------------------------------
+##############################################################################
+### DONE

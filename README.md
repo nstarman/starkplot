@@ -1,5 +1,5 @@
 # starkplot
-Matplotlib and Plotly functions
+Matplotlib pyplot wrapper
 
 This code is in active development and parts are quite likely to change significantly.
 I find this code useful for quickly prototyping plots.

@@ -69,7 +69,7 @@ except ImportError as e:
 from ..util import axisLabels, axisScales, axisLimits, invertAxis
 # from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
 
-from .docstring import dedent, strthentwoline
+from .docstring import cleandoc, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 #############################################################################
@@ -577,7 +577,7 @@ class SideHists(MatplotlibDecoratorBase):
         _doc = (self.funcdoc +
                 _descrhead.format(func=wrapped_function.__name__) +
                 self._doc)
-        wrapped.__doc__ = dedent(wrapped.__doc__) + _doc
+        wrapped.__doc__ = cleandoc(wrapped.__doc__) + _doc
 
         return wrapped
     # /def

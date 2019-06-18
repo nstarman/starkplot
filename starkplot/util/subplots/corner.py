@@ -228,7 +228,7 @@ def corner_plot(data, data_labels=None, orientation='lower left',
 
 # --------------------------------------------------------------------------
 
-def staircase_plot(data, data_labels, draw_contours=False,
+def staircase_plot(data, data_labels=None, draw_contours=False,
                    fig=None, axs=None, savefig=False,
                    **kw):
     '''staircase_plot
@@ -256,7 +256,8 @@ def staircase_plot(data, data_labels, draw_contours=False,
     axs : Axes array
         array of matplotlib axes
     '''
-    return corner_plot(data, data_labels, draw_contours=draw_contours,
+    return corner_plot(data, data_labels=data_labels,
+                       draw_contours=draw_contours,
                        fig=fig, axs=axs, savefig=savefig,
                        orientation='lower left', **kw)
 

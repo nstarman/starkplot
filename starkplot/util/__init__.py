@@ -21,7 +21,6 @@ __author__ = "Nathaniel Starkman"
 from collections import OrderedDict
 
 # Custom
-from .logging import LogFile  #, LoggerFile
 
 # Project-Specific
 from .pickle import dump as _dump, load as _load

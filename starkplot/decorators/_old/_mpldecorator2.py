@@ -69,7 +69,7 @@ except ImportError as e:
 # from ._colorbardecorator import ColorbarDecorator, cbar_decorator
 # from ._axesdecorator import AxesDecorator, ax_decorator
 #
-from .docstring import dedent, strthentwoline
+from .docstring import cleandoc, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 # from ..util import ObjectWrapper

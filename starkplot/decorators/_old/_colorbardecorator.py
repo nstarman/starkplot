@@ -60,7 +60,7 @@ except ImportError as e:
     from functools import wraps
 
 # Custom Imports
-from .docstring import dedent, strthentwoline
+from .docstring import cleandoc, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..util import prepare_axes
@@ -468,7 +468,7 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
         _doc = (self.funcdoc +
                 _descrhead.format(func=wrapped_function.__name__) +
                 self._doc)
-        wrapped.__doc__ = wrapped.__doc__ and dedent(wrapped.__doc__) + _doc
+        wrapped.__doc__ = wrapped.__doc__ and cleandoc(wrapped.__doc__) + _doc
 
         return wrapped
     # /def

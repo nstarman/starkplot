@@ -45,7 +45,7 @@ except ImportError as e:
 
 ## Project-Specific
 
-from .docstring import dedent, strthentwoline
+from .docstring import cleandoc, strthentwoline
 from ._util import MatplotlibDecoratorBase, _funcdocprefix
 
 # from ..util import ObjectWrapper
@@ -1018,7 +1018,7 @@ class MatplotlibDecorator(object):
                     _descrhead.format(func=wrapped_function.__name__) +
                     self._doc
                 )
-                wrapped.__doc__ = dedent(wrapped.__doc__) + _added_doc
+                wrapped.__doc__ = cleandoc(wrapped.__doc__) + _added_doc
 
                 return wrapped
             # /def

@@ -49,7 +49,8 @@ Planned Features
 - incorporate the side hists from bovy_plot.bovy_plot into plot
     & do this as a decorator so can attach to functions easily
 
-
+- switch over to gca() (in a way that respects ax=) so can access 3d plots
+  when they happen
 """
 
 #############################################################################
@@ -463,7 +464,7 @@ def rgrids(*args, **kwargs):
 @mpl_decorator(funcdoc=_pyplot.scatter.__doc__)
 def scatter(*args, **kwargs):
     r"""starkplot wrapper for scatter"""
-    return _pyplot.scatter(*args, **kwargs)
+    return _pyplot.gca().scatter(*args, **kwargs)  # TODO check this works for ax argument
 
 
 @mpl_decorator(funcdoc=_pyplot.semilogx.__doc__)

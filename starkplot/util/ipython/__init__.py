@@ -10,6 +10,10 @@
 
 ### Docstring and Metadata
 """initialization file for jupyter notebook functions
+
+# TODO:
+- provide functions to set the inline vs notebook,
+  change figure_format to something other than retina, etc.
 """
 
 __author__ = "Nathaniel Starkman"
@@ -19,13 +23,16 @@ __author__ = "Nathaniel Starkman"
 ### IMPORTS
 
 ## General
-from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import display
-from IPython.display import Latex, Markdown  # display is a better print
-from IPython.core.debugger import set_trace
+import matplotlib.pyplot as pyplot
+
+try:
+    from astropy.visualization import quantity_support, astropy_mpl_style
+except ImportError:
+    _APY = False
+else:
+    _APY = True
 
 ## Custom
-from .printing import printmd, printltx
 
 ## Project-Specific
 
@@ -33,12 +40,20 @@ from .printing import printmd, printltx
 ##############################################################################
 ### Running
 
-InteractiveShell.ast_node_interactivity = "all"
-
 # configure matplotlib
 get_ipython().magic('matplotlib inline')
 get_ipython().magic("config InlineBackend.figure_format='retina'")
 
+if _APY:
+    quantity_support()
+    pyplot.style.use(astropy_mpl_style)
+
 
 ##############################################################################
-### CODE
+### Printing Output
+print("""Imported:
+Set matplotlib inline
+configured figure format to retina
+set up astropy quantity support
+changed style to astropy style
+""")

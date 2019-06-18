@@ -55,7 +55,7 @@ _customadded = (
 _other = (
     'autoscale', 'axes', 'axis',
     'cla', 'clf', 'clim', 'close', 'cm', 'colormaps', 'connect', 'cycler',
-    'dedent', 'delaxes', 'deprecated', 'disconnect',
+    'cleandoc', 'delaxes', 'deprecated', 'disconnect',
     'docstring', 'draw', 'draw_all', 'draw_if_interactive',
     'figaspect', 'fignum_exists', 'figure', 'findobj',
     'gca', 'gcf', 'gci', 'get', 'get_backend', 'get_cmap',

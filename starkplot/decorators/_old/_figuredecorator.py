@@ -62,7 +62,7 @@
 #     from functools import wraps
 
 # # Custom Imports
-# from .docstring import dedent, strthentwoline
+# from .docstring import cleandoc, strthentwoline
 # from .util import MatplotlibDecoratorBase, _funcdocprefix
 # from ..util import prepare_figure, save_figure, override_figure, set_suptitle, tightLayout
 
@@ -640,7 +640,7 @@
 #         _doc = (self.funcdoc +
 #                 _descrhead.format(func=wrapped_function.__name__) +
 #                 self._doc)
-#         wrapped.__doc__ = dedent(wrapped.__doc__) + _doc
+#         wrapped.__doc__ = cleandoc(wrapped.__doc__) + _doc
 
 #         return wrapped
 #     # /def

@@ -42,7 +42,8 @@ Planned Features
 #############################################################################
 # Imports
 
-from matplotlib import cbook
+import inspect
+
 from matplotlib import docstring as _docstring
 
 # decorator module
@@ -152,7 +153,7 @@ class Appender(object):
 
     def __call__(self, func):
         if self.prededent:
-            docitems = [cbook.dedent(func.__doc__), self.addendum]
+            docitems = [inspect.cleandoc(func.__doc__), self.addendum]
         else:
             docitems = [func.__doc__, self.addendum]
 
@@ -175,14 +176,14 @@ def strorblank(s):
     return '' if not isinstance(s, str) else s
 
 
-def dedent(docstring):
+def cleandoc(docstring):
     """Dedent a docstring (if present)
     if docstring is None, return ''
     """
-    return strorblank(docstring and cbook.dedent(docstring))
+    return strorblank(docstring and inspect.cleandoc(docstring))
 
 
-dedentfunc = _docstring.dedent
+dedentfunc = inspect.cleandoc
 
 
 copy = _docstring.copy
@@ -206,15 +207,7 @@ copy = _docstring.dedent_interpd
 #     return interpd(dedent(func))
 
 
-copy_dedent = _docstring.copy_dedent
-# def copy_dedent(source):
-#     """A decorator that will copy the docstring from the source and
-#     then dedent it"""
-#     # note the following is ugly because "Python is not a functional
-#     # language" - GVR. Perhaps one day, functools.compose will exist.
-#     #  or perhaps not.
-#     #  http://mail.python.org/pipermail/patches/2007-February/021687.html
-#     return lambda target: dedent(copy(source)(target))
+copy_dedent = inspect.cleandoc
 
 
 def wrap_func_keep_orig_sign(func, sub_func=None,
@@ -230,7 +223,7 @@ def wrap_func_keep_orig_sign(func, sub_func=None,
     if sub_func is None:
         sub_func = func
 
-    doc = dedent(doc_pre) + dedent(sub_func.__doc__) + dedent(doc_post)
+    doc = cleandoc(doc_pre) + cleandoc(sub_func.__doc__) + cleandoc(doc_post)
 
     return decorator.FunctionMaker.create(
         func, 'return f(%(signature)s)', dict(f=sub_func), doc=doc,

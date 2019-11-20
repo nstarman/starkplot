@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #############################################################################
-r"""
+"""Starkplot.
 
-#############################################################################
+This __init__ file is for including starkplot as a submodule in codes.
 
 Copyright (c) 2018 - Nathaniel Starkman
 All rights reserved.
@@ -33,29 +32,23 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
-#############################################################################
-Planned Features
 """
-
-#############################################################################
-# Imports
-
-# import top level packages
-from .starkplot import *
-
-
-#############################################################################
-# Info
 
 __author__ = "Nathaniel Starkman"
 __copyright__ = "Copyright 2018, "
-__credits__ = [""]
+__credits__ = ["Matplotlib"]
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = "Nathaniel Starkman"
 __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
 
+#############################################################################
+# IMPORTS
+
+# import top level packages
+from .starkplot import *
+
 
 #############################################################################
-# Code
+# END

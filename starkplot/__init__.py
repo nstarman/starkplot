@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ----------------------------------------------------------------------------
@@ -9,10 +8,10 @@
 #
 # ----------------------------------------------------------------------------
 
-### Docstring and Metadata
-r"""initialization file
+# Docstring and Metadata
+"""Starkplot.
 
-# ----------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 Copyright (c) 2018 - Nathaniel Starkman
 All rights reserved.
@@ -40,6 +39,7 @@ AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+
 """
 
 __author__ = "Nathaniel Starkman"
@@ -52,16 +52,16 @@ __email__ = "n.starkman@mail.utoronto.ca"
 __status__ = "Production"
 
 ##############################################################################
-### IMPORTS
+# IMPORTS
 
-## General
+# GENERAL
 from matplotlib.pyplot import *
 
 # astropy
 from astropy.visualization import quantity_support
 from astropy.visualization import astropy_mpl_style
 
-## Project-Specific
+# PROJECT-SPECIFIC
 
 # importing folders
 from . import decorators, util

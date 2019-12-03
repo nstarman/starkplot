@@ -29,12 +29,14 @@ from .subplots import (
     closest_square_axis_grid_shape,
     closest_square_axis_grid,
     closest_square_axis_grid_iter,
-    corner_plot, staircase_plot
+    corner_plot,
+    staircase_plot,
 )
 
 
 ##############################################################################
 ### CODE
+
 
 class ObjDict(OrderedDict):
     """ObjDict
@@ -44,14 +46,14 @@ class ObjDict(OrderedDict):
 
     """
 
-    def __init__(self, name='', **kw):
+    def __init__(self, name="", **kw):
         """__init__
         initialize with a name for the container and kwargs for the dict
         # the name is stored in the dictionary as well
         """
         super().__init__()
 
-        object.__setattr__(self, 'name', name)
+        object.__setattr__(self, "name", name)
 
         for key, value in kw.items():
             self[key] = value
@@ -69,10 +71,10 @@ class ObjDict(OrderedDict):
             return [OrderedDict.__getitem__(self, key) for key in keys]
 
     def __repr__(self):
-        if self.name == '':
+        if self.name == "":
             return super().__repr__()
         else:
-            return self.name + super().__repr__().replace('ObjDict', '')
+            return self.name + super().__repr__().replace("ObjDict", "")
 
     def values(self, *names):
         if not names:
@@ -97,31 +99,34 @@ class ObjDict(OrderedDict):
 
     # +-------- Serialize --------+
     def __reduce__(self):
-        return (self.__class__,
-                (self.name, ),
-                OrderedDict(self.items()))
+        return (self.__class__, (self.name,), OrderedDict(self.items()))
 
     def __setstate__(self, state):
         for key, value in state.items():
             self[key] = value
+
     # /def
 
-    def dump(self, fname, protocol=None, *, fopt='b', fix_imports=True):
-        _dump(self, fname, protocol=protocol, fopt=fopt,
-              fix_imports=fix_imports)
+    def dump(self, fname, protocol=None, *, fopt="b", fix_imports=True):
+        _dump(self, fname, protocol=protocol, fopt=fopt, fix_imports=fix_imports)
+
     # /def
 
-    def save(self, fname, protocol=None, *, fopt='b', fix_imports=True):
+    def save(self, fname, protocol=None, *, fopt="b", fix_imports=True):
         self.dump(fname, protocol=protocol, fopt=fopt, fix_imports=fix_imports)
+
     # /def
 
     @staticmethod
-    def load(fname, *, fopt='b', fix_imports=True, encoding='ASCII',
-             errors='strict'):
-        self = _load(fname, fopt=fopt, fix_imports=fix_imports,
-                     encoding=encoding, errors=errors)
+    def load(fname, *, fopt="b", fix_imports=True, encoding="ASCII", errors="strict"):
+        self = _load(
+            fname, fopt=fopt, fix_imports=fix_imports, encoding=encoding, errors=errors
+        )
         return self
+
     # /def
+
+
 # /class
 
 # --------------------------------------------------------------------------

@@ -41,7 +41,7 @@ else:
 ### Running
 
 # configure matplotlib
-get_ipython().magic('matplotlib inline')
+get_ipython().magic("matplotlib inline")
 get_ipython().magic("config InlineBackend.figure_format='retina'")
 
 if _APY:
@@ -51,9 +51,11 @@ if _APY:
 
 ##############################################################################
 ### Printing Output
-print("""Imported:
+print(
+    """Imported:
 Set matplotlib inline
 configured figure format to retina
 set up astropy quantity support
 changed style to astropy style
-""")
+"""
+)

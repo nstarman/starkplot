@@ -53,10 +53,11 @@ from pkg_resources import get_distribution, DistributionNotFound
 #############################################################################
 # Code
 
+
 def read(*names, **kwargs):
     with io.open(
         os.path.join(os.path.dirname(__file__), *names),
-        encoding=kwargs.get("encoding", "utf8")
+        encoding=kwargs.get("encoding", "utf8"),
     ) as fp:
         return fp.read()
 
@@ -70,22 +71,17 @@ def get_dist(pkgname):
 
 def find_version(*file_paths):
     version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              version_file, re.M)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
 
 
-readme = open('README.md').read()
+readme = open("README.md").read()
 
-VERSION = find_version(os.path.join('starkplot', '__init__.py'))
+VERSION = find_version(os.path.join("starkplot", "__init__.py"))
 
-requirements = [
-    'matplotlib',
-    'numpy>=1.7',
-    'decorator',  # TODO minimum version
-]
+requirements = ["matplotlib", "numpy>=1.7", "decorator"]  # TODO minimum version
 
 classifiers = [
     "Programming Language :: Python :: 3.6",
@@ -94,22 +90,17 @@ classifiers = [
 
 setup(
     # Metadata
-    name='starkplot',
+    name="starkplot",
     version=VERSION,
-    author='Nathaniel Starkman',
-    author_email='n.starkman@mail.utoronto.ca',
-    url='https://github.com/nstarman/starkplot',
-    description='pyplot wrapper for easy plot creation',
+    author="Nathaniel Starkman",
+    author_email="n.starkman@mail.utoronto.ca",
+    url="https://github.com/nstarman/starkplot",
+    description="pyplot wrapper for easy plot creation",
     long_description=readme,
-    license='New BSD',
-
+    license="New BSD",
     # Package info
-    packages=find_packages(exclude=('test', 'tests')),
-
+    packages=find_packages(exclude=("test", "tests")),
     zip_safe=True,
     install_requires=requirements,
-    extras_require={
-        "scipy": ["scipy"],
-        "astropy": ["astropy"],
-    },
+    extras_require={"scipy": ["scipy"], "astropy": ["astropy"]},
 )

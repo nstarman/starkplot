@@ -68,17 +68,16 @@ from matplotlib import pyplot as _pyplot  # for usage here
 ## Project-Specific
 from .decorators import mpl_decorator, docstring
 from ._util import (
-    _parseoptsdict, _parsestrandopts, _parselatexstrandopts,
-    _stripprefix, _latexstr,
-    axisLabels, axisScales
+    _parseoptsdict,
+    _parsestrandopts,
+    _parselatexstrandopts,
+    _stripprefix,
+    _latexstr,
+    axisLabels,
+    axisScales,
 )
 
-from ._info import (
-    _pltypes,
-    # _annotations,
-    # _customadded,
-    # _other
-)
+from ._info import _pltypes
 
 # TODO get rid of
 # try:
@@ -114,8 +113,9 @@ __status__ = "Production"
 ###############################################################################
 # Plotting Functions
 
-@mpl_decorator()
-def plot(*args, pltype='plot', **kwargs):
+
+@mpl_decorator(funcdoc=_pyplot.plot.__doc__)
+def plot(*args, pltype="plot", **kwargs):
     r"""
     pltype:
     ====================== ===================================================
@@ -181,25 +181,25 @@ def plot(*args, pltype='plot', **kwargs):
     """
 
     # The Common Plot Types
-    if pltype == 'plot':
+    if pltype == "plot":
         res = _pyplot.plot(*args, **kwargs)
 
-    elif pltype == 'scatter':
+    elif pltype == "scatter":
         res = _pyplot.scatter(*args, **kwargs)
 
-    elif pltype == 'errorbar':
+    elif pltype == "errorbar":
         res = _pyplot.errorbar(*args, **kwargs)
 
-    elif pltype == 'loglog':
+    elif pltype == "loglog":
         res = _pyplot.loglog(*args, **kwargs)
 
-    elif pltype == 'semilogx':
+    elif pltype == "semilogx":
         res = _pyplot.semilogx(*args, **kwargs)
 
-    elif pltype == 'semilogy':
+    elif pltype == "semilogy":
         res = _pyplot.semilogy(*args, **kwargs)
 
-    elif pltype == 'hist':
+    elif pltype == "hist":
         res = _pyplot.hist(*args, **kwargs)
 
     # Try all options in _pltypes
@@ -211,14 +211,17 @@ def plot(*args, pltype='plot', **kwargs):
         try:
             getattr(_pyplot, pltype)
         except Exception as e:
-            raise ValueError(f'invalid pltype {pltype}')  #
+            raise ValueError(f"invalid pltype {pltype}")  #
         else:
-            warn('using unsanctioned plotting method')
+            warn("using unsanctioned plotting method")
             getattr(_pyplot, pltype)(*args, **kwargs)
     else:
-        raise ValueError(f'invalid pltype {pltype}')
+        raise ValueError(f"invalid pltype {pltype}")
 
     return res
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.acorr.__doc__)
@@ -227,10 +230,16 @@ def acorr(*args, **kwargs):
     return _pyplot.acorr(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.angle_spectrum.__doc__)
 def angle_spectrum(*args, **kwargs):
     r"""starkplot wrapper for angle_spectrum"""
     return _pyplot.angle_spectrum(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.axhline.__doc__)
@@ -239,10 +248,16 @@ def axhline(*args, **kwargs):
     return _pyplot.axhline(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.axhspan.__doc__)
 def axhspan(*args, **kwargs):
     r"""starkplot wrapper for axhspan"""
     return _pyplot.axhspan(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.axvline.__doc__)
@@ -251,10 +266,16 @@ def axvline(*args, **kwargs):
     return _pyplot.axvline(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.axvspan.__doc__)
 def axvspan(*args, **kwargs):
     r"""starkplot wrapper for axvspan"""
     return _pyplot.axvspan(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.bar.__doc__)
@@ -263,10 +284,16 @@ def bar(*args, **kwargs):
     return _pyplot.bar(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.barbs.__doc__)
 def barbs(*args, **kwargs):
     r"""starkplot wrapper for barbs"""
     return _pyplot.barbs(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.barh.__doc__)
@@ -275,10 +302,16 @@ def barh(*args, **kwargs):
     return _pyplot.barh(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.boxplot.__doc__)
 def boxplot(*args, **kwargs):
     r"""starkplot wrapper for boxplot"""
     return _pyplot.boxplot(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.broken_barh.__doc__)
@@ -287,10 +320,16 @@ def broken_barh(*args, **kwargs):
     return _pyplot.broken_barh(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.cohere.__doc__)
 def cohere(*args, **kwargs):
     r"""starkplot wrapper for cohere"""
     return _pyplot.cohere(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.contour.__doc__)
@@ -299,10 +338,16 @@ def contour(*args, **kwargs):
     return _pyplot.contour(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.contourf.__doc__)
 def contourf(*args, **kwargs):
     r"""starkplot wrapper for contourf"""
     return _pyplot.contourf(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.csd.__doc__)
@@ -311,10 +356,16 @@ def csd(*args, **kwargs):
     return _pyplot.csd(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.errorbar.__doc__)
 def errorbar(*args, **kwargs):
     r"""starkplot wrapper for errorbar"""
     return _pyplot.errorbar(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.eventplot.__doc__)
@@ -323,10 +374,16 @@ def eventplot(*args, **kwargs):
     return _pyplot.eventplot(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.figimage.__doc__)
 def figimage(*args, **kwargs):
     r"""starkplot wrapper for figimage"""
     return _pyplot.figimage(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.fill.__doc__)
@@ -335,10 +392,16 @@ def fill(*args, **kwargs):
     return _pyplot.fill(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.fill_between.__doc__)
 def fill_between(*args, **kwargs):
     r"""starkplot wrapper for fill_between"""
     return _pyplot.fill_between(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.fill_betweenx.__doc__)
@@ -347,10 +410,16 @@ def fill_betweenx(*args, **kwargs):
     return _pyplot.fill_betweenx(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.hexbin.__doc__)
 def hexbin(*args, **kwargs):
     r"""starkplot wrapper for hexbin"""
     return _pyplot.hexbin(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.hist.__doc__)
@@ -359,10 +428,16 @@ def hist(*args, **kwargs):
     return _pyplot.hist(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.hist2d.__doc__)
 def hist2d(*args, **kwargs):
     r"""starkplot wrapper for hist2d"""
     return _pyplot.hist2d(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.hlines.__doc__)
@@ -371,10 +446,16 @@ def hlines(*args, **kwargs):
     return _pyplot.hlines(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.imshow.__doc__)
 def imshow(*args, **kwargs):
     r"""starkplot wrapper for imshow"""
     return _pyplot.imshow(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.loglog.__doc__)
@@ -383,10 +464,16 @@ def loglog(*args, **kwargs):
     return _pyplot.loglog(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.magnitude_spectrum.__doc__)
 def magnitude_spectrum(*args, **kwargs):
     r"""starkplot wrapper for magnitude_spectrum"""
     return _pyplot.magnitude_spectrum(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.matshow.__doc__)
@@ -395,10 +482,16 @@ def matshow(*args, **kwargs):
     return _pyplot.matshow(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.pcolor.__doc__)
 def pcolor(*args, **kwargs):
     r"""starkplot wrapper for pcolor"""
     return _pyplot.pcolor(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.pcolormesh.__doc__)
@@ -407,10 +500,16 @@ def pcolormesh(*args, **kwargs):
     return _pyplot.pcolormesh(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.phase_spectrum.__doc__)
 def phase_spectrum(*args, **kwargs):
     r"""starkplot wrapper for phase_spectrum"""
     return _pyplot.phase_spectrum(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.pie.__doc__)
@@ -419,10 +518,13 @@ def pie(*args, **kwargs):
     return _pyplot.pie(*args, **kwargs)
 
 
+# /def
+
+
 # @mpl_decorator(funcdoc=_pyplot.plot.__doc__)
 # def plot(*args, **kwargs):
 #     r"""starkplot wrapper for plot"""
-#     return _pyplot.plot(*args, **kwargs)
+#     return _pyplot.plot(*args, **kwargs)# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.plot_date.__doc__)
@@ -431,10 +533,16 @@ def plot_date(*args, **kwargs):
     return _pyplot.plot_date(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.plotfile.__doc__)
 def plotfile(*args, **kwargs):
     r"""starkplot wrapper for plotfile"""
     return _pyplot.plotfile(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.polar.__doc__)
@@ -443,10 +551,16 @@ def polar(*args, **kwargs):
     return _pyplot.polar(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.psd.__doc__)
 def psd(*args, **kwargs):
     r"""starkplot wrapper for psd"""
     return _pyplot.psd(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.quiver.__doc__)
@@ -455,16 +569,27 @@ def quiver(*args, **kwargs):
     return _pyplot.quiver(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.rgrids.__doc__)
 def rgrids(*args, **kwargs):
     r"""starkplot wrapper for rgrids"""
     return _pyplot.rgrids(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.scatter.__doc__)
 def scatter(*args, **kwargs):
     r"""starkplot wrapper for scatter"""
-    return _pyplot.gca().scatter(*args, **kwargs)  # TODO check this works for ax argument
+    return _pyplot.gca().scatter(
+        *args, **kwargs
+    )  # TODO check this works for ax argument
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.semilogx.__doc__)
@@ -473,10 +598,16 @@ def semilogx(*args, **kwargs):
     return _pyplot.semilogx(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.semilogy.__doc__)
 def semilogy(*args, **kwargs):
     r"""starkplot wrapper for semilogy"""
     return _pyplot.semilogy(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.specgram.__doc__)
@@ -485,10 +616,16 @@ def specgram(*args, **kwargs):
     return _pyplot.specgram(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.spy.__doc__)
 def spy(*args, **kwargs):
     r"""starkplot wrapper for spy"""
     return _pyplot.spy(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.stackplot.__doc__)
@@ -497,10 +634,16 @@ def stackplot(*args, **kwargs):
     return _pyplot.stackplot(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.stem.__doc__)
 def stem(*args, **kwargs):
     r"""starkplot wrapper for stem"""
     return _pyplot.stem(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.step.__doc__)
@@ -509,15 +652,21 @@ def step(*args, **kwargs):
     return _pyplot.step(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.streamplot.__doc__)
 def streamplot(*args, **kwargs):
     r"""starkplot wrapper for streamplot"""
     return _pyplot.streamplot(*args, **kwargs)
 
 
+# /def
+
+
 # def table(*args, **kwargs):  # is this an annotation?
 #     r"""starkplot wrapper for table"""
-#     return _pyplot.table(*args, **kwargs)
+#     return _pyplot.table(*args, **kwargs)# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.tricontour.__doc__)
@@ -526,10 +675,16 @@ def tricontour(*args, **kwargs):
     return _pyplot.tricontour(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.tricontourf.__doc__)
 def tricontourf(*args, **kwargs):
     r"""starkplot wrapper for tricontourf"""
     return _pyplot.tricontourf(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.tripcolor.__doc__)
@@ -538,10 +693,16 @@ def tripcolor(*args, **kwargs):
     return _pyplot.tripcolor(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.triplot.__doc__)
 def triplot(*args, **kwargs):
     r"""starkplot wrapper for triplot"""
     return _pyplot.triplot(*args, **kwargs)
+
+
+# /def
 
 
 @mpl_decorator(funcdoc=_pyplot.violinplot.__doc__)
@@ -550,16 +711,50 @@ def violinplot(*args, **kwargs):
     return _pyplot.violinplot(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.vlines.__doc__)
 def vlines(*args, **kwargs):
     r"""starkplot wrapper for vlines"""
     return _pyplot.vlines(*args, **kwargs)
 
 
+# /def
+
+
 @mpl_decorator(funcdoc=_pyplot.xcorr.__doc__)
 def xcorr(*args, **kwargs):
     r"""starkplot wrapper for xcorr"""
     return _pyplot.xcorr(*args, **kwargs)
+
+
+# /def
+
+
+# TODO this is a replacement for scatterplot
+# @mpl_decorator()
+# def smartscatter(x, y,
+#                  # contour stuff
+#                  contours=True, justcontours=True,
+#                  bins=None, weights=None, levels=None, aspect=None,
+#                  conditional=False,
+#                  cntrcolors='k', cntrlw=None, cntrls=None, cntrsmooth=None,
+#                  **kw):
+#     """"""
+#     ndata = len(x)
+#     bins = bins if bins is not None else round(0.3 * np.sqrt(ndata))
+#     levels = (levels if levels is not None else
+#               special.erf(np.arange(1, 4) / np.sqrt(2.)))
+#     aspect = (aspect if aspect is not None else
+#               (xrng[1] - xrng[0]) / (yrng[1] - yrng[0]))
+
+
+#     data = np.array([x, y]).T
+
+
+#     return
+# # /def
 
 
 # def scatterplot(x, y, *args, **kwargs):
@@ -616,14 +811,14 @@ def xcorr(*args, **kwargs):
 #        onedhistcolor, onedhistfc, onedhistec
 
 #        onedhistxnormed, onedhistynormed - normed keyword for one-d histograms
-       
+
 #        onedhistxweights, onedhistyweights - weights keyword for one-d histograms
 
 #        cmap= cmap for density plot
 
 #        hist= and edges= - you can supply the histogram of the data yourself, this can be useful if you want to censor the data, both need to be set and calculated using scipy.histogramdd with the given range
 
-#        retAxes= return all Axes instances
+#        retAxes= return all Axes instances# /def
 
 #     OUTPUT:
 
@@ -775,9 +970,9 @@ def xcorr(*args, **kwargs):
 #     #Add onedhists
 #     if not (onedhists or onedhistx or onedhisty):
 #         if retAxes:
-#             return _pyplot.gca()
+#             return _pyplot.gca()# /def
 #         else:
-#             return None
+#             return None# /def
 #     if onedhistx:
 #         histx, edges, patches = axHistx.hist(x, bins=onedhistsbins,
 #                                              normed=onedhistxnormed,
@@ -808,13 +1003,14 @@ def xcorr(*args, **kwargs):
 #     if not onedhisty:
 #         axHisty = None
 #     if retAxes:
-#         return (axScatter, axHistx, axHisty)
+#         return (axScatter, axHistx, axHisty)# /def
 #     else:
-#         return None
+#         return None# /def
 
 
 ###############################################################################
 # Annotation Functions
+
 
 def add_axis_labels(ax=None, x=None, y=None, z=None, units=False):
     """Add axis labels to given axis
@@ -882,32 +1078,49 @@ def add_text(ax=None, *args, **kwargs):
     """
     ax = ax if ax is not None else _pyplot.gca()
 
-    if kwargs.pop('title', False):
-        ax.annotate(args[0], (0.5, 1.05),
-                    xycoords='axes fraction',
-                    horizontalalignment='center', verticalalignment='top',
-                    **kwargs)
-    elif kwargs.pop('bottom_left', False):
-        _pyplot.annotate(args[0], (0.05, 0.05),
-                        xycoords='axes fraction', **kwargs)
-    elif kwargs.pop('bottom_right', False):
-        _pyplot.annotate(args[0], (0.95, 0.05), xycoords='axes fraction',
-                        horizontalalignment='right', **kwargs)
-    elif kwargs.pop('top_right', False):
-        _pyplot.annotate(args[0], (0.95, 0.95),
-                        xycoords='axes fraction',
-                        horizontalalignment='right', verticalalignment='top',
-                        **kwargs)
-    elif kwargs.pop('top_left', False):
-        _pyplot.annotate(args[0], (0.05, 0.95),
-                        xycoords='axes fraction', verticalalignment='top',
-                        **kwargs)
+    if kwargs.pop("title", False):
+        ax.annotate(
+            args[0],
+            (0.5, 1.05),
+            xycoords="axes fraction",
+            horizontalalignment="center",
+            verticalalignment="top",
+            **kwargs,
+        )
+    elif kwargs.pop("bottom_left", False):
+        _pyplot.annotate(args[0], (0.05, 0.05), xycoords="axes fraction", **kwargs)
+    elif kwargs.pop("bottom_right", False):
+        _pyplot.annotate(
+            args[0],
+            (0.95, 0.05),
+            xycoords="axes fraction",
+            horizontalalignment="right",
+            **kwargs,
+        )
+    elif kwargs.pop("top_right", False):
+        _pyplot.annotate(
+            args[0],
+            (0.95, 0.95),
+            xycoords="axes fraction",
+            horizontalalignment="right",
+            verticalalignment="top",
+            **kwargs,
+        )
+    elif kwargs.pop("top_left", False):
+        _pyplot.annotate(
+            args[0],
+            (0.05, 0.95),
+            xycoords="axes fraction",
+            verticalalignment="top",
+            **kwargs,
+        )
     else:
         _pyplot.text(*args, **kwargs)
 
 
 ###############################################################################
 # Plot Property Functions
+
 
 @mpl_decorator()
 def plotproperties(**kw):
@@ -917,11 +1130,17 @@ def plotproperties(**kw):
     return None
 
 
+# /def
+
+
 @mpl_decorator(overridefig=True)
 def set(**kw):
     r"""A blanck function for accessing any mpl_decorator property
     """
     return None
+
+
+# /def
 
 
 def add_axis_limits(ax=None, x=None, y=None, z=None):
@@ -970,12 +1189,12 @@ def add_minorticks(ax=None, x=True, y=True, z=True):
     if x:
         xstep = ax.xaxis.get_majorticklocs()
         xstep = xstep[1] - xstep[0]
-        ax.xaxis.set_minor_locator(MultipleLocator(xstep / 5.))
+        ax.xaxis.set_minor_locator(MultipleLocator(xstep / 5.0))
 
     if y:
         ystep = ax.yaxis.get_majorticklocs()
         ystep = ystep[1] - ystep[0]
-        ax.yaxis.set_minor_locator(MultipleLocator(ystep / 5.))
+        ax.yaxis.set_minor_locator(MultipleLocator(ystep / 5.0))
 
     if z:
         try:
@@ -984,11 +1203,12 @@ def add_minorticks(ax=None, x=True, y=True, z=True):
             pass
         else:
             zstep = zstep[1] - zstep[0]
-            ax.yaxis.set_minor_locator(MultipleLocator(zstep / 5.))
+            ax.yaxis.set_minor_locator(MultipleLocator(zstep / 5.0))
 
 
 ##############################################################################
 # Reference Functions
+
 
 def plot_help():
     r"""

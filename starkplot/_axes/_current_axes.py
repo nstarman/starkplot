@@ -18,9 +18,7 @@ TODO
 
 __author__ = "Nathaniel Starkman"
 __credits__ = ["matplotlib"]
-__all__ = [
-    'gca', 'sca'
-]
+__all__ = ["gca", "sca"]
 
 
 ##############################################################################
@@ -36,7 +34,7 @@ from matplotlib.axes._base import _AxesBase
 
 ##############################################################################
 
-gca = pyplot.gca   # TODO allow with-enabled axes
+gca = pyplot.gca  # TODO allow with-enabled axes
 
 
 def sca(ax=None):
@@ -66,4 +64,6 @@ def sca(ax=None):
 
     else:
         return pyplot.sca(ax)
+
+
 # /def

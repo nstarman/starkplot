@@ -67,9 +67,13 @@ from .docstring import cleandoc, strthentwoline
 from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 from ..util import (
-    prepare_axes, axisLabels, axisLimits, invertAxis, axisScales,
+    prepare_axes,
+    axisLabels,
+    axisLimits,
+    invertAxis,
+    axisScales,
     set_title,
-    _parseoptsdict  #, _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
+    _parseoptsdict,  # , _stripprefix, _latexstr, _parselatexstrandopts, _parsestrandopts
 )
 
 
@@ -189,13 +193,23 @@ xkw: dict
 
 _axesattrs = (
     # axes
-    'ax',
-    'title', 'xlabel', 'ylabel', 'zlabel', 'unit_labels',
-    'xlim', 'ylim', 'zlim', 'invert_axis',
-    'xscale', 'yscale', 'zscale', 'aspect',
-    'legend',
+    "ax",
+    "title",
+    "xlabel",
+    "ylabel",
+    "zlabel",
+    "unit_labels",
+    "xlim",
+    "ylim",
+    "zlim",
+    "invert_axis",
+    "xscale",
+    "yscale",
+    "zscale",
+    "aspect",
+    "legend",
     # style
-    'stylesheet',
+    "stylesheet",
     # # modifying arguments
     # 'xkw',
 )
@@ -203,6 +217,7 @@ _axesattrs = (
 
 #############################################################################
 # Decorator
+
 
 class AxesDecorator(MatplotlibDecoratorBase):
     """docstring for AxesDecorator
@@ -321,23 +336,34 @@ class AxesDecorator(MatplotlibDecoratorBase):
              dict(xkw[o] for o in option_names)
     """
 
-    __name__ = 'AxesDecorator'
+    __name__ = "AxesDecorator"
 
     @classmethod
-    def as_decorator(cls, func=None, funcdoc=None,
-                     # axes
-                     ax=None,
-                     title=None,
-                     xlabel=None, ylabel=None, zlabel=None, unit_labels=False,
-                     xlim=None, ylim=None, zlim=None,
-                     invert_axis=None,
-                     xscale='linear', yscale='linear', zscale='linear',
-                     aspect='auto',
-                     legend={},
-                     # style
-                     stylesheet=None,
-                     # modifying arguments
-                     xkw={}):
+    def as_decorator(
+        cls,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        title=None,
+        xlabel=None,
+        ylabel=None,
+        zlabel=None,
+        unit_labels=False,
+        xlim=None,
+        ylim=None,
+        zlim=None,
+        invert_axis=None,
+        xscale="linear",
+        yscale="linear",
+        zscale="linear",
+        aspect="auto",
+        legend={},
+        # style
+        stylesheet=None,
+        # modifying arguments
+        xkw={},
+    ):
         r"""AxesDecorator
 
         Arguments  # TODO fill out text
@@ -445,8 +471,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
         # modifying docstring
         _locals = locals()
         self.__doc__ = self.__doc__.format(
-            **{k: _locals.get(k).__repr__() for k in set(_axesattrs)},
-            xkw=xkw
+            **{k: _locals.get(k).__repr__() for k in set(_axesattrs)}, xkw=xkw
         )
 
         # init
@@ -455,44 +480,63 @@ class AxesDecorator(MatplotlibDecoratorBase):
             # axes
             ax=ax,
             title=title,
-            xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            zlabel=zlabel,
             unit_labels=unit_labels,
-            xlim=xlim, ylim=ylim, zlim=zlim,
+            xlim=xlim,
+            ylim=ylim,
+            zlim=zlim,
             invert_axis=invert_axis,
-            xscale=xscale, yscale=yscale, zscale=zscale,
+            xscale=xscale,
+            yscale=yscale,
+            zscale=zscale,
             aspect=aspect,
             legend=legend,
             # style
             stylesheet=stylesheet,
             # modifying arguments
-            xkw=xkw
+            xkw=xkw,
         )
         if func is not None:
             return self(func)
         else:
             return self
+
     # /def
 
     # __new__
-    def __new__(cls, func=None, funcdoc=None,
-                # axes
-                ax=None,
-                title=None,
-                xlabel=None, ylabel=None, zlabel=None, unit_labels=False,
-                xlim=None, ylim=None, zlim=None,
-                invert_axis=None,
-                xscale='linear', yscale='linear', zscale='linear',
-                aspect='auto',
-                legend={},
-                # style
-                stylesheet=None,
-                # modifying arguments
-                xkw={}, **kw):
+    def __new__(
+        cls,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        title=None,
+        xlabel=None,
+        ylabel=None,
+        zlabel=None,
+        unit_labels=False,
+        xlim=None,
+        ylim=None,
+        zlim=None,
+        invert_axis=None,
+        xscale="linear",
+        yscale="linear",
+        zscale="linear",
+        aspect="auto",
+        legend={},
+        # style
+        stylesheet=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
 
-        print('called ax __new__')
+        print("called ax __new__")
         # making instance from base class
         self = super(AxesDecorator, cls).__new__(cls)
-        print('\t in ax __new__')
+        print("\t in ax __new__")
 
         # modifying docstring
         _locals = locals()
@@ -509,54 +553,74 @@ class AxesDecorator(MatplotlibDecoratorBase):
             # axes
             ax=ax,
             title=title,
-            xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            zlabel=zlabel,
             unit_labels=unit_labels,
-            xlim=xlim, ylim=ylim, zlim=zlim,
+            xlim=xlim,
+            ylim=ylim,
+            zlim=zlim,
             invert_axis=invert_axis,
-            xscale=xscale, yscale=yscale, zscale=zscale,
+            xscale=xscale,
+            yscale=yscale,
+            zscale=zscale,
             aspect=aspect,
             legend=legend,
             # style
             stylesheet=stylesheet,
             # modifying arguments
-            xkw=xkw, **kw
+            xkw=xkw,
+            **kw
         )
-        print('\t in ax __new__')
+        print("\t in ax __new__")
 
         # if func is not None:
         #     return self(lambda *args, **kw: func(*args, **kw))
         return self.as_decorator
+
     # /def
 
     # __init__
-    def __init__(self, func=None, funcdoc=None,
-                 # axes
-                 ax=None,
-                 title=None,
-                 xlabel=None, ylabel=None, zlabel=None, unit_labels=False,
-                 xlim=None, ylim=None, zlim=None,
-                 invert_axis=None,
-                 xscale='linear', yscale='linear', zscale='linear',
-                 aspect='auto',
-                 legend={},
-                 # style
-                 stylesheet=None,
-                 # modifying arguments
-                 xkw={}, **kw):
+    def __init__(
+        self,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        title=None,
+        xlabel=None,
+        ylabel=None,
+        zlabel=None,
+        unit_labels=False,
+        xlim=None,
+        ylim=None,
+        zlim=None,
+        invert_axis=None,
+        xscale="linear",
+        yscale="linear",
+        zscale="linear",
+        aspect="auto",
+        legend={},
+        # style
+        stylesheet=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
 
-        print('called ax __init__')
+        print("called ax __init__")
 
         super().__init__()
 
         # +----------- -----------+
 
-        if kw.get('_topdecorator', True):
+        if kw.get("_topdecorator", True):
             if isinstance(funcdoc, str):
                 self.funcdoc = _funcdocprefix + funcdoc
             elif isinstance(funcdoc, types.FunctionType):
                 self.funcdoc = _funcdocprefix + funcdoc.__doc__
             else:
-                self.funcdoc = ''
+                self.funcdoc = ""
             self.funcdoc = strthentwoline(self.funcdoc)  # ensure '\n\n' ending
 
             # extra arguments
@@ -593,35 +657,44 @@ class AxesDecorator(MatplotlibDecoratorBase):
 
         self.attrs += _axesattrs
 
-        self._doc = _descrargs.format(**{k: getattr(self, k).__repr__()
-                                         for k in set(_axesattrs)})
+        self._doc = _descrargs.format(
+            **{k: getattr(self, k).__repr__() for k in set(_axesattrs)}
+        )
 
-        if kw.get('_topdecorator', True):
-            self._doc += xkwargs.format(xkw=getattr(self, 'xkw').__repr__())
+        if kw.get("_topdecorator", True):
+            self._doc += xkwargs.format(xkw=getattr(self, "xkw").__repr__())
 
         return
+
     # /def
 
     # __call__
     def __call__(self, wrapped_function):
-
         @wraps(wrapped_function)
-        def wrapped(*func_args,
-                    # axes
-                    ax=self.ax,
-                    title=self.title,
-                    xlabel=self.xlabel, ylabel=self.ylabel, zlabel=self.zlabel,
-                    unit_labels=self.unit_labels,
-                    xlim=self.xlim, ylim=self.ylim, zlim=self.zlim,
-                    invert_axis=self.invert_axis,
-                    xscale=self.xscale, yscale=self.yscale, zscale=self.zscale,
-                    aspect=self.aspect,
-                    legend=self.legend,
-                    # styles
-                    stylesheet=self.stylesheet,
-                    # modifying arguments
-                    xkw=self.xkw,
-                    **func_kwargs):
+        def wrapped(
+            *func_args,
+            # axes
+            ax=self.ax,
+            title=self.title,
+            xlabel=self.xlabel,
+            ylabel=self.ylabel,
+            zlabel=self.zlabel,
+            unit_labels=self.unit_labels,
+            xlim=self.xlim,
+            ylim=self.ylim,
+            zlim=self.zlim,
+            invert_axis=self.invert_axis,
+            xscale=self.xscale,
+            yscale=self.yscale,
+            zscale=self.zscale,
+            aspect=self.aspect,
+            legend=self.legend,
+            # styles
+            stylesheet=self.stylesheet,
+            # modifying arguments
+            xkw=self.xkw,
+            **func_kwargs
+        ):
             # PRE
 
             # combining dictionaries
@@ -640,7 +713,7 @@ class AxesDecorator(MatplotlibDecoratorBase):
                 # /PRE
                 # CALL
 
-                func_kwargs['label'] = str(func_kwargs.get('label', ''))  # TODO set in
+                func_kwargs["label"] = str(func_kwargs.get("label", ""))  # TODO set in
 
                 if stylesheet is not None:
                     with plt.style.context(stylesheet):
@@ -693,13 +766,18 @@ class AxesDecorator(MatplotlibDecoratorBase):
                     ax.set_aspect(aspect)
 
                     # setting axisLabels/limits/scales
-                    axisLabels(ax, x=xlabel, y=ylabel, z=zlabel,
-                               units=unit_labels, **wkw)
+                    axisLabels(
+                        ax, x=xlabel, y=ylabel, z=zlabel, units=unit_labels, **wkw
+                    )
                     axisLimits(ax, x=xlim, y=ylim, z=zlim)
 
                     if invert_axis is not None:
-                        invertAxis(ax, x='x' in invert_axis, y='y' in invert_axis,
-                                   z='z' in invert_axis)
+                        invertAxis(
+                            ax,
+                            x="x" in invert_axis,
+                            y="y" in invert_axis,
+                            z="z" in invert_axis,
+                        )
 
                     axisScales(ax, x=xscale, y=yscale, z=zscale, **wkw)
 
@@ -738,18 +816,19 @@ class AxesDecorator(MatplotlibDecoratorBase):
                     #
                     # plt.sca(ax[0])
 
-
             # Returning
             return return_
+
         # /def
 
         # modifying wrapped_function docstring
-        _doc = (self.funcdoc +
-                _descrhead.format(func=wrapped_function.__name__) +
-                self._doc)
+        _doc = (
+            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+        )
         wrapped.__doc__ = wrapped.__doc__ and cleandoc(wrapped.__doc__) + _doc
 
         return wrapped
+
     # /def
 
 

@@ -54,7 +54,7 @@ import decorator
 
 __author__ = "Nathaniel Starkman"
 __copyright__ = "Copyright 2018, "
-__credits__ = ["The Matplotlib Team", 'Jo Bovy']
+__credits__ = ["The Matplotlib Team", "Jo Bovy"]
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = "Nathaniel Starkman"
@@ -146,7 +146,7 @@ class Appender(object):
     # TODO make robust if func.__doc__ is None
     """
 
-    def __init__(self, addendum, join='', prededent=False):
+    def __init__(self, addendum, join="", prededent=False):
         self.addendum = addendum
         self.join = join
         self.prededent = prededent
@@ -162,18 +162,18 @@ class Appender(object):
 
 
 def strthentwoline(s):
-    if s.endswith('\n\n'):
+    if s.endswith("\n\n"):
         return s
-    elif s.endswith('\n'):
-        return s + '\n'
+    elif s.endswith("\n"):
+        return s + "\n"
     else:
-        return s + '\n\n'
+        return s + "\n\n"
 
 
 def strorblank(s):
     """return '' if not already string
     """
-    return '' if not isinstance(s, str) else s
+    return "" if not isinstance(s, str) else s
 
 
 def cleandoc(docstring):
@@ -210,10 +210,16 @@ copy = _docstring.dedent_interpd
 copy_dedent = inspect.cleandoc
 
 
-def wrap_func_keep_orig_sign(func, sub_func=None,
-                             doc_pre=None, doc_post=None,
-                             defaults=None, module=None, addsource=True,
-                             **attrs):
+def wrap_func_keep_orig_sign(
+    func,
+    sub_func=None,
+    doc_pre=None,
+    doc_post=None,
+    defaults=None,
+    module=None,
+    addsource=True,
+    **attrs
+):
     """helper for decorator.FunctionMaker.create
 
     takes a function and the main function and makes a
@@ -226,7 +232,16 @@ def wrap_func_keep_orig_sign(func, sub_func=None,
     doc = cleandoc(doc_pre) + cleandoc(sub_func.__doc__) + cleandoc(doc_post)
 
     return decorator.FunctionMaker.create(
-        func, 'return f(%(signature)s)', dict(f=sub_func), doc=doc,
+        func,
+        "return f(%(signature)s)",
+        dict(f=sub_func),
+        doc=doc,
         __wrapped__=sub_func,
-        defaults=defaults, module=module, addsource=addsource, **attrs)
+        defaults=defaults,
+        module=module,
+        addsource=addsource,
+        **attrs
+    )
+
+
 # /def

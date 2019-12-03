@@ -36,7 +36,8 @@ from ._current_figure import gcf, scf
 
 ###############################################################################
 
-class GetFigArg():
+
+class GetFigArg:
     r"""
     Make a function from a Figure method which accepts a figure as a kwarg
 
@@ -63,7 +64,7 @@ class GetFigArg():
         # Control the __doc__ options
         # default to wrapped functions documentation, if available
         _doc_default = func.__doc__ if func is not None else None
-        doc = kw.get('_doc', _doc_default)
+        doc = kw.get("_doc", _doc_default)
 
         # if _doc is
         if callable(doc):
@@ -78,34 +79,38 @@ class GetFigArg():
             return self
         else:
             return self(func)
+
     # /def
 
     def __call__(self, wrapped_func):
-
         def wrapped(fig=None):
 
             oldfig = pyplot.gcf()  # saving old figure
-            fig = scf(fig=fig)     # get figure from fig argument
+            fig = scf(fig=fig)  # get figure from fig argument
 
             return_ = wrapped_func(fig)
 
-            scf(fig=oldfig)        # make old fig current
+            scf(fig=oldfig)  # make old fig current
 
             return return_
+
         # /def
 
         # assign documentation
         wrapped.__doc__ = wrapped_func.__doc__
 
         return wrapped
+
     # /def
+
 
 # /class
 
 
 ###############################################################################
 
-class SetFigArg():
+
+class SetFigArg:
     r"""
     Make a function from a Figure method which accepts a figure as a kwarg
 
@@ -132,7 +137,7 @@ class SetFigArg():
         # Control the __doc__ options
         # default to wrapped functions documentation, if available
         _doc_default = func.__doc__ if func is not None else None
-        doc = kw.get('_doc', _doc_default)
+        doc = kw.get("_doc", _doc_default)
 
         # if _doc is
         if callable(doc):
@@ -147,27 +152,30 @@ class SetFigArg():
             return self
         else:
             return self(func)
+
     # /def
 
     def __call__(self, wrapped_func):
-
         def wrapped(*args, fig=None, **kwargs):
 
             oldfig = pyplot.gcf()  # saving old figure
-            fig = scf(fig)         # get right figure
+            fig = scf(fig)  # get right figure
 
             # apply function with correct figure
             return_ = wrapped_func(fig, *args, **kwargs)
 
-            scf(fig=oldfig)        # make old fig current
+            scf(fig=oldfig)  # make old fig current
 
             return return_
+
         # /def
 
         # assign documentation
         wrapped.__doc__ = wrapped_func.__doc__
 
         return wrapped
+
     # /def
+
 
 # /class

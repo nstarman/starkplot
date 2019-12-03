@@ -24,8 +24,10 @@ from matplotlib import pyplot
 
 ## Project-Specific
 from starkplot._figure._save_or_close import (
-    savefig, save_figure,
-    close, closefig,
+    savefig,
+    save_figure,
+    close,
+    closefig,
     save_and_close,
 )
 
@@ -35,26 +37,36 @@ from starkplot._figure._save_or_close import (
 
 def test_savefig():
     pass  # TODO
+
+
 # /def
 
 
 def test_save_figure():
     pass  # TODO
+
+
 # /def
 
 
 def test_close():
     pass  # TODO
+
+
 # /def
 
 
 def test_closefig():
     pass  # TODO
+
+
 # /def
 
 
 def test_save_and_close():
     pass  # TODO
+
+
 # /def
 
 ###############################################################################

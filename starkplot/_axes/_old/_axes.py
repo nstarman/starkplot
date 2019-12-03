@@ -65,8 +65,11 @@ __status__ = "Production"
 
 ###############################################################################
 
+
 def _gca(ax=None):
     return ax if ax is not None else pyplot.gca()
+
+
 # /def
 
 
@@ -114,85 +117,113 @@ axes = pyplot.axes
 def get_title(ax=None):
     ax = _gca(ax=ax)
     return ax.get_title()
+
+
 # /def
 
 
 # TODO with decorator
 # TODO with _parsexkwandopts
-def set_title(label, fontdict=None, loc='center', pad=None, ax=None, **kwargs):
+def set_title(label, fontdict=None, loc="center", pad=None, ax=None, **kwargs):
     ax = _gca(ax=ax)
     ax.set_title(label, fontdict=fontdict, loc=loc, pad=pad, **kwargs)
+
+
 # /def
 
 
 ###############################################################################
 # xlabel
 
+
 def get_xlabel(ax=None):
     ax = _gca(ax=ax)
     return ax.get_xlabel()
+
+
 # /def
 
 
 ###############################################################################
 # ylabel
 
+
 def get_ylabel(ax=None):
     ax = _gca(ax=ax)
     return ax.get_ylabel()
+
+
 # /def
 
 
 ###############################################################################
 # zlabel
 
+
 def get_zlabel(ax=None):
     ax = _gca(ax=ax)
     return ax.get_zlabel()
+
+
 # /def
 
 
 ###############################################################################
 # axes labels
 
+
 def get_axes_labels(ax=None):
     return [get_xlabel(ax=ax), get_ylabel(ax=ax), get_zlabel(ax=ax)]
+
+
 # /def
 
 
 ###############################################################################
 # xlim
 
+
 def get_xlim(ax=None):
     ax = _gca(ax=ax)
     return ax.get_xlim()
+
+
 # /def
 
 
 ###############################################################################
 # ylim
 
+
 def get_ylim(ax=None):
     ax = _gca(ax=ax)
     return ax.get_ylim()
+
+
 # /def
 
 
 ###############################################################################
 # zlim
 
+
 def get_zlim(ax=None):
     ax = _gca(ax=ax)
     return ax.get_zlim()
+
+
 # /def
 
 
 ###############################################################################
 # axes limits
 
+
 def get_axes_lims(ax=None):
     ax = _gca(ax=ax)
     return ax.get_xlim()
+
+
 # /def
 
 

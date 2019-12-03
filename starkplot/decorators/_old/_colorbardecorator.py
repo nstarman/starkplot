@@ -139,9 +139,12 @@ xkw: dict
 
 _cbarattrs = (
     # axes
-    'ax',
+    "ax",
     # colorbar arguments
-    'colorbar', 'clabel', 'clim', 'cloc',
+    "colorbar",
+    "clabel",
+    "clim",
+    "cloc",
     # # modifying arguments
     # 'xkw'
 )
@@ -149,6 +152,7 @@ _cbarattrs = (
 
 #############################################################################
 # Decorator
+
 
 class ColorbarDecorator(MatplotlibDecoratorBase):
     """docstring for ColorbarDecorator
@@ -218,13 +222,20 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
     """
 
     @classmethod
-    def as_decorator(cls, func=None, funcdoc=None,
-                     # axes
-                     ax=None,
-                     # colorbar
-                     colorbar=True, clabel=None, clim=None, cloc=None,
-                     # modifying arguments
-                     xkw={}):
+    def as_decorator(
+        cls,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        # colorbar
+        colorbar=True,
+        clabel=None,
+        clim=None,
+        cloc=None,
+        # modifying arguments
+        xkw={},
+    ):
         r"""ColorbarDecorator
 
         Arguments  # TODO fill out text
@@ -288,8 +299,7 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
         # modifying docstring
         _locals = locals()
         self.__doc__ = self.__doc__.format(
-            **{k: _locals.get(k).__repr__() for k in set(_cbarattrs)},
-            xkw=xkw
+            **{k: _locals.get(k).__repr__() for k in set(_cbarattrs)}, xkw=xkw
         )
 
         self.__init__(
@@ -297,24 +307,36 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
             # axes
             ax=ax,
             # colorbar
-            colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
+            colorbar=colorbar,
+            clabel=clabel,
+            clim=clim,
+            cloc=cloc,
             # modifying arguments
-            xkw=xkw
+            xkw=xkw,
         )
         if func is not None:
             return self(func)
         else:
             return self
+
     # /def
 
     # __new__
-    def __new__(cls, func=None, funcdoc=None,
-                # axes
-                ax=None,
-                # colorbar
-                colorbar=False, clabel=None, clim=None, cloc=None,
-                # modifying arguments
-                xkw={}, **kw):
+    def __new__(
+        cls,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        # colorbar
+        colorbar=False,
+        clabel=None,
+        clim=None,
+        cloc=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
 
         # making instance from base class
         self = super(ColorbarDecorator, cls).__new__(cls)
@@ -330,23 +352,35 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
             # axes
             ax=ax,
             # colorbar
-            colorbar=colorbar, clabel=clabel, clim=clim, cloc=cloc,
+            colorbar=colorbar,
+            clabel=clabel,
+            clim=clim,
+            cloc=cloc,
             # modifying arguments
-            xkw=xkw, **kw
+            xkw=xkw,
+            **kw
         )
 
         return self.as_decorator
+
     # /def
 
     # __init__
-    def __init__(self, func=None, funcdoc=None,
-                 # axes
-                 ax=None,
-                 # colorbar
-                 colorbar=False, clabel=None, clim=None, cloc=None,
-                 # modifying arguments
-                 xkw={}, **kw
-                 ):
+    def __init__(
+        self,
+        func=None,
+        funcdoc=None,
+        # axes
+        ax=None,
+        # colorbar
+        colorbar=False,
+        clabel=None,
+        clim=None,
+        cloc=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
         r"""
         """
 
@@ -354,13 +388,13 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
 
         # +----------- -----------+
 
-        if kw.get('_topdecorator', True):
+        if kw.get("_topdecorator", True):
             if isinstance(funcdoc, str):
                 self.funcdoc = _funcdocprefix + funcdoc
             elif isinstance(funcdoc, types.FunctionType):
                 self.funcdoc = _funcdocprefix + funcdoc.__doc__
             else:
-                self.funcdoc = ''
+                self.funcdoc = ""
             self.funcdoc = strthentwoline(self.funcdoc)  # ensure '\n\n' ending
 
             # extra arguments
@@ -380,28 +414,33 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
 
         self.attrs += _cbarattrs
 
-        self._doc = _descrargs.format(**{k: getattr(self, k).__repr__()
-                                         for k in set(_cbarattrs)})
+        self._doc = _descrargs.format(
+            **{k: getattr(self, k).__repr__() for k in set(_cbarattrs)}
+        )
 
-        if kw.get('_topdecorator', True):
-            self._doc += xkwargs.format(xkw=getattr(self, 'xkw').__repr__())
+        if kw.get("_topdecorator", True):
+            self._doc += xkwargs.format(xkw=getattr(self, "xkw").__repr__())
 
         return
+
     # /def
 
     # __call__
     def __call__(self, wrapped_function):
-
         @wraps(wrapped_function)
-        def wrapped(*func_args,
-                    # axes
-                    ax=self.ax,
-                    # colorbar
-                    colorbar=self.colorbar, clabel=self.clabel,
-                    clim=self.clim, cloc=self.cloc,
-                    # modifying arguments
-                    xkw=self.xkw,
-                    **func_kwargs):
+        def wrapped(
+            *func_args,
+            # axes
+            ax=self.ax,
+            # colorbar
+            colorbar=self.colorbar,
+            clabel=self.clabel,
+            clim=self.clim,
+            cloc=self.cloc,
+            # modifying arguments
+            xkw=self.xkw,
+            **func_kwargs
+        ):
             r"""
             """
 
@@ -432,21 +471,25 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
             # +---- colorbar ----+
             if colorbar:
 
-                ckw = xkw.get('colorbar', {})
+                ckw = xkw.get("colorbar", {})
                 if not ckw:
                     # allowable arguments
                     ckw = {k: xkw.get(k) for k in _cbark if k in xkw}
                     # any specific overrides
-                    ckw.update({_stripprefix(k, 'colorbar_'): v
-                                for k, v in ckw.items()
-                                if k.startswith('colorbar_')})
+                    ckw.update(
+                        {
+                            _stripprefix(k, "colorbar_"): v
+                            for k, v in ckw.items()
+                            if k.startswith("colorbar_")
+                        }
+                    )
 
                 # make colorbar
                 if cloc is None:
                     cbar = fig.colorbar(return_, ax=ax, **ckw)
-                elif cloc == 'in':
+                elif cloc == "in":
                     cbar = fig.colorbar(return_, cax=ax, **ckw)
-                elif cloc == 'out':
+                elif cloc == "out":
                     cbar = fig.colorbar(return_, ax=ax, **ckw)
                 elif isinstance(cloc, mpl.axes.Axes):
                     cbar = fig.colorbar(return_, ax=cloc, **ckw)
@@ -462,15 +505,17 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
             # /POST
             # Returning
             return return_
+
         # /def
 
         # modifying wrapped_function docstring
-        _doc = (self.funcdoc +
-                _descrhead.format(func=wrapped_function.__name__) +
-                self._doc)
+        _doc = (
+            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+        )
         wrapped.__doc__ = wrapped.__doc__ and cleandoc(wrapped.__doc__) + _doc
 
         return wrapped
+
     # /def
 
 

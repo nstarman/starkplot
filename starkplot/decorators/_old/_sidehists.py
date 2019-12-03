@@ -67,6 +67,7 @@ except ImportError as e:
 # Custom Imports
 
 from ..util import axisLabels, axisScales, axisLimits, invertAxis
+
 # from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
 
 from .docstring import cleandoc, strthentwoline
@@ -148,9 +149,16 @@ xkw: dict
 
 _sidehistattrs = (
     # sidehist arguments
-    'sidehists',
-    'shtype', 'shbins', 'shcolor', 'shfc', 'shec',
-    'shxdensity', 'shydensity', 'shxweights', 'shyweights',
+    "sidehists",
+    "shtype",
+    "shbins",
+    "shcolor",
+    "shfc",
+    "shec",
+    "shxdensity",
+    "shydensity",
+    "shxweights",
+    "shyweights",
     # # modifying arguments
     # 'xkw'
 )
@@ -158,6 +166,7 @@ _sidehistattrs = (
 
 #############################################################################
 # Decorator
+
 
 class SideHists(MatplotlibDecoratorBase):
     r"""docstring for SideHists
@@ -230,15 +239,24 @@ class SideHists(MatplotlibDecoratorBase):
     """
 
     @classmethod
-    def as_decorator(cls, func=None, funcdoc=None,
-                     # sidehists
-                     sidehists=True, shtype='stepfilled',
-                     shbins=None, shcolor='k',
-                     shfc=None, shec='k',
-                     shxdensity=True, shydensity=True,
-                     shxweights=None, shyweights=None,
-                     # modifying arguments
-                     xkw={}):
+    def as_decorator(
+        cls,
+        func=None,
+        funcdoc=None,
+        # sidehists
+        sidehists=True,
+        shtype="stepfilled",
+        shbins=None,
+        shcolor="k",
+        shfc=None,
+        shec="k",
+        shxdensity=True,
+        shydensity=True,
+        shxweights=None,
+        shyweights=None,
+        # modifying arguments
+        xkw={},
+    ):
         r"""SideHists
 
         Arguments  # TODO fill out text
@@ -306,21 +324,25 @@ class SideHists(MatplotlibDecoratorBase):
         # modifying docstring
         _locals = locals()
         self.__doc__ = self.__doc__.format(
-            **{k: _locals.get(k).__repr__() for k in set(_sidehistattrs)},
-            xkw=xkw
+            **{k: _locals.get(k).__repr__() for k in set(_sidehistattrs)}, xkw=xkw
         )
 
         # init
         self.__init__(
             funcdoc=funcdoc,
             # sidehists
-            sidehists=sidehists, shbins=shbins,
-            shtype=shtype, shcolor=shcolor,
-            shfc=shfc, shec=shec,
-            shxdensity=shxdensity, shydensity=shydensity,
-            shxweights=shxweights, shyweights=shyweights,
+            sidehists=sidehists,
+            shbins=shbins,
+            shtype=shtype,
+            shcolor=shcolor,
+            shfc=shfc,
+            shec=shec,
+            shxdensity=shxdensity,
+            shydensity=shydensity,
+            shxweights=shxweights,
+            shyweights=shyweights,
             # modifying arguments
-            xkw=xkw
+            xkw=xkw,
         )
         if func is not None:
             if isinstance(func, type(plt.scatter)):  # scatter doesn't work
@@ -329,17 +351,28 @@ class SideHists(MatplotlibDecoratorBase):
             return self(func)
         else:
             return self
+
     # /def
 
-    def __new__(cls, func=None, funcdoc=None,
-                # sidehists
-                sidehists=False, shbins=None,
-                shtype='stepfilled', shcolor='k',
-                shfc=None, shec='k',
-                shxdensity=True, shydensity=True,
-                shxweights=None, shyweights=None,
-                # modifying arguments
-                xkw={}, **kw):
+    def __new__(
+        cls,
+        func=None,
+        funcdoc=None,
+        # sidehists
+        sidehists=False,
+        shbins=None,
+        shtype="stepfilled",
+        shcolor="k",
+        shfc=None,
+        shec="k",
+        shxdensity=True,
+        shydensity=True,
+        shxweights=None,
+        shyweights=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
         r"""
         important that sidehists defaults to True for combining wrappers
         """
@@ -356,26 +389,44 @@ class SideHists(MatplotlibDecoratorBase):
         self.__init__(
             funcdoc=funcdoc,
             # sidehists
-            sidehists=sidehists, shbins=shbins,
-            shtype=shtype, shcolor=shcolor,
-            shfc=shfc, shec=shec,
-            shxdensity=shxdensity, shydensity=shydensity,
-            shxweights=shxweights, shyweights=shyweights,
+            sidehists=sidehists,
+            shbins=shbins,
+            shtype=shtype,
+            shcolor=shcolor,
+            shfc=shfc,
+            shec=shec,
+            shxdensity=shxdensity,
+            shydensity=shydensity,
+            shxweights=shxweights,
+            shyweights=shyweights,
             # modifying arguments
-            xkw={}, **kw
+            xkw={},
+            **kw
         )
 
         return self.as_decorator
+
     # /def
 
-    def __init__(self, func=None, funcdoc=None,
-                 # sidehists
-                 sidehists=False, shtype='stepfilled', shbins=None,
-                 shcolor='k', shfc=None, shec='k',
-                 shxdensity=True, shydensity=True,
-                 shxweights=None, shyweights=None,
-                 # modifying arguments
-                 xkw={}, **kw):
+    def __init__(
+        self,
+        func=None,
+        funcdoc=None,
+        # sidehists
+        sidehists=False,
+        shtype="stepfilled",
+        shbins=None,
+        shcolor="k",
+        shfc=None,
+        shec="k",
+        shxdensity=True,
+        shydensity=True,
+        shxweights=None,
+        shyweights=None,
+        # modifying arguments
+        xkw={},
+        **kw
+    ):
         r"""
         """
 
@@ -383,13 +434,13 @@ class SideHists(MatplotlibDecoratorBase):
 
         # +----------- -----------+
 
-        if kw.get('_topdecorator', True):
+        if kw.get("_topdecorator", True):
             if isinstance(funcdoc, str):
                 self.funcdoc = _funcdocprefix + funcdoc
             elif isinstance(funcdoc, types.FunctionType):
                 self.funcdoc = _funcdocprefix + funcdoc.__doc__
             else:
-                self.funcdoc = ''
+                self.funcdoc = ""
             self.funcdoc = strthentwoline(self.funcdoc)  # ensure '\n\n' ending
 
             # extra arguments
@@ -411,32 +462,37 @@ class SideHists(MatplotlibDecoratorBase):
 
         self.attrs += _sidehistattrs
 
-        self._doc = _descrargs.format(**{k: getattr(self, k).__repr__()
-                                         for k in set(self.attrs)})
+        self._doc = _descrargs.format(
+            **{k: getattr(self, k).__repr__() for k in set(self.attrs)}
+        )
 
-        if kw.get('_topdecorator', True):
-            self._doc += xkwargs.format(xkw=getattr(self, 'xkw').__repr__())
+        if kw.get("_topdecorator", True):
+            self._doc += xkwargs.format(xkw=getattr(self, "xkw").__repr__())
 
         return
+
     # /def
 
     # __call__
     def __call__(self, wrapped_function):
-
         @wraps(wrapped_function)
-        def wrapped(*func_args,
-                    # sidehists
-                    sidehists=self.sidehists,
-                    shtype=self.shtype, shbins=self.shbins,
-                    shcolor=self.shcolor, shfc=self.shfc,
-                    shec=self.shec,
-                    shxdensity=self.shxdensity,
-                    shydensity=self.shydensity,
-                    shxweights=self.shxweights,
-                    shyweights=self.shyweights,
-                    # modifying arguments
-                    xkw=self.xkw,
-                    **func_kwargs):
+        def wrapped(
+            *func_args,
+            # sidehists
+            sidehists=self.sidehists,
+            shtype=self.shtype,
+            shbins=self.shbins,
+            shcolor=self.shcolor,
+            shfc=self.shfc,
+            shec=self.shec,
+            shxdensity=self.shxdensity,
+            shydensity=self.shydensity,
+            shxweights=self.shxweights,
+            shyweights=self.shyweights,
+            # modifying arguments
+            xkw=self.xkw,
+            **func_kwargs
+        ):
             # PRE
 
             # combining dictionaries
@@ -458,7 +514,7 @@ class SideHists(MatplotlibDecoratorBase):
             # +---- sidehists ----+
             if sidehists:
 
-                ax.set_aspect(1.)  # so same size sidehists
+                ax.set_aspect(1.0)  # so same size sidehists
 
                 # create new axes on the right and on the top of the current axes
                 # The first argument of the new_vertical(new_horizontal) method is
@@ -468,8 +524,9 @@ class SideHists(MatplotlibDecoratorBase):
                 axHisty = divider.append_axes("right", 1.2, pad=0.1, sharey=ax)
 
                 # make some labels invisible
-                plt.setp(axHistx.get_xticklabels() + axHisty.get_yticklabels(),
-                         visible=False)
+                plt.setp(
+                    axHistx.get_xticklabels() + axHisty.get_yticklabels(), visible=False
+                )
 
                 if shbins is None:
                     if isinstance(func_args[0], np.ndarray):
@@ -484,16 +541,27 @@ class SideHists(MatplotlibDecoratorBase):
                 # _xrange = func_kwargs.get('xlim', None)
 
                 histx, edges, patches = axHistx.hist(
-                    func_args[0], bins=shbins,
-                    histtype=shtype, weights=shxweights, density=shxdensity,
+                    func_args[0],
+                    bins=shbins,
+                    histtype=shtype,
+                    weights=shxweights,
+                    density=shxdensity,
                     # range=_xrange,
-                    color=shcolor, fc=shfc, ec=shec
+                    color=shcolor,
+                    fc=shfc,
+                    ec=shec,
                 )
                 histy, edges, patches = axHisty.hist(
-                    func_args[1], bins=shbins, orientation='horizontal',
-                    histtype=shtype, weights=shyweights, density=shydensity,
+                    func_args[1],
+                    bins=shbins,
+                    orientation="horizontal",
+                    histtype=shtype,
+                    weights=shyweights,
+                    density=shydensity,
                     # range=sorted(ylim),
-                    color=shcolor, fc=shfc, ec=shec
+                    color=shcolor,
+                    fc=shfc,
+                    ec=shec,
                 )
 
             # /POST
@@ -574,12 +642,13 @@ class SideHists(MatplotlibDecoratorBase):
         # print('_doc:', self._doc)
 
         # modifying wrapped_function docstring
-        _doc = (self.funcdoc +
-                _descrhead.format(func=wrapped_function.__name__) +
-                self._doc)
+        _doc = (
+            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+        )
         wrapped.__doc__ = cleandoc(wrapped.__doc__) + _doc
 
         return wrapped
+
     # /def
 
 

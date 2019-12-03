@@ -71,38 +71,57 @@ NoneType = type(None)
 # Colorbar
 _cbark = (
     # axes properties
-    'orientation', 'fraction', 'pad', 'shrink', 'aspect',
-    'anchor', 'panchor',
+    "orientation",
+    "fraction",
+    "pad",
+    "shrink",
+    "aspect",
+    "anchor",
+    "panchor",
     # colorbar properties
-    'extend', 'extendfrac', 'extendrect', 'spacing', 'ticks',
-    'format', 'drawedges', 'boundaries', 'values',
+    "extend",
+    "extendfrac",
+    "extendrect",
+    "spacing",
+    "ticks",
+    "format",
+    "drawedges",
+    "boundaries",
+    "values",
 )
 
 
 #############################################################################
 # Helper Functions
 
+
 def _stripprefix(s, prefix):
     if s.startswith(prefix):
-        return s[len(prefix):]
+        return s[len(prefix) :]
     else:
         return s
+
+
 # /def
 
 
 def _parseoptsdict(attr):
     attr = attr if isinstance(attr, dict) else {}
     return attr
+
+
 # /def
 
 
 def _latexstr(attr):  # TODO FIXME
     if not attr:  # empty string
-        return rf'{attr}'
+        return rf"{attr}"
     # elif not attr.startswith('$'):
     #     return rf'${attr}$'
     else:
-        return rf'{attr}'
+        return rf"{attr}"
+
+
 # /def
 
 
@@ -114,6 +133,8 @@ def _parselatexstrandopts(attr):
         return _latexstr(attr), {}
     else:
         return _latexstr(attr[0]), attr[1]
+
+
 # /def
 
 
@@ -123,18 +144,19 @@ def _parsestrandopts(attr):
     if attr is True:
         return None, {}
     if attr is False:
-        return '', {}
+        return "", {}
     elif isinstance(attr, NoneType):
-        return '', {}
+        return "", {}
     elif isinstance(attr, str):
         return attr, {}
     else:
         return attr[0], attr[1]
+
+
 # /def
 
 
-def _parsexkwandopts(arg, kw, name, compatible, parser,
-                     prefix=None, allowupdate=True):
+def _parsexkwandopts(arg, kw, name, compatible, parser, prefix=None, allowupdate=True):
     r"""
     Parameters
     ---------
@@ -157,12 +179,12 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
         arg, argkw0 = parser(arg)
     elif parser == _parseoptsdict:  # check if opts
         argkw0 = parser(arg)
-    else:                           # check if (arg, opts)
+    else:  # check if (arg, opts)
         arg, argkw0 = parser(arg)
 
     # whether to allow kwargs to update
     if allowupdate:
-        update = argkw0.get('update', False)
+        update = argkw0.get("update", False)
     else:
         update = False
 
@@ -172,7 +194,7 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
         argkw1 = kw.get(name, {})
 
         if allowupdate:
-            update = argkw1.get('update', False)
+            update = argkw1.get("update", False)
         else:
             update = False
 
@@ -181,23 +203,33 @@ def _parsexkwandopts(arg, kw, name, compatible, parser,
             argkw2 = {k: kw.get(k) for k in compatible if k in kw}
             # overwrite with any specific options
             if prefix is None:
-                prefix = name + '_'
-            argkw2.update({_stripprefix(k, prefix): v for k, v in kw.items()
-                           if k.startswith(prefix)})
+                prefix = name + "_"
+            argkw2.update(
+                {
+                    _stripprefix(k, prefix): v
+                    for k, v in kw.items()
+                    if k.startswith(prefix)
+                }
+            )
     # updating & maintaining priority
     argkw = argkw2
     argkw.update(argkw1)
     argkw.update(argkw0)
 
     return arg, argkw
+
+
 # /def
 
 
 ###############################################################################
 # Figure
 
+
 def _gcf(fig):  # TODO deprecate
     return fig if fig is not None else plt.gcf()
+
+
 # /def
 
 
@@ -230,15 +262,20 @@ def _prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
         fig = plt.gcf()
 
     # make new figure
-    elif fig == 'new':
+    elif fig == "new":
         if rtcf is True:  # preserve oldfig
             oldfig = plt.gcf()
         # figure kwargs if included
-        nfkw = kw.get('fig', {})
+        nfkw = kw.get("fig", {})
         if not nfkw:
             nfkw = {k: kw.get(k) for k in _newfigk if k in kw}
-            nfkw.update({_stripprefix(k, 'fig_'): v
-                         for k, v in kw.items() if k.startswith('fig_')})
+            nfkw.update(
+                {
+                    _stripprefix(k, "fig_"): v
+                    for k, v in kw.items()
+                    if k.startswith("fig_")
+                }
+            )
         # making the figure
         fig = plt.figure(figsize=figsize, **nfkw)
 
@@ -247,6 +284,8 @@ def _prepare_figure(fig=None, rtcf=True, figsize=None, **kw):
         raise ValueError("fig is not Figure, int, None, or 'new'")
 
     return fig, oldfig
+
+
 # /def
 
 
@@ -255,18 +294,22 @@ def tightLayout(fig=None, tlkw={}, **kw):
     """
     fig = _gcf(fig)
 
-    _, tlkw = _parsexkwandopts(tlkw, kw, 'tight_layout', _tightlayoutk,
-                               _parseoptsdict)
+    _, tlkw = _parsexkwandopts(tlkw, kw, "tight_layout", _tightlayoutk, _parseoptsdict)
 
     fig.tight_layout(**tlkw)
+
+
 # /def
 
 
 ###############################################################################
 # Axes
 
+
 def _gca(ax):
     return ax if ax is not None else plt.gca()
+
+
 # /def
 
 
@@ -283,7 +326,7 @@ def prepare_axes(ax=None, rtcf=True, _fig=None, _oldfig=None):
     # ex = next # TODO
     # #TODO should ax=False impact how the figure is treated?
 
-    if rtcf in (True, ):  # preserve oldax
+    if rtcf in (True,):  # preserve oldax
         if _oldfig is None:
             oldax = fig.gca()
         else:
@@ -301,7 +344,7 @@ def prepare_axes(ax=None, rtcf=True, _fig=None, _oldfig=None):
     elif isinstance(ax, (tuple, list)):
         fig.add_subplot(*ax)
     elif isinstance(ax, str):
-        if ax == 'next':
+        if ax == "next":
             raise ValueError("`next' not yet supported")
         else:
             raise ValueError("not supported")
@@ -309,6 +352,8 @@ def prepare_axes(ax=None, rtcf=True, _fig=None, _oldfig=None):
         ax = fig.sca(ax)
 
     return ax, oldax
+
+
 # /def
 
 
@@ -350,18 +395,21 @@ def set_title(t, ax=None, **kw):
     # titlekw = titlekw2
     # titlekw.update(titlekw1)
     # titlekw.update(titlekw0)
-    title, titlekw = _parsexkwandopts(t, kw, 'title', _titlek,
-                                      _parsestrandopts)
+    title, titlekw = _parsexkwandopts(t, kw, "title", _titlek, _parsestrandopts)
 
     ax.set_title(title, **titlekw)
+
+
 # /def
 
 
 ###############################################################################
 # Axis Labels
 
-@docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+
+@docstring.Appender(
+    pyplot.Axes.set_xlabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_xlabel(ax=None, x=None, units=True, **kw):
     r"""starkplot wrapper for set_xlabel
 
@@ -386,16 +434,18 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
     #         nkw.update({_stripprefix(k, 'xlabel_'): v
     #                     for k, v in kw.items()
     #                     if k.startswith('xlabel_')})
-    x, nkw = _parsexkwandopts(x, kw, 'xlabel', _xlabelk,
-                              _parselatexstrandopts)
+    x, nkw = _parsexkwandopts(x, kw, "xlabel", _xlabelk, _parselatexstrandopts)
     if units is True:
         x = rf"{x} [{ax.get_xlabel()}]"
     ax.set_xlabel(x, **nkw)
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_ylabel.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_ylabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_ylabel(ax=None, y=None, units=True, **kw):
     r"""starkplot wrapper for set_ylabel
 
@@ -420,11 +470,12 @@ def set_ylabel(ax=None, y=None, units=True, **kw):
     #         nkw.update({_stripprefix(k, 'ylabel_'): v
     #                     for k, v in kw.items()
     #                     if k.startswith('ylabel_')})
-    y, nkw = _parsexkwandopts(y, kw, 'ylabel', _ylabelk,
-                              _parselatexstrandopts)
+    y, nkw = _parsexkwandopts(y, kw, "ylabel", _ylabelk, _parselatexstrandopts)
     if units is True:
         y = rf"{y} [{ax.get_ylabel()}]"
     ax.set_ylabel(y, **nkw)
+
+
 # /def
 
 
@@ -458,18 +509,21 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
         #         nkw.update({_stripprefix(k, 'zlabel_'): v
         #                     for k, v in kw.items()
         #                     if k.startswith('zlabel_')})
-        z, nkw = _parsexkwandopts(z, kw, 'zlabel', _zlabelk,
-                                  _parselatexstrandopts)
+        z, nkw = _parsexkwandopts(z, kw, "zlabel", _zlabelk, _parselatexstrandopts)
         if units is True:
             rf"{z} [{ax.get_zlabel()}]"
         ax.set_zlabel(z, **nkw)
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
-@docstring.Appender(pyplot.Axes.set_ylabel.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_xlabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
+@docstring.Appender(
+    pyplot.Axes.set_ylabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 # @docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
 def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
@@ -505,14 +559,18 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
     set_xlabel(ax=ax, x=x, units=units, **kw)
     set_ylabel(ax=ax, y=y, units=units, **kw)
     set_zlabel(ax=ax, z=z, units=units, **kw)
+
+
 # /def
 
 
 ###############################################################################
 # Axis Limits
 
-@docstring.Appender(pyplot.Axes.set_xlim.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+
+@docstring.Appender(
+    pyplot.Axes.set_xlim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_xlim(ax=None, x=None):
     r"""starkplot wrapper for set_xlim
     """
@@ -521,11 +579,14 @@ def set_xlim(ax=None, x=None):
 
     ax = ax if ax is not None else pyplot.gca()
     return ax.set_xlim(*x)
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_ylim.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_ylim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_ylim(ax=None, y=None):
     r"""starkplot wrapper for set_ylim
     """
@@ -534,6 +595,8 @@ def set_ylim(ax=None, y=None):
 
     ax = ax if ax is not None else pyplot.gca()
     return ax.set_ylim(*y)
+
+
 # /def
 
 
@@ -550,13 +613,17 @@ def set_zlim(ax=None, z=None):
         return ax.set_zlim(*z)
     except AttributeError:
         pass
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_xlim.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
-@docstring.Appender(pyplot.Axes.set_ylim.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_xlim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
+@docstring.Appender(
+    pyplot.Axes.set_ylim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 # @docstring.Appender(pyplot.Axes.set_zlim.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
 def axisLimits(ax=None, x=None, y=None, z=None):
@@ -566,29 +633,38 @@ def axisLimits(ax=None, x=None, y=None, z=None):
     set_xlim(ax=ax, x=x)
     set_ylim(ax=ax, y=y)
     set_zlim(ax=ax, z=z)
+
+
 # /def
 
 
 ###############################################################################
 # Axis Inversion
 
-@docstring.Appender(pyplot.Axes.invert_xaxis.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+
+@docstring.Appender(
+    pyplot.Axes.invert_xaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def invert_xaxis(ax=None):
     r"""starkplot wrapper for invert_xaxis
     """
     ax = ax if ax is not None else pyplot.gca()
     ax.invert_xaxis()
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.invert_yaxis.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.invert_yaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def invert_yaxis(ax=None):
     r"""starkplot wrapper for invert_yaxis
     """
     ax = ax if ax is not None else pyplot.gca()
     ax.invert_yaxis()
+
+
 # /def
 
 
@@ -602,13 +678,17 @@ def invert_zaxis(ax=None):
         ax.invert_zaxis()
     except AttributeError:
         pass
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.invert_xaxis.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
-@docstring.Appender(pyplot.Axes.invert_yaxis.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.invert_xaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
+@docstring.Appender(
+    pyplot.Axes.invert_yaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 # @docstring.Appender(pyplot.Axes.invert_zaxis.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
 def invertAxis(ax=None, x=False, y=False, z=False):
@@ -621,14 +701,18 @@ def invertAxis(ax=None, x=False, y=False, z=False):
         invert_yaxis(ax=ax)
     if z:
         invert_zaxis(ax=ax)
+
+
 # /def
 
 
 ###############################################################################
 # Axis Scales
 
-@docstring.Appender(pyplot.Axes.set_xscale.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+
+@docstring.Appender(
+    pyplot.Axes.set_xscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_xscale(ax=None, x=None, **kw):
     r"""starkplot wrapper for set_xscale
     """
@@ -638,13 +722,16 @@ def set_xscale(ax=None, x=None, **kw):
     ax = ax if ax is not None else pyplot.gca()
     x, nkw = _parsestrandopts(x)
     if not nkw:  # if no kwargs
-        nkw = kw.get('xscale', {})
+        nkw = kw.get("xscale", {})
     ax.set_xscale(x, **nkw)
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_yscale.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_yscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 def set_yscale(ax=None, y=None, **kw):
     r"""starkplot wrapper for set_yscale
     """
@@ -654,8 +741,10 @@ def set_yscale(ax=None, y=None, **kw):
     ax = ax if ax is not None else pyplot.gca()
     y, nkw = _parsestrandopts(y)
     if not nkw:  # if no kwargs
-        nkw = kw.get('yscale', {})
+        nkw = kw.get("yscale", {})
     ax.set_yscale(y, **nkw)
+
+
 # /def
 
 
@@ -675,15 +764,19 @@ def set_zscale(ax=None, z=None, **kw):
     else:
         z, nkw = _parsestrandopts(z)
         if not nkw:  # if no kwargs
-            nkw = kw.get('zscale', {})
+            nkw = kw.get("zscale", {})
         ax.set_zscale(z, **nkw)
+
+
 # /def
 
 
-@docstring.Appender(pyplot.Axes.set_xscale.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
-@docstring.Appender(pyplot.Axes.set_yscale.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+@docstring.Appender(
+    pyplot.Axes.set_xscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
+@docstring.Appender(
+    pyplot.Axes.set_yscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 # @docstring.Appender(pyplot.Axes.set_zscale.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
 def axisScales(ax=None, x=None, y=None, z=None, **kw):
@@ -692,6 +785,8 @@ def axisScales(ax=None, x=None, y=None, z=None, **kw):
     set_xscale(ax=ax, x=x, **kw)
     set_yscale(ax=ax, y=y, **kw)
     set_zscale(ax=ax, z=z, **kw)
+
+
 # /def
 
 ##############################################################################

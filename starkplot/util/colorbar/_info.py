@@ -26,8 +26,21 @@ __author__ = "Nathaniel Starkman"
 
 _colorbark = (
     # axes properties
-    'orientation', 'fraction', 'pad', 'shrink', 'aspect',
-    'anchor', 'panchor',
+    "orientation",
+    "fraction",
+    "pad",
+    "shrink",
+    "aspect",
+    "anchor",
+    "panchor",
     # colorbar properties
-    'extend', 'extendfrac', 'extendrect', 'spacing', 'ticks', 'format', 'drawedges', 'boundaries', 'values',
+    "extend",
+    "extendfrac",
+    "extendrect",
+    "spacing",
+    "ticks",
+    "format",
+    "drawedges",
+    "boundaries",
+    "values",
 )

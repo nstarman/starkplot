@@ -19,9 +19,7 @@ TODO:
 __author__ = "Nathaniel Starkman"
 __credits__ = ["matplotlib"]
 
-__all__ = [
-    'savefig', 'save_figure', 'save_and_close'
-]
+__all__ = ["savefig", "save_figure", "save_and_close"]
 
 
 ##############################################################################
@@ -51,23 +49,34 @@ def savefig(*fnames, fig=None, **kw):
     Parameters
     ----------
     fnames : str(s)
-        list of fnames
-        locations to save
-    fig: Figure, None
+        filename or list of filenames, which is(are) the location(s) to 
+        save the figure
+    fig: Figure, int, None  (default None)
         figure to save
+        passed to *scf*, see documentation
         None -> current figure
     **kw : savefig arguments
+
+    Exceptions
+    ----------
+    raised by scf for invalid arguments, see documentation
     """
     fig = scf(fig)
     for fname in fnames:
         pyplot.savefig(fname, **kw)
+
+
 # /def
 
 
 # -------------------------------------------------------------------------
 
+
 def save_figure(*fnames, fig=None, **kw):
     r"""save figure
+
+    # TODO explanantion of _parsexkwandopts
+    # TODO merge with savefig
 
     Parameters
     ----------
@@ -75,36 +84,49 @@ def save_figure(*fnames, fig=None, **kw):
     fig: Figure, None
         figure to save
         None -> current figure
-    # TODO explanantion of _parsexkwandopts
-    # TODO merge with savefig
+
+    Exceptions
+    ----------
+    raised by scf for invalid arguments, see documentation
     """
     fig = scf(fig)
 
     for fname in fnames:
 
-        fname, sfgkw = _parsexkwandopts(fname, kw, 'savefig', _savefigk,
-                                        _parsestrandopts)
+        fname, sfgkw = _parsexkwandopts(
+            fname, kw, "savefig", _savefigk, _parsestrandopts
+        )
 
         if fname is None:
-            fname = 'plot' + str(fig.number)
+            fname = "plot" + str(fig.number)
 
         fig.savefig(fname, **sfgkw)
+
+
 # /def
 
 
 # -------------------------------------------------------------------------
 
-@docstring.Appender(pyplot.savefig.__doc__,
-                    join='\n\n{}\n'.format('=' * 78), prededent=True)
+
+@docstring.Appender(
+    pyplot.savefig.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+)
 @SetFigArg
 def save_and_close(filename, fig=None, **kw):
     """Wrapper for pyplot.savefig
     Calls pyplot.savefig() & pyplot.close()
+
+    Exceptions
+    ----------
+    raised by scf for invalid arguments, see documentation
     """
     fig = scf(fig)  # set fig to current
 
     fig.savefig(filename, **kw)
     pyplot.close(fig)
+
+
 # /def
 
 

@@ -63,6 +63,7 @@ __status__ = "Production"
 #############################################################################
 # Classes
 
+
 class MatplotlibDecoratorBase(object):
     """docstring for MatplotlibDecoratorBase
     """
@@ -94,12 +95,14 @@ class MatplotlibDecoratorBase(object):
         self._ylabelk = _ylabelk
         self._zlabelk = _zlabelk
 
+
 #############################################################################
 # Strings
 
-_funcdocprefix = "\n\n{0}\n{1}Wrapped Function's Documentation\n{0}\n\n".format('=' * 78, ' ' * 22)
+_funcdocprefix = "\n\n{0}\n{1}Wrapped Function's Documentation\n{0}\n\n".format(
+    "=" * 78, " " * 22
+)
 
 
 #############################################################################
 # Functions
-

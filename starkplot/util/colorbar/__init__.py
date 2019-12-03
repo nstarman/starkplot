@@ -20,9 +20,7 @@ __author__ = "Nathaniel Starkman"
 ## General
 
 ## Project-Specific
-from ._info import (
-    _colorbark,
-)
+from ._info import _colorbark
 
 
 ##############################################################################

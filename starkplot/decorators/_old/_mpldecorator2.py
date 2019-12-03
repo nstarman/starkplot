@@ -74,23 +74,38 @@ from .util import MatplotlibDecoratorBase, _funcdocprefix
 
 # from ..util import ObjectWrapper
 from ..util import axisLabels, axisScales, axisLimits, invertAxis
-from ..util import _stripprefix, _parseoptsdict, _latexstr, _parselatexstrandopts, _parsestrandopts
-
 from ..util import (
-    # figure
-    _newfigk, _savefigk, _suptitlek,
-    # axes
-    _titlek, _xlabelk, _ylabelk, _zlabelk, _cbark
+    _stripprefix,
+    _parseoptsdict,
+    _latexstr,
+    _parselatexstrandopts,
+    _parsestrandopts,
 )
 
 from ..util import (
     # figure
-    _prepare_figure, save_figure,
+    _newfigk,
+    _savefigk,
+    _suptitlek,
+    # axes
+    _titlek,
+    _xlabelk,
+    _ylabelk,
+    _zlabelk,
+    _cbark,
+)
+
+from ..util import (
+    # figure
+    _prepare_figure,
+    save_figure,
     set_suptitle,
     tightLayout,
-    override_figure, set_figsize,
+    override_figure,
+    set_figsize,
     # axes
-    prepare_axes, set_title
+    prepare_axes,
+    set_title,
 )
 
 #############################################################################
@@ -543,29 +558,64 @@ xkw: dict
 
 _mplattrs = (
     # figure
-    'fig', 'rtcf',
-    'figsize', 'overridefig', 'savefig', 'closefig',
-    'suptitle',
+    "fig",
+    "rtcf",
+    "figsize",
+    "overridefig",
+    "savefig",
+    "closefig",
+    "suptitle",
     # style
-    'stylesheet', 'tight_layout',
+    "stylesheet",
+    "tight_layout",
     # axes
-    'ax',
-    'title', 'xlabel', 'ylabel', 'zlabel', 'unit_labels',
-    'xlim', 'ylim', 'zlim', 'invert_axis',
-    'xscale', 'yscale', 'zscale', 'aspect',
-    'legend',
+    "ax",
+    "title",
+    "xlabel",
+    "ylabel",
+    "zlabel",
+    "unit_labels",
+    "xlim",
+    "ylim",
+    "zlim",
+    "invert_axis",
+    "xscale",
+    "yscale",
+    "zscale",
+    "aspect",
+    "legend",
     # colorbar arguments
-    'colorbar', 'clabel', 'clim', 'cloc',
+    "colorbar",
+    "clabel",
+    "clim",
+    "cloc",
     # sidehist arguments
-    'sidehists',
-    'shtype', 'shbins', 'shcolor', 'shfc', 'shec',
-    'shxdensity', 'shydensity', 'shxweights', 'shyweights',
+    "sidehists",
+    "shtype",
+    "shbins",
+    "shcolor",
+    "shfc",
+    "shec",
+    "shxdensity",
+    "shydensity",
+    "shxweights",
+    "shyweights",
     # colorbar arguments
-    'colorbar', 'clabel', 'clim', 'cloc',
+    "colorbar",
+    "clabel",
+    "clim",
+    "cloc",
     # sidehist arguments
-    'sidehists',
-    'shtype', 'shbins', 'shcolor', 'shfc', 'shec',
-    'shxdensity', 'shydensity', 'shxweights', 'shyweights',
+    "sidehists",
+    "shtype",
+    "shbins",
+    "shcolor",
+    "shfc",
+    "shec",
+    "shxdensity",
+    "shydensity",
+    "shxweights",
+    "shyweights",
     # Options
-    'xkw'
+    "xkw",
 )

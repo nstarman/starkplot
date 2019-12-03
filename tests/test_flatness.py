@@ -25,6 +25,7 @@ from importlib import import_module
 #############################################################################
 # mpl_decorator
 
+
 def _can_import(name):
     import importlib
 
@@ -48,23 +49,27 @@ def _can_import(name):
 #         return False
 #     else:
 #         print(i)
-        # return True
+# return True
 
 
 # -------------------------------------------------------------------------
+
 
 def test_import_starkplot():
     r"""
     import starkplot as splt
     """
 
-    assert _can_import('starkplot')
+    assert _can_import("starkplot")
 
     return None
+
+
 # /def
 
 
 # -------------------------------------------------------------------------
+
 
 def test_import_folders():
     r"""
@@ -73,29 +78,34 @@ def test_import_folders():
     """
     # testing folders
     #####################
-    assert _can_import('starkplot._axes')
+    assert _can_import("starkplot._axes")
 
-    assert _can_import('starkplot._figure')
+    assert _can_import("starkplot._figure")
 
-    assert _can_import('starkplot._info')
+    assert _can_import("starkplot._info")
 
-    assert _can_import('starkplot.decorators')
+    assert _can_import("starkplot.decorators")
 
-    assert _can_import('starkplot.util')
+    assert _can_import("starkplot.util")
 
     # testing equivalence  # TODO programmatic way to do this
     #####################
     from starkplot import decorators
-    assert import_module('starkplot.decorators') == decorators
+
+    assert import_module("starkplot.decorators") == decorators
 
     from starkplot import _info
-    assert import_module('starkplot._info') == _info
+
+    assert import_module("starkplot._info") == _info
 
     return None
+
+
 # /def
 
 
 # -------------------------------------------------------------------------
+
 
 def test_call_starkplot_functions():
     r"""
@@ -110,6 +120,8 @@ def test_call_starkplot_functions():
     plt._info
 
     return None
+
+
 # /def
 
 

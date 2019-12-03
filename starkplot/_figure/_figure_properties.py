@@ -60,6 +60,7 @@ set_figsize = SetFigArg(pyplot.Figure.set_size_inches)
 ###############################################################################
 # Suptitle
 
+
 def get_suptitle(fig=None, text=True):
     """Get a figure's title.
 
@@ -84,6 +85,8 @@ def get_suptitle(fig=None, text=True):
         return fig._suptitle._text
     else:
         return fig._suptitle
+
+
 # /def
 
 
@@ -105,17 +108,18 @@ def set_suptitle(t, fig=None, **kw):
     """
     fig = scf(fig)
 
-    t, stkw = _parsexkwandopts(
-        t, kw, 'suptitle', _suptitlek, _parsestrandopts)
+    t, stkw = _parsexkwandopts(t, kw, "suptitle", _suptitlek, _parsestrandopts)
 
     res = fig.suptitle(t, **stkw)
     return res
+
+
 # /def
 
 
 set_supertitle = set_suptitle  # alias for set_suptitle
-suptitle = set_suptitle        # alias for set_suptitle
-supertitle = set_supertitle    # alias for set_suptitle
+suptitle = set_suptitle  # alias for set_suptitle
+supertitle = set_supertitle  # alias for set_suptitle
 
 
 ###############################################################################
@@ -157,6 +161,7 @@ set_frameon = SetFigArg(pyplot.Figure.set_frameon)
 ###############################################################################
 # Override Figure
 
+
 def override_figure(fig=None, **kw):
     r"""override figure properties
     Parameters
@@ -174,34 +179,36 @@ def override_figure(fig=None, **kw):
     """
     fig = scf(fig)
 
-    if kw.get('figsize', None) is not None:
-        fig.set_size_inches(kw.get('figsize'), forward=True)
+    if kw.get("figsize", None) is not None:
+        fig.set_size_inches(kw.get("figsize"), forward=True)
 
-    if 'dpi' in kw:  # TODO better methods
-        fig.set_dpi(kw.get('dpi'))
-    elif 'fig_dpi' in kw:
-        fig.set_dpi(kw.get('fig_dpi'))
+    if "dpi" in kw:  # TODO better methods
+        fig.set_dpi(kw.get("dpi"))
+    elif "fig_dpi" in kw:
+        fig.set_dpi(kw.get("fig_dpi"))
 
-    if 'facecolor' in kw:  # TODO better methods
-        fig.set_facecolor(kw.get('facecolor'))
-    elif 'fig_facecolor' in kw:
-        fig.set_facecolor(kw.get('fig_facecolor'))
+    if "facecolor" in kw:  # TODO better methods
+        fig.set_facecolor(kw.get("facecolor"))
+    elif "fig_facecolor" in kw:
+        fig.set_facecolor(kw.get("fig_facecolor"))
 
-    if 'edgecolor' in kw:  # TODO better methods
-        fig.set_edgecolor(kw.get('edgecolor'))
-    elif 'fig_edgecolor' in kw:
-        fig.set_edgecolor(kw.get('fig_edgecolor'))
+    if "edgecolor" in kw:  # TODO better methods
+        fig.set_edgecolor(kw.get("edgecolor"))
+    elif "fig_edgecolor" in kw:
+        fig.set_edgecolor(kw.get("fig_edgecolor"))
 
-    if 'frameon' in kw:  # TODO better methods
-        fig.set_frameon(kw.get('frameon'))
-    elif 'fig_frameon' in kw:
-        fig.set_frameon(kw.get('fig_frameon'))
+    if "frameon" in kw:  # TODO better methods
+        fig.set_frameon(kw.get("frameon"))
+    elif "fig_frameon" in kw:
+        fig.set_frameon(kw.get("fig_frameon"))
 
     # FigureClass
     # clear
     # subplotpars
     # tight_layout
     # constrained_layout
+
+
 # /def
 
 
@@ -222,7 +229,6 @@ tight_layout = SetFigArg(pyplot.Figure.tight_layout)
 
 #     fig.tight_layout(**tlkw)
 # # /def
-
 
 
 ###############################################################################

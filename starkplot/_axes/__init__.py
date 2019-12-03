@@ -9,15 +9,11 @@
 #
 # ----------------------------------------------------------------------------
 
-### Docstring and Metadata
-"""**DOCSTRING**
-
-TODO
-"""
+# Docstring and Metadata
+"""DOCSTRING."""
 
 __author__ = "Nathaniel Starkman"
 __credits__ = ["matplotlib"]
-# __all__ = ['figure', ]
 
 
 ##############################################################################
@@ -26,23 +22,21 @@ __credits__ = ["matplotlib"]
 ## General
 from ._current_axes import gca, sca
 
-# from ._axes import *  # TODO replace
-
 from ._axes_properties import (
-    get_title, set_title,
-    get_xlabel, set_xlabel,
-    get_ylabel, set_ylabel,
-    # get_zlabel, set_zlabel,
-    # get_label, set_label,
-    get_xlim, set_xlim,
-    get_ylim, set_ylim,
-    # get_zlim, set_zlim,
+    get_title,
+    set_title,
+    get_xlabel,
+    set_xlabel,
+    get_ylabel,
+    set_ylabel,
+    get_xlim,
+    set_xlim,
+    get_ylim,
+    set_ylim,
     invert_xaxis,
     invert_yaxis,
-    # invert_zaxis,
-    # invert_axis,
-    get_xscale, set_xscale,
-    get_yscale, set_yscale,
-    # get_zscale, set_zscale,
-    # get_scale, set_scale
+    get_xscale,
+    set_xscale,
+    get_yscale,
+    set_yscale,
 )

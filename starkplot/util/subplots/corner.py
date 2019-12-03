@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -39,6 +38,7 @@ from ...decorators import mpl_decorator
 
 ##############################################################################
 
+
 def _type_of_plot(orientation, n_var, i, j):
     """internal helper function for determining plot type in a corner plot
 
@@ -57,16 +57,16 @@ def _type_of_plot(orientation, n_var, i, j):
         'same' : the axes are the same
         'compare' : compare the two different axes
     """
-    if orientation == 'lower left':
+    if orientation == "lower left":
         if j > i:
-            return i, j, 'remove'
+            return i, j, "remove"
         elif j == i:
-            return i, j, 'same'
+            return i, j, "same"
         else:  # j < i
-            return i, j, 'compare'
+            return i, j, "compare"
 
-    elif orientation == 'lower right':
-        raise ValueError('not yet supported orientation')
+    elif orientation == "lower right":
+        raise ValueError("not yet supported orientation")
         # if i + j < n_var - 1:
         #     return i, j, 'remove'
         # elif i + j == n_var - 1:
@@ -74,8 +74,8 @@ def _type_of_plot(orientation, n_var, i, j):
         # else:  # j < i
         #     return i, j, 'compare'
 
-    elif orientation == 'upper left':
-        raise ValueError('not yet supported orientation')
+    elif orientation == "upper left":
+        raise ValueError("not yet supported orientation")
         # if i + j < n_var - 1:
         #     return i, j, 'compare'
         # elif i + j == n_var - 1:
@@ -83,8 +83,8 @@ def _type_of_plot(orientation, n_var, i, j):
         # else:  # j < i
         #     return i, j, 'remove'
 
-    elif orientation == 'upper right':
-        raise ValueError('not yet supported orientation')
+    elif orientation == "upper right":
+        raise ValueError("not yet supported orientation")
         # if j < i:
         #     return i, j, 'remove'
         # elif j == i:
@@ -92,15 +92,24 @@ def _type_of_plot(orientation, n_var, i, j):
         # else:  # j < i
         #     return i, j, 'compare'
     else:
-        raise ValueError('not supported orientation')
+        raise ValueError("not supported orientation")
+
+
 # /def
 
 
 # Staircase plotting function
-def corner_plot(data, data_labels=None, orientation='lower left',
-                draw_contours=False,
-                fig=None, axs=None, savefig=False, **kw):
-    '''corner_plot
+def corner_plot(
+    data,
+    data_labels=None,
+    orientation="lower left",
+    draw_contours=False,
+    fig=None,
+    axs=None,
+    savefig=False,
+    **kw
+):
+    """corner_plot
 
     Take in N variables in M samples and plot their correlations.
 
@@ -128,13 +137,13 @@ def corner_plot(data, data_labels=None, orientation='lower left',
         matplotlib figure
     axs : Axes array
         array of matplotlib axes
-    '''
+    """
 
     # Figure out the number of variables
     n_var = len(data[0, :])
 
     if data_labels is None:
-        data_labels = ['q ' + i + 1 for i in range(n_var)]
+        data_labels = ["q " + i + 1 for i in range(n_var)]
 
     # Check if the figure was provided
     if fig is None:
@@ -158,27 +167,27 @@ def corner_plot(data, data_labels=None, orientation='lower left',
         ymax = np.max(data[:, i])
 
         # If this is an upper-right plot it is a duplicate, remove it
-        if plot_type == 'remove':
+        if plot_type == "remove":
             axs[i, j].set_axis_off()
             continue
 
         # If the two indices are equal just make a histogram of the data
-        elif plot_type == 'same':
+        elif plot_type == "same":
 
             # Make and plot the kernel
             kernel = stats.gaussian_kde(data[:, i])
             kernel_grid = np.linspace(np.min(data[:, i]), np.max(data[:, i]), 1000)
             kernel_evaluate = kernel.evaluate(kernel_grid)
-            axs[i, j].plot(kernel_grid, kernel_evaluate, color='Black')
+            axs[i, j].plot(kernel_grid, kernel_evaluate, color="Black")
 
             # Decorate
             axs[i, j].set_xlim(np.min(data[:, i]), np.max(data[:, i]))
             axs[i, j].tick_params(labelleft=False, labelright=True)
-            axs[i, j].set_ylabel('KDE')
-            axs[i, j].yaxis.set_label_position('right')
+            axs[i, j].set_ylabel("KDE")
+            axs[i, j].yaxis.set_label_position("right")
 
         # If the two indices are not equal make a scatter plot
-        elif plot_type == 'compare':
+        elif plot_type == "compare":
 
             if draw_contours:
 
@@ -190,8 +199,8 @@ def corner_plot(data, data_labels=None, orientation='lower left',
                 kernel_evaluate = np.reshape(kernel(positions).T, xx.shape)
 
                 # Make contours out of the KDE
-                cfset = axs[i, j].contourf(xx, yy, kernel_evaluate, cmap='Blues')
-                cset = axs[i, j].contour(xx, yy, kernel_evaluate, colors='Black')
+                cfset = axs[i, j].contourf(xx, yy, kernel_evaluate, cmap="Blues")
+                cset = axs[i, j].contour(xx, yy, kernel_evaluate, colors="Black")
 
                 # Decorate
                 axs[i, j].set_xlim(xmin, xmax)
@@ -223,15 +232,18 @@ def corner_plot(data, data_labels=None, orientation='lower left',
         fig.savefig(savefig)
 
     return fig, axs
+
+
 # /def
 
 
 # --------------------------------------------------------------------------
 
-def staircase_plot(data, data_labels=None, draw_contours=False,
-                   fig=None, axs=None, savefig=False,
-                   **kw):
-    '''staircase_plot
+
+def staircase_plot(
+    data, data_labels=None, draw_contours=False, fig=None, axs=None, savefig=False, **kw
+):
+    """staircase_plot
 
     Take in N variables in M samples and plot their correlations.
 
@@ -255,11 +267,18 @@ def staircase_plot(data, data_labels=None, draw_contours=False,
         matplotlib figure
     axs : Axes array
         array of matplotlib axes
-    '''
-    return corner_plot(data, data_labels=data_labels,
-                       draw_contours=draw_contours,
-                       fig=fig, axs=axs, savefig=savefig,
-                       orientation='lower left', **kw)
+    """
+    return corner_plot(
+        data,
+        data_labels=data_labels,
+        draw_contours=draw_contours,
+        fig=fig,
+        axs=axs,
+        savefig=savefig,
+        orientation="lower left",
+        **kw
+    )
+
 
 ##############################################################################
 # End

@@ -22,26 +22,15 @@ __credits__ = ["matplotlib"]
 
 _titlek = (
     # fontdict, loc, pad,
-    'fontsize', 'fontweight',
+    "fontsize",
+    "fontweight",
     # size, weight
     # fontproperties  # include?
     # kwargs
 )
 
-_xlabelk = (
-    'labelpad',
-    'fontsize',
-    'fontweight'
-)
+_xlabelk = ("labelpad", "fontsize", "fontweight")
 
-_ylabelk = (
-    'labelpad',
-    'fontsize',
-    'fontweight'
-)
+_ylabelk = ("labelpad", "fontsize", "fontweight")
 
-_zlabelk = (
-    'labelpad',
-    'fontsize',
-    'fontweight'
-)
+_zlabelk = ("labelpad", "fontsize", "fontweight")

@@ -56,6 +56,7 @@ __status__ = "Production"
 
 # GENERAL
 from matplotlib.pyplot import *
+from matplotlib import pyplot as _pyplot
 
 # astropy
 from astropy.visualization import quantity_support
@@ -73,59 +74,61 @@ from .decorators import mpl_decorator, MatplotlibDecorator
 # explicitly import here
 from ._figure import (
     figure,
-
-    gcf, scf,
-
-    # get/set figure properties
-    get_figsize, set_figsize,
-
-    suptitle, supertitle,
-    get_suptitle, set_suptitle,
-    get_supertitle, set_supertitle,
-
-    get_dpi, set_dpi,
-    get_facecolor, set_facecolor,
-    get_edgecolor, set_edgecolor,
-    get_frameon, set_frameon,
-
+    gcf,
+    scf,
+    get_figsize,
+    set_figsize,
+    suptitle,
+    supertitle,
+    get_suptitle,
+    set_suptitle,
+    get_supertitle,
+    set_supertitle,
+    get_dpi,
+    set_dpi,
+    get_facecolor,
+    set_facecolor,
+    get_edgecolor,
+    set_edgecolor,
+    get_frameon,
+    set_frameon,
     override_figure,
     tight_layout,
-
-    savefig, save_figure,
-    close, closefig,
+    savefig,
+    save_figure,
+    close,
+    closefig,
     save_and_close,
 )
 
 
 from ._axes import (
-    gca, sca,
-
-    # get/set axes properties
-    get_title, set_title,
-    get_xlabel, set_xlabel,
-    get_ylabel, set_ylabel,
-    # get_zlabel, set_zlabel,
-    # get_label, set_label,
-
-    get_xlim, set_xlim,
-    get_ylim, set_ylim,
-    # get_zlim, set_zlim,
-
+    gca,
+    sca,
+    get_title,
+    set_title,
+    get_xlabel,
+    set_xlabel,
+    get_ylabel,
+    set_ylabel,
+    get_xlim,
+    set_xlim,
+    get_ylim,
+    set_ylim,
     invert_xaxis,
     invert_yaxis,
-    # invert_zaxis,
-    # invert_axis,
-
-    get_xscale, set_xscale,
-    get_yscale, set_yscale,
-    # get_zscale, set_zscale,
-    # get_scale, set_scale
-
+    get_xscale,
+    set_xscale,
+    get_yscale,
+    set_yscale,
 )
 
 
 #############################################################################
-# Code
+# CODE
 
 quantity_support()
 style.use(astropy_mpl_style)  # using *style* from ._plot
+
+#############################################################################
+# END

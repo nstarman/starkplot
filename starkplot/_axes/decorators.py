@@ -32,7 +32,8 @@ from ._current_axes import gca, sca
 
 ###############################################################################
 
-class GetAxArg():
+
+class GetAxArg:
     r"""
     Make a function from a Figure method which accepts a figure as a kwarg
 
@@ -59,7 +60,7 @@ class GetAxArg():
         # Control the __doc__ options
         # default to wrapped functions documentation, if available
         _doc_default = func.__doc__ if func is not None else None
-        doc = kw.get('_doc', _doc_default)
+        doc = kw.get("_doc", _doc_default)
 
         # if _doc is
         if callable(doc):
@@ -74,33 +75,38 @@ class GetAxArg():
             return self
         else:
             return self(func)
+
     # /def
 
     def __call__(self, wrapped_func):
-
         def wrapped(ax=None):
 
             oldax = pyplot.gca()  # saving old figure
-            ax = gca(ax=ax)     # get figure from fig argument
+            ax = gca(ax=ax)  # get figure from fig argument
 
             return_ = wrapped_func(ax)
 
-            sca(ax=oldax)        # make old fig current
+            sca(ax=oldax)  # make old fig current
 
             return return_
+
         # /def
 
         # assign documentation
         wrapped.__doc__ = wrapped_func.__doc__
 
         return wrapped
+
     # /def
+
+
 # /class
 
 
 ###############################################################################
 
-class SetAxArg():
+
+class SetAxArg:
     r"""
     Make a function from a Figure method which accepts a figure as a kwarg
 
@@ -127,7 +133,7 @@ class SetAxArg():
         # Control the __doc__ options
         # default to wrapped functions documentation, if available
         _doc_default = func.__doc__ if func is not None else None
-        doc = kw.get('_doc', _doc_default)
+        doc = kw.get("_doc", _doc_default)
 
         # if _doc is
         if callable(doc):
@@ -142,27 +148,30 @@ class SetAxArg():
             return self
         else:
             return self(func)
+
     # /def
 
     def __call__(self, wrapped_func):
-
         def wrapped(*args, ax=None, **kwargs):
 
-            oldax = pyplot.gca()   # saving old figure
-            ax = sca(ax=ax)        # get right figure
+            oldax = pyplot.gca()  # saving old figure
+            ax = sca(ax=ax)  # get right figure
 
             # apply function with correct figure
             return_ = wrapped_func(pyplot.gca(), *args, **kwargs)
 
-            sca(ax=oldax)        # make old fig current
+            sca(ax=oldax)  # make old fig current
 
             return return_
+
         # /def
 
         # assign documentation
         wrapped.__doc__ = wrapped_func.__doc__
 
         return wrapped
+
     # /def
+
 
 # /class

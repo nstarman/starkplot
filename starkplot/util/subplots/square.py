@@ -29,6 +29,7 @@ from ...decorators import mpl_decorator
 
 ##############################################################################
 
+
 def closest_square_axis_grid_shape(numax, prefer_cols=True):
     """shape of the closest-to-square grid given the number of desired axes
 
@@ -52,7 +53,7 @@ def closest_square_axis_grid_shape(numax, prefer_cols=True):
     # the difference between this nearest square grid and the number of axes
     # this is needed for finding 'nearby' rectangles that are closer to the
     # desired number of axes
-    diff = side**2 - numax
+    diff = side ** 2 - numax
 
     # determining if the square grid is the best fit
     # comparing s^2 to (s-1) x s = s^2 - ss
@@ -68,10 +69,13 @@ def closest_square_axis_grid_shape(numax, prefer_cols=True):
             shape = [side, side - 1]
 
     return shape
+
+
 # /def
 
 
 # --------------------------------------------------------------------------
+
 
 def closest_square_axis_grid(numax, prefer_cols=True, flatten=False, **kw):
     """the closest-to-square grid given the number of desired axes
@@ -98,8 +102,7 @@ def closest_square_axis_grid(numax, prefer_cols=True, flatten=False, **kw):
     ----
     support mpl_decorator on the subplots
     """
-    nrows, ncols = closest_square_axis_grid_shape(numax,
-                                                  prefer_cols=prefer_cols)
+    nrows, ncols = closest_square_axis_grid_shape(numax, prefer_cols=prefer_cols)
 
     fig, axs = pyplot.subplots(nrows=nrows, ncols=ncols, **kw)
 
@@ -107,10 +110,13 @@ def closest_square_axis_grid(numax, prefer_cols=True, flatten=False, **kw):
         axs = axs.reshape(-1)
 
     return fig, axs
+
+
 # /def
 
 
 # --------------------------------------------------------------------------
+
 
 def closest_square_axis_grid_iter(numax, prefer_cols=True):
     """the closest-to-square grid given the number of desired axes
@@ -130,8 +136,9 @@ def closest_square_axis_grid_iter(numax, prefer_cols=True):
     fig : Figure
     axs : flat array of Axes
     """
-    return closest_square_axis_grid(numax, prefer_cols=prefer_cols,
-                                    flatten=True)
+    return closest_square_axis_grid(numax, prefer_cols=prefer_cols, flatten=True)
+
+
 # /def
 
 ##############################################################################

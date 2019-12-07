@@ -176,7 +176,9 @@ def corner_plot(
 
             # Make and plot the kernel
             kernel = stats.gaussian_kde(data[:, i])
-            kernel_grid = np.linspace(np.min(data[:, i]), np.max(data[:, i]), 1000)
+            kernel_grid = np.linspace(
+                np.min(data[:, i]), np.max(data[:, i]), 1000
+            )
             kernel_evaluate = kernel.evaluate(kernel_grid)
             axs[i, j].plot(kernel_grid, kernel_evaluate, color="Black")
 
@@ -199,8 +201,12 @@ def corner_plot(
                 kernel_evaluate = np.reshape(kernel(positions).T, xx.shape)
 
                 # Make contours out of the KDE
-                cfset = axs[i, j].contourf(xx, yy, kernel_evaluate, cmap="Blues")
-                cset = axs[i, j].contour(xx, yy, kernel_evaluate, colors="Black")
+                cfset = axs[i, j].contourf(
+                    xx, yy, kernel_evaluate, cmap="Blues"
+                )
+                cset = axs[i, j].contour(
+                    xx, yy, kernel_evaluate, colors="Black"
+                )
 
                 # Decorate
                 axs[i, j].set_xlim(xmin, xmax)
@@ -241,7 +247,13 @@ def corner_plot(
 
 
 def staircase_plot(
-    data, data_labels=None, draw_contours=False, fig=None, axs=None, savefig=False, **kw
+    data,
+    data_labels=None,
+    draw_contours=False,
+    fig=None,
+    axs=None,
+    savefig=False,
+    **kw
 ):
     """staircase_plot
 

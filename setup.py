@@ -71,7 +71,9 @@ def get_dist(pkgname):
 
 def find_version(*file_paths):
     version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
+    )
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
@@ -81,7 +83,11 @@ readme = open("README.md").read()
 
 VERSION = find_version(os.path.join("starkplot", "__init__.py"))
 
-requirements = ["matplotlib", "numpy>=1.7", "decorator"]  # TODO minimum version
+requirements = [
+    "matplotlib",
+    "numpy>=1.7",
+    "decorator",
+]  # TODO minimum version
 
 classifiers = [
     "Programming Language :: Python :: 3.6",

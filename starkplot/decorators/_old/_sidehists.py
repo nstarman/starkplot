@@ -324,7 +324,8 @@ class SideHists(MatplotlibDecoratorBase):
         # modifying docstring
         _locals = locals()
         self.__doc__ = self.__doc__.format(
-            **{k: _locals.get(k).__repr__() for k in set(_sidehistattrs)}, xkw=xkw
+            **{k: _locals.get(k).__repr__() for k in set(_sidehistattrs)},
+            xkw=xkw
         )
 
         # init
@@ -525,7 +526,8 @@ class SideHists(MatplotlibDecoratorBase):
 
                 # make some labels invisible
                 plt.setp(
-                    axHistx.get_xticklabels() + axHisty.get_yticklabels(), visible=False
+                    axHistx.get_xticklabels() + axHisty.get_yticklabels(),
+                    visible=False,
                 )
 
                 if shbins is None:
@@ -643,7 +645,9 @@ class SideHists(MatplotlibDecoratorBase):
 
         # modifying wrapped_function docstring
         _doc = (
-            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+            self.funcdoc
+            + _descrhead.format(func=wrapped_function.__name__)
+            + self._doc
         )
         wrapped.__doc__ = cleandoc(wrapped.__doc__) + _doc
 

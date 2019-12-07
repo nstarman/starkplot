@@ -1088,7 +1088,9 @@ def add_text(ax=None, *args, **kwargs):
             **kwargs,
         )
     elif kwargs.pop("bottom_left", False):
-        _pyplot.annotate(args[0], (0.05, 0.05), xycoords="axes fraction", **kwargs)
+        _pyplot.annotate(
+            args[0], (0.05, 0.05), xycoords="axes fraction", **kwargs
+        )
     elif kwargs.pop("bottom_right", False):
         _pyplot.annotate(
             args[0],

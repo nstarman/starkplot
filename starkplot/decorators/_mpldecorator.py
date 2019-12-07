@@ -791,7 +791,9 @@ class MatplotlibDecorator(object):
                         self.funcdoc = _funcdocprefix + funcdoc.__doc__
                     else:
                         self.funcdoc = ""
-                    self.funcdoc = strthentwoline(self.funcdoc)  # ensure '\n\n' ending
+                    self.funcdoc = strthentwoline(
+                        self.funcdoc
+                    )  # ensure '\n\n' ending
 
                     # extra arguments
                     self.xkw = xkw
@@ -869,7 +871,9 @@ class MatplotlibDecorator(object):
                 )
 
                 if kw.get("_topdecorator", True):
-                    self._doc += xkwargs.format(xkw=getattr(self, "xkw").__repr__())
+                    self._doc += xkwargs.format(
+                        xkw=getattr(self, "xkw").__repr__()
+                    )
 
                 return
 
@@ -954,7 +958,9 @@ class MatplotlibDecorator(object):
                         set_suptitle(suptitle, fig=fig, **wkw)
 
                     # +---- axes ----+
-                    ax, oldax = prepare_axes(ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig)
+                    ax, oldax = prepare_axes(
+                        ax=ax, rtcf=rtcf, _fig=fig, _oldfig=oldfig
+                    )
 
                     # /PRE
                     # CALL
@@ -986,7 +992,12 @@ class MatplotlibDecorator(object):
 
                         # setting axisLabels/limits/scales
                         axisLabels(
-                            ax, x=xlabel, y=ylabel, z=zlabel, units=unit_labels, **wkw
+                            ax,
+                            x=xlabel,
+                            y=ylabel,
+                            z=zlabel,
+                            units=unit_labels,
+                            **wkw
                         )
                         axisLimits(ax, x=xlim, y=ylim, z=zlim)
 
@@ -1005,7 +1016,9 @@ class MatplotlibDecorator(object):
                             handles, labels = ax.get_legend_handles_labels()
                             if labels:
                                 legend = _parseoptsdict(legend)
-                                ax.legend(handles=handles, labels=labels, **legend)
+                                ax.legend(
+                                    handles=handles, labels=labels, **legend
+                                )
 
                     # +---- colorbar ----+
                     if colorbar:
@@ -1069,15 +1082,22 @@ class MatplotlibDecorator(object):
 
                         # make some labels invisible
                         pyplot.setp(
-                            (axHistx.get_xticklabels() + axHisty.get_yticklabels()),
+                            (
+                                axHistx.get_xticklabels()
+                                + axHisty.get_yticklabels()
+                            ),
                             visible=False,
                         )
 
                         if shbins is None:
                             if isinstance(func_args[0], np.ndarray):
-                                shbins = round(0.3 * np.sqrt(func_args[0].shape[0]))
+                                shbins = round(
+                                    0.3 * np.sqrt(func_args[0].shape[0])
+                                )
                             if isinstance(func_args[0], (list, tuple)):
-                                shbins = round(0.3 * np.sqrt(len(func_args[0])))
+                                shbins = round(
+                                    0.3 * np.sqrt(len(func_args[0]))
+                                )
                             else:
                                 shbins = 30
                         else:
@@ -1132,7 +1152,9 @@ class MatplotlibDecorator(object):
                         pyplot.close(fig)
 
                     # old figure
-                    if oldfig is not None:  # Returning old figure to current status
+                    if (
+                        oldfig is not None
+                    ):  # Returning old figure to current status
                         pyplot.figure(oldfig.number)
                         fig = pyplot.gcf()
 

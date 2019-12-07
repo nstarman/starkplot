@@ -35,7 +35,9 @@ def dump(obj, fname, protocol=None, *, fopt="b", fix_imports=True):
 # /def
 
 
-def load(fname, *, fopt="b", fix_imports=True, encoding="ASCII", errors="strict"):
+def load(
+    fname, *, fopt="b", fix_imports=True, encoding="ASCII", errors="strict"
+):
     r"""pickle load
     """
     with open(fname, "r" + fopt) as file:

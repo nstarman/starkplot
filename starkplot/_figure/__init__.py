@@ -53,6 +53,12 @@ from ._info import (  # TODO are these necessary here?
     _suptitlek,
 )
 
-from ._save_or_close import savefig, save_figure, close, closefig, save_and_close
+from ._save_or_close import (
+    savefig,
+    save_figure,
+    close,
+    closefig,
+    save_and_close,
+)
 
 from .decorators import GetFigArg, SetFigArg

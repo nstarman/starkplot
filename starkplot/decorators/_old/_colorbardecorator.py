@@ -510,7 +510,9 @@ class ColorbarDecorator(MatplotlibDecoratorBase):
 
         # modifying wrapped_function docstring
         _doc = (
-            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+            self.funcdoc
+            + _descrhead.format(func=wrapped_function.__name__)
+            + self._doc
         )
         wrapped.__doc__ = wrapped.__doc__ and cleandoc(wrapped.__doc__) + _doc
 

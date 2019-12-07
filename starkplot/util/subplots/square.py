@@ -102,7 +102,9 @@ def closest_square_axis_grid(numax, prefer_cols=True, flatten=False, **kw):
     ----
     support mpl_decorator on the subplots
     """
-    nrows, ncols = closest_square_axis_grid_shape(numax, prefer_cols=prefer_cols)
+    nrows, ncols = closest_square_axis_grid_shape(
+        numax, prefer_cols=prefer_cols
+    )
 
     fig, axs = pyplot.subplots(nrows=nrows, ncols=ncols, **kw)
 
@@ -136,7 +138,9 @@ def closest_square_axis_grid_iter(numax, prefer_cols=True):
     fig : Figure
     axs : flat array of Axes
     """
-    return closest_square_axis_grid(numax, prefer_cols=prefer_cols, flatten=True)
+    return closest_square_axis_grid(
+        numax, prefer_cols=prefer_cols, flatten=True
+    )
 
 
 # /def

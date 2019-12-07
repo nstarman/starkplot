@@ -156,7 +156,9 @@ def _parsestrandopts(attr):
 # /def
 
 
-def _parsexkwandopts(arg, kw, name, compatible, parser, prefix=None, allowupdate=True):
+def _parsexkwandopts(
+    arg, kw, name, compatible, parser, prefix=None, allowupdate=True
+):
     r"""
     Parameters
     ---------
@@ -175,7 +177,10 @@ def _parsexkwandopts(arg, kw, name, compatible, parser, prefix=None, allowupdate
     """
 
     # sorting parsers
-    if parser in (_parsestrandopts, _parselatexstrandopts):  # check if (arg, opts)
+    if parser in (
+        _parsestrandopts,
+        _parselatexstrandopts,
+    ):  # check if (arg, opts)
         arg, argkw0 = parser(arg)
     elif parser == _parseoptsdict:  # check if opts
         argkw0 = parser(arg)
@@ -294,7 +299,9 @@ def tightLayout(fig=None, tlkw={}, **kw):
     """
     fig = _gcf(fig)
 
-    _, tlkw = _parsexkwandopts(tlkw, kw, "tight_layout", _tightlayoutk, _parseoptsdict)
+    _, tlkw = _parsexkwandopts(
+        tlkw, kw, "tight_layout", _tightlayoutk, _parseoptsdict
+    )
 
     fig.tight_layout(**tlkw)
 
@@ -395,7 +402,9 @@ def set_title(t, ax=None, **kw):
     # titlekw = titlekw2
     # titlekw.update(titlekw1)
     # titlekw.update(titlekw0)
-    title, titlekw = _parsexkwandopts(t, kw, "title", _titlek, _parsestrandopts)
+    title, titlekw = _parsexkwandopts(
+        t, kw, "title", _titlek, _parsestrandopts
+    )
 
     ax.set_title(title, **titlekw)
 
@@ -408,7 +417,9 @@ def set_title(t, ax=None, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xlabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xlabel.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_xlabel(ax=None, x=None, units=True, **kw):
     r"""starkplot wrapper for set_xlabel
@@ -444,7 +455,9 @@ def set_xlabel(ax=None, x=None, units=True, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_ylabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_ylabel.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_ylabel(ax=None, y=None, units=True, **kw):
     r"""starkplot wrapper for set_ylabel
@@ -509,7 +522,9 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
         #         nkw.update({_stripprefix(k, 'zlabel_'): v
         #                     for k, v in kw.items()
         #                     if k.startswith('zlabel_')})
-        z, nkw = _parsexkwandopts(z, kw, "zlabel", _zlabelk, _parselatexstrandopts)
+        z, nkw = _parsexkwandopts(
+            z, kw, "zlabel", _zlabelk, _parselatexstrandopts
+        )
         if units is True:
             rf"{z} [{ax.get_zlabel()}]"
         ax.set_zlabel(z, **nkw)
@@ -519,10 +534,14 @@ def set_zlabel(ax=None, z=None, units=True, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xlabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xlabel.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 @docstring.Appender(
-    pyplot.Axes.set_ylabel.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_ylabel.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 # @docstring.Appender(pyplot.Axes.set_xlabel.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
@@ -569,7 +588,9 @@ def axisLabels(ax=None, x=None, y=None, z=None, units=True, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xlim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xlim.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_xlim(ax=None, x=None):
     r"""starkplot wrapper for set_xlim
@@ -585,7 +606,9 @@ def set_xlim(ax=None, x=None):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_ylim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_ylim.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_ylim(ax=None, y=None):
     r"""starkplot wrapper for set_ylim
@@ -619,10 +642,14 @@ def set_zlim(ax=None, z=None):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xlim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xlim.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 @docstring.Appender(
-    pyplot.Axes.set_ylim.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_ylim.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 # @docstring.Appender(pyplot.Axes.set_zlim.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
@@ -643,7 +670,9 @@ def axisLimits(ax=None, x=None, y=None, z=None):
 
 
 @docstring.Appender(
-    pyplot.Axes.invert_xaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.invert_xaxis.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def invert_xaxis(ax=None):
     r"""starkplot wrapper for invert_xaxis
@@ -656,7 +685,9 @@ def invert_xaxis(ax=None):
 
 
 @docstring.Appender(
-    pyplot.Axes.invert_yaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.invert_yaxis.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def invert_yaxis(ax=None):
     r"""starkplot wrapper for invert_yaxis
@@ -684,10 +715,14 @@ def invert_zaxis(ax=None):
 
 
 @docstring.Appender(
-    pyplot.Axes.invert_xaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.invert_xaxis.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 @docstring.Appender(
-    pyplot.Axes.invert_yaxis.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.invert_yaxis.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 # @docstring.Appender(pyplot.Axes.invert_zaxis.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)
@@ -711,7 +746,9 @@ def invertAxis(ax=None, x=False, y=False, z=False):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xscale.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_xscale(ax=None, x=None, **kw):
     r"""starkplot wrapper for set_xscale
@@ -730,7 +767,9 @@ def set_xscale(ax=None, x=None, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_yscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_yscale.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 def set_yscale(ax=None, y=None, **kw):
     r"""starkplot wrapper for set_yscale
@@ -772,10 +811,14 @@ def set_zscale(ax=None, z=None, **kw):
 
 
 @docstring.Appender(
-    pyplot.Axes.set_xscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_xscale.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 @docstring.Appender(
-    pyplot.Axes.set_yscale.__doc__, join="\n\n{}\n".format("=" * 78), prededent=True
+    pyplot.Axes.set_yscale.__doc__,
+    join="\n\n{}\n".format("=" * 78),
+    prededent=True,
 )
 # @docstring.Appender(pyplot.Axes.set_zscale.__doc__,
 #                     join='\n\n{}\n'.format('=' * 78), prededent=True)

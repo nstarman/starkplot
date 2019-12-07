@@ -713,7 +713,9 @@ class AxesDecorator(MatplotlibDecoratorBase):
                 # /PRE
                 # CALL
 
-                func_kwargs["label"] = str(func_kwargs.get("label", ""))  # TODO set in
+                func_kwargs["label"] = str(
+                    func_kwargs.get("label", "")
+                )  # TODO set in
 
                 if stylesheet is not None:
                     with plt.style.context(stylesheet):
@@ -767,7 +769,12 @@ class AxesDecorator(MatplotlibDecoratorBase):
 
                     # setting axisLabels/limits/scales
                     axisLabels(
-                        ax, x=xlabel, y=ylabel, z=zlabel, units=unit_labels, **wkw
+                        ax,
+                        x=xlabel,
+                        y=ylabel,
+                        z=zlabel,
+                        units=unit_labels,
+                        **wkw
                     )
                     axisLimits(ax, x=xlim, y=ylim, z=zlim)
 
@@ -823,7 +830,9 @@ class AxesDecorator(MatplotlibDecoratorBase):
 
         # modifying wrapped_function docstring
         _doc = (
-            self.funcdoc + _descrhead.format(func=wrapped_function.__name__) + self._doc
+            self.funcdoc
+            + _descrhead.format(func=wrapped_function.__name__)
+            + self._doc
         )
         wrapped.__doc__ = wrapped.__doc__ and cleandoc(wrapped.__doc__) + _doc
 

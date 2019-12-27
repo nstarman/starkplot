@@ -56,7 +56,7 @@ __status__ = "Production"
 
 # GENERAL
 from matplotlib.pyplot import *
-from matplotlib import pyplot as _pyplot
+from matplotlib import pyplot
 
 # astropy
 from astropy.visualization import quantity_support

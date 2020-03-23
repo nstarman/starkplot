@@ -1,19 +1,11 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# ----------------------------------------------------------------------------
-#
-# TITLE   : ipython initialization file
-# AUTHOR  : Nathaniel Starkman
-#
-# ----------------------------------------------------------------------------
-
-### Docstring and Metadata
 """initialization file for jupyter notebook functions
 
 # TODO:
 - provide functions to set the inline vs notebook,
   change figure_format to something other than retina, etc.
+
 """
 
 __author__ = "Nathaniel Starkman"
@@ -41,8 +33,16 @@ else:
 ### Running
 
 # configure matplotlib
-get_ipython().magic("matplotlib inline")
-get_ipython().magic("config InlineBackend.figure_format='retina'")
+try:
+    get_ipython()
+
+except NameError:
+    pass
+
+else:
+    get_ipython().magic("matplotlib inline")
+    get_ipython().magic("config InlineBackend.figure_format='retina'")
+
 
 if _APY:
     quantity_support()

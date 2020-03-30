@@ -65,7 +65,7 @@ from astropy.visualization import astropy_mpl_style
 # PROJECT-SPECIFIC
 
 # importing folders
-from . import decorators, util
+from . import decorators, utils
 
 # Now overwriting
 from ._plot import *

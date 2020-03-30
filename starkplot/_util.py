@@ -51,7 +51,7 @@ from .decorators import docstring
 from ._figure._info import _newfigk, _tightlayoutk, _savefigk, _suptitlek
 from ._axes._info import _titlek, _xlabelk, _ylabelk, _zlabelk
 
-# from .util.colorbar._info import _colorbark as _cbark
+# from .utils.colorbar._info import _colorbark as _cbark
 
 #############################################################################
 # Info

@@ -46,8 +46,14 @@ __status__ = "Production"
 #############################################################################
 # IMPORTS
 
-# import top level packages
+
 from .starkplot import *
+
+# import top level submodules
+from .starkplot import (
+    utils,
+    decorators
+)
 
 
 #############################################################################

@@ -50,10 +50,7 @@ __status__ = "Production"
 from .starkplot import *
 
 # import top level submodules
-from .starkplot import (
-    utils,
-    decorators
-)
+from .starkplot import utils, decorators
 
 
 #############################################################################
